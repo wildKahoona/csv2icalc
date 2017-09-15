@@ -17,7 +17,7 @@ public class MainApp extends Application {
      * Constructor
      */
     public MainApp() {
-    	// Add some sample data
+    	// Add some sample data...
     }
     
     
