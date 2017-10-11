@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?> 
+<?import javafx.collections.*?> 
+<?import ch.ffhs.kino.table.model.TicketTableModel?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import ch.ffhs.kino.layout.FormattedTableCellFactory?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<?scenebuilder-stylesheet controlStyle.css?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.cell.CheckBoxListCell?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.Pane?>
+
+
+<GridPane alignment="CENTER" prefWidth="1000" hgap="10.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml" fx:controller="ch.ffhs.kino.layout.FXMLTicketZahlenController">
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Vorstellung:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+	<Label style="-fx-font: NORMAL 15 Tahoma;" fx:id="vorstellung" text="[Platzhalter]" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+
+	<Separator valignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2" />
+
+
+	<HBox spacing="10" alignment="TOP_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="3">
+		<Label text="E-Mail*:" />
+		<TextField fx:id="email" promptText="E-Mail-Adresse eingeben" prefWidth="200" />
+	</HBox>
+
+
+	<!-- Zahlungsart -->
+	<GridPane alignment="CENTER_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="solidblackborder">
+		<Label text="Ihre Zahlungsart:" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
+
+		<RadioButton  onAction="#kkSelected"  mnemonicParsing="false"  text="Kreditkarte" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+			<toggleGroup>
+				<ToggleGroup fx:id="a" />
+			</toggleGroup>
+		</RadioButton>
+		<RadioButton onAction="#paypalSelected" mnemonicParsing="false" text="Paypal" toggleGroup="$a" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" />
+
+
+
+		<GridPane fx:id="kk" GridPane.columnIndex="0" GridPane.rowIndex="3" >
+			<Label text="Mit Kreditkarte bezahlen" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" />
+			<Label text="Kreditkartennummer*:" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" />
+			<TextField fx:id="kknummer" promptText="Kreditkartennummer eingeben" styleClass="long" GridPane.columnIndex="0" GridPane.rowIndex="5"
+				GridPane.columnSpan="2" />
+			<Label text="Gültig bis*:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+
+			<ComboBox fx:id="monat" promptText="Monat" styleClass="medium" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+			<ComboBox fx:id="jahr" promptText="Jahr" styleClass="small" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+			<Label text="CVV*:" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+			<TextField fx:id="cvv" promptText="CVV" styleClass="small" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+			<TextField fx:id="vorname" promptText="Vorname" styleClass="medium" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+			<TextField fx:id="nachname" promptText="Nachname" styleClass="medium" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+		</GridPane>
+
+		<Button text="Bezahlen" onAction="#pay" styleClass="medium" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+	</GridPane>
+	<!-- Buchungsinformation -->
+	<VBox spacing="10" alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+		<Label text="Buchungsvorgang läuft ab in: 06:22" />
+		<Label text="Erwachsene:2, Kinder:1 Total:50.00 CHF" />
+	</VBox>
+	<TableView fx:id="tableView" styleClass="noheader" GridPane.columnIndex="1" GridPane.rowIndex="4" prefHeight="10">
+		<columns>
+			<TableColumn prefWidth="100" fx:id="sitz">
+				<cellValueFactory>
+					<PropertyValueFactory property="sitz" />
+				</cellValueFactory>
+			</TableColumn>
+			<TableColumn prefWidth="100">
+				<cellValueFactory>
+					<PropertyValueFactory property="tickettype" />
+				</cellValueFactory>
+			</TableColumn>
+			<TableColumn prefWidth="100">
+				<cellValueFactory>
+					<PropertyValueFactory property="price" />
+				</cellValueFactory>
+			</TableColumn>
+		</columns>
+		<items>
+			<FXCollections fx:factory="observableArrayList">
+				<TicketTableModel sitz="Reihe 5, Platz 7" tickettype="Erwachsener" price="19.00 CHF" />
+			</FXCollections>
+		</items>
+		<sortOrder>
+			<fx:reference source="sitz" />
+		</sortOrder>
+	</TableView>
+
+</GridPane>

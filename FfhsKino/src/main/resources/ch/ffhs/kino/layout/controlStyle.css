@@ -1,0 +1,42 @@
+/*controlStyle.css */
+ 
+.scene{
+    -fx-font: 14.0pt "Cambria Bold";
+    -fx-color: #e79423;
+    -fx-background: #67644e;
+    
+}
+ 
+.button  {
+    -fx-border-radius: 20.0;
+    -fx-background-radius: 20.0;
+  
+}
+
+
+/*Table ohne Überschrift */
+.noheader .column-header-background {
+    -fx-max-height: 0.0;
+    -fx-pref-height: 0.0;
+    -fx-min-height: 0.0;
+}
+
+
+.h1{
+-fx-font: NORMAL 20.0 "Tahoma";
+}
+
+.h2{
+-fx-font: NORMAL 15.0 "Tahoma";
+-fx-padding: 15 ;
+}
+
+.text-field {
+    -fx-padding: 5.0px;
+  
+}
+
+.long{-fx-pref-width:180px;  width:180px;}
+.medium{-fx-pref-width:120px; width:180px; }
+.small{-fx-pref-width:80px; width:180px; }
+.solidblackborder{ -fx-border-color: black; -fx-padding: 15 ;}
