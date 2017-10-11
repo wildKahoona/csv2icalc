@@ -4,3 +4,5 @@
 *.MF
 */target/*
 */bin/*
+FfhsKino/.settings/org.eclipse.jdt.core.prefs
+FfhsKino/.settings/org.eclipse.m2e.core.prefs
