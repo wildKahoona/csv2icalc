@@ -6,23 +6,23 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.ffhs.kino.model.Event;
+import ch.ffhs.kino.model.Vorstellung;
 
 
 public class CinemaProgrammServiceTest {
 
-	private CinemaProgrammService testee;
+	private CinemaProgrammServiceMock testee;
 
 	@Before
 	public void init() {
-		testee = new CinemaProgrammService();
+		testee = new CinemaProgrammServiceMock();
 
 	}
 
 	@Test
 	public void test() {
 
-		List<Event> programm = testee.getProgramm();
+		List<Vorstellung> programm = testee.getProgramm();
 
 		System.out.println(programm.toString());
 		Assume.assumeNotNull(programm);

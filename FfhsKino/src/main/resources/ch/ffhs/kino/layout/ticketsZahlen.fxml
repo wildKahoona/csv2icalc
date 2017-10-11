@@ -26,37 +26,36 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<GridPane alignment="CENTER" prefWidth="1000" hgap="10.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml" fx:controller="ch.ffhs.kino.layout.FXMLTicketZahlenController">
+<GridPane alignment="CENTER" prefWidth="1000" hgap="10.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml" fx:controller="ch.ffhs.kino.controller.TicketZahlenController">
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 	</padding>
 	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Vorstellung:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 	<Label style="-fx-font: NORMAL 15 Tahoma;" fx:id="vorstellung" text="[Platzhalter]" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-
 	<Separator valignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2" />
-
 
 	<HBox spacing="10" alignment="TOP_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="3">
 		<Label text="E-Mail*:" />
-		<TextField fx:id="email" promptText="E-Mail-Adresse eingeben" prefWidth="200" />
+		<TextField fx:id="email" promptText="E-Mail-Adresse eingeben" />
 	</HBox>
-
 
 	<!-- Zahlungsart -->
 	<GridPane alignment="CENTER_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="solidblackborder">
 		<Label text="Ihre Zahlungsart:" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
 
-		<RadioButton  onAction="#kkSelected"  mnemonicParsing="false"  text="Kreditkarte" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+		<RadioButton onAction="#kkSelected" mnemonicParsing="false" text="Kreditkarte" GridPane.columnIndex="0" GridPane.rowIndex="1"
+			GridPane.columnSpan="2">
 			<toggleGroup>
-				<ToggleGroup fx:id="a" />
+				<ToggleGroup fx:id="zahlungsart" />
 			</toggleGroup>
 		</RadioButton>
-		<RadioButton onAction="#paypalSelected" mnemonicParsing="false" text="Paypal" toggleGroup="$a" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" />
+		<RadioButton onAction="#paypalSelected" mnemonicParsing="false" text="Paypal" toggleGroup="$zahlungsart" GridPane.columnIndex="0"
+			GridPane.rowIndex="2" GridPane.columnSpan="2" />
 
 
 
-		<GridPane fx:id="kk" GridPane.columnIndex="0" GridPane.rowIndex="3" >
+		<GridPane fx:id="kk" GridPane.columnIndex="0" GridPane.rowIndex="3">
 			<Label text="Mit Kreditkarte bezahlen" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" />
 			<Label text="Kreditkartennummer*:" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" />
 			<TextField fx:id="kknummer" promptText="Kreditkartennummer eingeben" styleClass="long" GridPane.columnIndex="0" GridPane.rowIndex="5"

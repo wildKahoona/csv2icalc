@@ -5,69 +5,46 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ffhs.kino.layout.VorstellungController">
-  <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Label text="Vorstellung" />
-      <Label text="[Platzhalter]" GridPane.columnIndex="1" />
-      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-      <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TableView>
-      <Label text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" GridPane.rowIndex="2" />
-      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
-         <children>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-            <Label text="frei" />
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-            <Label text="belegt" />
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-            <Label text="Rollstuhlplatz" />
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-            <Label text="meine Plätze" />
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <children>
-            <GridPane>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button mnemonicParsing="false" text="Kaufen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
-                  <Label text="Buchungsvorgang läuft ab in 08:35 " />
-                  <Label text="Buchungsvorgang läuft ab in 08:35 " GridPane.rowIndex="1" />
-                  <Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               </children>
-            </GridPane>
-         </children>
-      </HBox>
-      <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <columns>
-            <TableColumn prefWidth="75.0" text="C1" />
-            <TableColumn prefWidth="75.0" text="C2" />
-         </columns>
-      </TableView>
-      <Button mnemonicParsing="false" text="Ticket hinzufügen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
-   </children>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ffhs.kino.controller.VorstellungController">
+
+	<children>
+		<Label text="Vorstellung" />
+		<Label text="[Platzhalter]" GridPane.columnIndex="1" />
+		<Separator GridPane.columnSpan="2" GridPane.rowIndex="1" />
+		<TableView fx:id="kinoSaal" styleClass="kinoSaal" GridPane.rowIndex="3">
+
+		</TableView>
+		<Label text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" GridPane.rowIndex="2" />
+		<HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
+			<children>
+				<ImageView pickOnBounds="true" preserveRatio="true" />
+				<Label text="frei" />
+				<ImageView pickOnBounds="true" preserveRatio="true" />
+				<Label text="belegt" />
+				<ImageView pickOnBounds="true" preserveRatio="true" />
+				<Label text="Rollstuhlplatz" />
+				<ImageView pickOnBounds="true" preserveRatio="true" />
+				<Label text="meine Plätze" />
+				<ImageView pickOnBounds="true" preserveRatio="true" />
+			</children>
+		</HBox>
+		<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+			<children>
+				<GridPane>
+
+					<children>
+						<Button mnemonicParsing="false" text="Kaufen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+
+						<Label text="Buchungsvorgang läuft ab in 08:35 " GridPane.rowIndex="1" />
+						<Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+					</children>
+				</GridPane>
+			</children>
+		</HBox>
+		<TableView fx:id="vorstellungTable" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+		<Button mnemonicParsing="false" text="Ticket hinzufügen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4"
+			GridPane.valignment="TOP" />
+	</children>
 </GridPane>
