@@ -48,7 +48,6 @@ public class TicketZahlenController {
 
 	}
 
-	
 	private Booking booking;
 
 	public void setBooking(Booking booking) {
@@ -59,7 +58,6 @@ public class TicketZahlenController {
 		return booking;
 	}
 
-	
 	@FXML
 	protected void pay(ActionEvent event) {
 

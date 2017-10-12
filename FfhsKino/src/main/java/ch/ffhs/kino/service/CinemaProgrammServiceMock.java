@@ -187,7 +187,10 @@ public class CinemaProgrammServiceMock {
 				"30 Jahre nach dem ersten Film fördert ein neuer Blade Runner ein lange unter Verschluss gehaltenes Geheimnis zu Tage.");
 		movie3.setImageRessource("movies/mov23");
 		movie3.setAltersfreigabe("14/12J");
-		movie3.setTrailer("https://youtu.be/WQU8yrI6o9Q");
+
+		final String code = "f0o1KcTu5tc";
+		String url = "http://www.youtube.com/embed/" + code + "?rel=0;3&amp;autohide=1&amp;showinfo=0";
+		movie3.setTrailer(url);
 	}
 
 	public Movie getMovie() {

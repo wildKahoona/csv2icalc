@@ -17,6 +17,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -34,15 +35,19 @@ public class Main extends Application {
 		return Main.primaryStage;
 	}
 
+	static {
+		Font.loadFont(Main.class.getResource("/ch/ffhs/kino/layout/font/fontawesome-webfont.ttf").toExternalForm(), 10);
+	}
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		setPrimaryStage(primaryStage);
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
-		// startKinoProgramm();
+		startKinoProgramm();
 		// startVorstellung(cinemaProgrammService.getVorstellung());
-		startTicketZahlen(cinemaProgrammService.getBooking());
+		// startTicketZahlen(cinemaProgrammService.getBooking());
 	}
 
 	public static void main(String[] args) {
@@ -54,7 +59,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/programm.fxml"));
 		Scene scene = new Scene((Pane) loader.load());
 		ProgrammController controller = loader.<ProgrammController>getController();
-		controller.setProgramm(cinemaProgrammService.getProgramm());
+		controller.setVorstellungen(cinemaProgrammService.getProgramm());
 		show(scene);
 
 	}

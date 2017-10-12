@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -22,60 +21,75 @@
 	</developers>
 
 
+
 	<version>1.0-SNAPSHOT</version>
 
 	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<slf4j.version>1.6.1</slf4j.version>
 	</properties>
 
-	<build>
+		<build>
 		<plugins>
-
 			<plugin>
-				<groupId>com.zenjava</groupId>
-				<artifactId>javafx-maven-plugin</artifactId>
-				<version>1.2</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-
-					<!-- executable JAR file is built by default (not optional at this stage) -->
-					<mainClass>ch.ffhs.kino.layout.LayoutSample</mainClass>
-
-					<!-- optionally override settings (such as jar file name, html file, 
-						etc) -->
-					<jarFileName>my-example-app.jar</jarFileName>
-
-					<!-- optionally sign the jar file if security is needed -->
-					<!-- to create keystore use command line: keytool -genkey -alias example-user 
-						-keystore keystore.jks -->
-					<signJar>
-						<alias>example-user</alias>
-						<storePassword>example-password</storePassword>
-					</signJar>
-
-					<!-- optionally build webstart bundle -->
-					<webstart>
-						<requiresAllPermissions>true</requiresAllPermissions>
-					</webstart>
-
-					<!-- optionally build native installers -->
-					<nativeInstallers />
-
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<!-- copy all dependencies of your app to target folder-->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<configuration>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<JavaFX-Version>${javafx.version}+</JavaFX-Version>
+							<Main-Class>ch.ffhs.kino.layout.Main</Main-Class>
+							<implementation-version>1.0</implementation-version>
+							<JavaFX-Application-Class>ch.ffhs.kino.layout.Main</JavaFX-Application-Class>
+							<JavaFX-Class-Path>
+								<!-- list all your dependencies here-->
+								
+							</JavaFX-Class-Path>
+							<!-- The artifactId (name) of the jfxrt.jar ... see dependency system scope--> 
+							<Class-Path>javafx-${javafx.version}.jar</Class-Path>
+						</manifestEntries>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			
 		</plugins>
+		<finalName>YourAppName</finalName>
 	</build>
-
 
 	<dependencies>
 
-		<!-- MigLayout -->
-
-		<dependency>
-			<groupId>com.miglayout</groupId>
-			<artifactId>miglayout-javafx</artifactId>
-			<version>4.2</version>
-		</dependency>
 
 		<!-- Apache Commons -->
 
@@ -88,21 +102,6 @@
 		<!-- Logging -->
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
@@ -114,6 +113,8 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		
+
 
 	</dependencies>
 
