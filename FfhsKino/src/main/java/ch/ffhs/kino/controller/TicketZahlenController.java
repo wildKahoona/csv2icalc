@@ -16,6 +16,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 
 public class TicketZahlenController {
+
+	/**
+	 * Birgit
+	 * TODO: Fertigstellen
+	 */
+	
 	@FXML
 	private TableView<TicketTableModel> tableView;
 

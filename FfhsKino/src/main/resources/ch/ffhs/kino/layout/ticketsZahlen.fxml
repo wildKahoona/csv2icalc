@@ -77,6 +77,7 @@
 		<Label text="Buchungsvorgang läuft ab in: 06:22" />
 		<Label text="Erwachsene:2, Kinder:1 Total:50.00 CHF" />
 	</VBox>
+	<!--  Ticket Tabelle -->
 	<TableView fx:id="tableView" styleClass="noheader" GridPane.columnIndex="1" GridPane.rowIndex="4" prefHeight="10">
 		<columns>
 			<TableColumn prefWidth="100" fx:id="sitz">

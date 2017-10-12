@@ -4,6 +4,10 @@ import ch.ffhs.kino.model.Vorstellung;
 import javafx.fxml.FXML;
 
 public class VorstellungController {
+	/**
+	 * Birgit
+	 *  TODO: Fertigstellen
+	 */
 
 	Vorstellung vorstellung;
 

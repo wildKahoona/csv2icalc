@@ -167,7 +167,7 @@ public class CinemaProgrammServiceMock {
 		movie1.setGenre(GenreType.COMEDY);
 		movie1.setDesc(
 				"Die neunköpfige Romafamilie im Garten des Linksintellektuellen Jean-Etienne stellt seine Überzeugungen auf die Probe.");
-		movie1.setImageRessource("movies/mov20");
+		movie1.setImageRessource("/ch/ffhs/kino/movies/movies/mov20.jpg");
 		movie1.setAltersfreigabe("12J");
 
 		// Barry Seal - Only in America
@@ -176,7 +176,7 @@ public class CinemaProgrammServiceMock {
 		movie2.setGenre(GenreType.ACTION, GenreType.COMEDY, GenreType.DRAMA, GenreType.THRILLER);
 		movie2.setDesc(
 				"Einige Waisenkinder finden ein Zuhause bei einem Puppenmacher. Schon bald geraten sie ins Visier einer seiner Kreationen.");
-		movie2.setImageRessource("movies/mov4");
+		movie2.setImageRessource("/ch/ffhs/kino/movies/mov4.jpg");
 		movie2.setAltersfreigabe("14/12J");
 
 		// Blade Runner 2049
@@ -185,7 +185,7 @@ public class CinemaProgrammServiceMock {
 		movie3.setGenre(GenreType.SCIENCE_FICTION, GenreType.THRILLER);
 		movie3.setDesc(
 				"30 Jahre nach dem ersten Film fördert ein neuer Blade Runner ein lange unter Verschluss gehaltenes Geheimnis zu Tage.");
-		movie3.setImageRessource("movies/mov23");
+		movie3.setImageRessource("/ch/ffhs/kino/movies/mov23.jpg");
 		movie3.setAltersfreigabe("14/12J");
 
 		final String code = "f0o1KcTu5tc";

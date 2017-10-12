@@ -17,9 +17,9 @@
 					<children>
 						<VBox>
 							<children>
-								<ImageView pickOnBounds="true" preserveRatio="true" />
-								<WebView fx:id="trailer" onMouseClicked="#startTrailer" prefHeight="200" prefWidth="200"/>
-								<Label text="Label" />
+								<ImageView fx:id="movieImage" pickOnBounds="true" preserveRatio="true" />
+								<WebView fx:id="trailer"  prefHeight="200" prefWidth="200"/>
+								<Label  fx:id="trailerButton" text="Trailer" onMouseClicked="#startTrailer" />
 							</children>
 						</VBox>
 						<VBox GridPane.columnIndex="1">

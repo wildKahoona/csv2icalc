@@ -38,7 +38,7 @@
 
 .long{-fx-pref-width:180px;  width:180px;}
 .medium{-fx-pref-width:120px; width:180px; }
-.small{-fx-pref-width:80px; width:180px; }
+.small{-fx-pref-width:50px; width:180px; }
 .solidblackborder{ -fx-border-color: black; -fx-padding: 15 ;}
 
 .kinoSaal{

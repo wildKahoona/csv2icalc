@@ -85,7 +85,7 @@
 			</plugin>
 			
 		</plugins>
-		<finalName>YourAppName</finalName>
+		<finalName>KinoApp</finalName>
 	</build>
 
 	<dependencies>
@@ -114,8 +114,6 @@
 			<scope>test</scope>
 		</dependency>
 		
-
-
 	</dependencies>
 
 </project>

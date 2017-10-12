@@ -1,11 +1,26 @@
 package ch.ffhs.kino.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SimpleTimeZone;
+
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 
 public class Hall {
 
 	private String hallName;
 	private CinemaPlaces cinema;
+
+	private int row;
+	private int columns;
+
+	List<Seat> seatlist = new ArrayList<Seat>();
+
+	public Hall() {
+
+		seatlist.add(new Seat(1, 1));
+
+	}
 
 	public Hall(String hallName, CinemaPlaces cinema) {
 		this.hallName = hallName;

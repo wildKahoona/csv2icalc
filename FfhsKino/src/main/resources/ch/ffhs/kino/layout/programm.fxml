@@ -5,6 +5,6 @@
 	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ffhs.kino.controller.ProgrammController">
 
 
-	<TextField promptText="Search" onKeyReleased="#search" />
+	<TextField fx:id="searchKey" promptText="Search" onKeyPressed="#search" />
 	<TableView fx:id="programmtable" GridPane.rowIndex="1" />
 </GridPane>

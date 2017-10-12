@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -27,8 +28,15 @@ import javafx.util.Callback;
 
 public class ProgrammController {
 
+
+	/**
+	 * TODO: Denis Fertigstellen
+	 */
+	//FIXME: hahllo 
 	@FXML
 	TableView<ProgrammTableModel> programmtable;
+	@FXML
+	TextField searchKey;
 
 	List<String> columns = new ArrayList<String>();
 
@@ -126,6 +134,6 @@ public class ProgrammController {
 
 	@FXML
 	public void search(KeyEvent event) {
-
+		searchKey.setPromptText("You Have clicked");
 	}
 }

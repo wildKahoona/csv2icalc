@@ -32,7 +32,6 @@
 		<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
 			<children>
 				<GridPane>
-
 					<children>
 						<Button mnemonicParsing="false" text="Kaufen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
 

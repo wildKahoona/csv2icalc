@@ -1,10 +1,9 @@
 package ch.ffhs.kino.model;
 
-
 public class Seat {
 
 	public enum SeatType {
-		NORMAL, PREMIUM, HANDYCAP;
+		NORMAL, PREMIUM, HANDYCAP, NONE;
 	}
 
 	private Integer row;
