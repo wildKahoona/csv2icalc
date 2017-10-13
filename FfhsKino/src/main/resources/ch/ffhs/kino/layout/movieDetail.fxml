@@ -6,34 +6,79 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.GridPane?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-	prefWidth="600.0" text="untitled" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ffhs.kino.controller.MovieDetailController">
-	<content>
-		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<GridPane id="content" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ffhs.kino.controller.MovieDetailController">
+
+	<!-- Breadcrumb -->
+	<HBox GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="0">
+		<Label styleClass="breadcrumb" text="Programm" />
+		<Label styleClass="breadcrumb" text="1. Vorstellung wählen" />
+		<Label styleClass="breadcrumb" text="2. Sitzplatz wählen" />
+		<Label styleClass="breadcrumb" text="3. Bezahlen" />
+	</HBox>
+	<!-- Title -->
+	<GridPane GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="1">
+		<Label styleClass="h1" fx:id="movieTitle" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+		<Label styleClass="h2" fx:id="movieLenght" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+		<ImageView styleClass="fskImage" fx:id="fskImage" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+		<Separator GridPane.columnSpan="3" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+	</GridPane>
+
+
+	<!-- Bild & Kritik -->
+	<VBox GridPane.columnIndex="0" GridPane.rowIndex="2">
+		<children>
+			<ImageView fx:id="movieImage" pickOnBounds="true" preserveRatio="true" />
+			<Button text="Trailer" onMouseClicked="#startTrailer" />
+			<Label text="Cineman-Filmkritik" />
+			<HBox>
+				<Label fx:id="criticsValue" />
+				<ImageView fx:id="criticsStarImage" />
+			</HBox>
+		</children>
+	</VBox>
+
+	<!-- DetailInfos -->
+	<VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+		<VBox>
 			<children>
-				<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0">
+				<Label text="Tickets: Einfach die gewünschte Spielzeit anklicken." />
+				<TableView fx:id="vorstellungenTable">
+				</TableView>
 
-					<children>
-						<VBox>
-							<children>
-								<ImageView fx:id="movieImage" pickOnBounds="true" preserveRatio="true" />
-								<WebView fx:id="trailer"  prefHeight="200" prefWidth="200"/>
-								<Label  fx:id="trailerButton" text="Trailer" onMouseClicked="#startTrailer" />
-							</children>
-						</VBox>
-						<VBox GridPane.columnIndex="1">
-							<children>
-								<Label text="Label" />
-								<TableView>
-								</TableView>
-								<Label text="Label" />
-								<TextFlow />
-							</children>
-						</VBox>
-					</children>
+				<GridPane>
+					<Label text="Genre:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+					<Label fx:id="genre" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+					<Label text="Originalsprache:"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+					<Label fx:id="originalsprache" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+					<Label text="Untertitel:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+					<Label fx:id="untertitel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+					<Label text="Regie:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+					<Label fx:id="regie" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+					<Label text="Schausspieler:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+					<Label fx:id="schausspieler" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 				</GridPane>
+
+				<!-- Beschreibung -->
+				<VBox>
+					<children>
+						<TextFlow fx:id="movieDescription" />
+						<Hyperlink text="Mehr Informationen(Webseite)" fx:id="movieLink" onMouseClicked="#webseiteStart" />
+					</children>
+				</VBox>
+
 			</children>
-		</AnchorPane>
-	</content>
-</TitledPane>
+		</VBox>
+		<!-- Trailer -->
+		<VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+			<Label styleClass="rightOriented" text="X" onMouseClicked="#closeTrailer" />
+			<WebView fx:id="trailerView" />
+		</VBox>
+
+	</VBox>
+</GridPane>

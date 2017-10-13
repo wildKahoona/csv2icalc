@@ -68,7 +68,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Kino REX - " + movie.getTitle());
 
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/movieDetail.fxml"));
-		Scene scene = new Scene((TitledPane) loader.load());
+		Scene scene = new Scene((GridPane) loader.load());
 		// Parameterübergabe
 		MovieDetailController controller = loader.<MovieDetailController>getController();
 		controller.setMovie(movie);
