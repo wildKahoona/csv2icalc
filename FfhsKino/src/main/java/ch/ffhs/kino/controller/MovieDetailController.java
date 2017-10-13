@@ -9,6 +9,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.text.TextFlow;
+import javafx.scene.layout.VBox;
 
 public class MovieDetailController {
 
@@ -60,13 +62,25 @@ public class MovieDetailController {
 	Label schausspieler;
 
 	@FXML
+	TextFlow movieDescription;
+
+	@FXML
+	VBox trailerContainer;
+
+	@FXML
+	VBox detailContainer;
+
+	@FXML
 	public void startTrailer(MouseEvent event) {
 
+		detailContainer.setVisible(false);
 		String content_Url = "http://www.youtube.com/watch?v=qWxNb17aArw";
 		content_Url = movie.getTrailer();
 		trailerView.getEngine().setUserAgent(CHROME_41_USER_AGENT);
 		trailerView.getEngine().load(content_Url);
 		trailerView.setPrefSize(640, 390);
+
+		trailerContainer.setVisible(true);
 
 	}
 
@@ -90,13 +104,21 @@ public class MovieDetailController {
 		movieImage.setImage(new Image(getClass().getResourceAsStream(movie.getImageRessource())));
 
 		movieTitle.setText(movie.getTitle());
-		movieLenght.setText(String.format("Lönge: %s min.", movie.getLaengeMin()));
-		fskImage.setImage(new Image(getClass().getResourceAsStream(movie.getAltersfreigabe())));
+		movieLenght.setText(String.format("Länge: %S min.", movie.getLaengeMin()));
 
+		// FIXME:USE FSK PICTURE
+		// fskImage.setImage(new
+		// Image(getClass().getResourceAsStream(movie.getAltersfreigabe())));
+		fskImage.setAccessibleText(movie.getAltersfreigabe());
 	}
 
 	@FXML
 	public void closeTrailer() {
+		trailerContainer.setVisible(false);
+		detailContainer.setVisible(true);
+		trailerView.getEngine().load("about:blank");
+		
+
 	}
 
 	@FXML

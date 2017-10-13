@@ -44,7 +44,7 @@
 	</VBox>
 
 	<!-- DetailInfos -->
-	<VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+	<VBox GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="detailContainer">
 		<VBox>
 			<children>
 				<Label text="Tickets: Einfach die gewünschte Spielzeit anklicken." />
@@ -52,16 +52,16 @@
 				</TableView>
 
 				<GridPane>
-					<Label text="Genre:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-					<Label fx:id="genre" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-					<Label text="Originalsprache:"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-					<Label fx:id="originalsprache" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-					<Label text="Untertitel:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-					<Label fx:id="untertitel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-					<Label text="Regie:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-					<Label fx:id="regie" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-					<Label text="Schausspieler:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-					<Label fx:id="schausspieler" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+					<Label text="Genre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+					<Label fx:id="genre" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+					<Label text="Originalsprache:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+					<Label fx:id="originalsprache" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+					<Label text="Untertitel:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+					<Label fx:id="untertitel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+					<Label text="Regie:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+					<Label fx:id="regie" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+					<Label text="Schausspieler:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+					<Label fx:id="schausspieler" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 				</GridPane>
 
 				<!-- Beschreibung -->
@@ -75,7 +75,7 @@
 			</children>
 		</VBox>
 		<!-- Trailer -->
-		<VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+		<VBox GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="trailerContainer" visible="false">
 			<Label styleClass="rightOriented" text="X" onMouseClicked="#closeTrailer" />
 			<WebView fx:id="trailerView" />
 		</VBox>

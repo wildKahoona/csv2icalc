@@ -47,7 +47,7 @@ public class Main extends Application {
 		// startMovieDetail(cinemaProgrammService.getMovie());
 		startKinoProgramm();
 		// startVorstellung(cinemaProgrammService.getVorstellung());
-		//startTicketZahlen(cinemaProgrammService.getBooking());
+		// startTicketZahlen(cinemaProgrammService.getBooking());
 	}
 
 	public static void main(String[] args) {
