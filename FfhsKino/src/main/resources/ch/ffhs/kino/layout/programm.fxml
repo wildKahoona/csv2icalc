@@ -30,10 +30,10 @@
 
 	<HBox GridPane.rowIndex="4" GridPane.columnIndex="0" spacing="20">
 		<Label text="Genre: " />
-		<ComboBox fx:id="sucheGenre" onMouseClicked="#search" />
+		<ComboBox fx:id="sucheGenre" onAction="#search" />
 		<Label text="Sprache: " />
-		<ComboBox fx:id="sucheLanguage" onMouseClicked="#search" />
-		<CheckBox fx:id="suche3D" text="3D" />
+		<ComboBox fx:id="sucheLanguage" onAction="#search" />
+		<CheckBox fx:id="suche3D" text="3D" onAction="#search" />
 	</HBox>
 	<HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="4">
 		<TextField fx:id="sucheBegriff" onKeyPressed="#search" promptText="Search" />

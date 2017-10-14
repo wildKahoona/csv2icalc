@@ -12,6 +12,7 @@ import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Show;
+import ch.ffhs.kino.model.Show.ShowType;
 
 /**
  * Stellt einen Mock-Service zur verfügung um die Daten auf den verschiedenen
@@ -122,7 +123,17 @@ public class CinemaProgrammServiceMock {
 				event1.setShow(show7);
 				break;
 			}
-
+			switch (i % 4) {
+			case 0:
+				event1.setType(ShowType.THREE_D);
+				break;
+			default:
+				event1.setType(ShowType.NORMAL);
+				break;
+			}
+			
+			
+			
 			vorstellungen.add(event1);
 
 		}
@@ -205,4 +216,7 @@ public class CinemaProgrammServiceMock {
 	public Movie getMovie() {
 		return movie3;
 	}
+	
+	
+	
 }

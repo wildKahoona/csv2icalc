@@ -66,7 +66,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/programm.fxml"));
 		Scene scene = new Scene((Pane) loader.load());
 		ProgrammController controller = loader.<ProgrammController>getController();
-		controller.setVorstellungen(cinemaProgrammService.getProgramm());
+		controller.initVorstellungen(cinemaProgrammService.getProgramm());
 		show(scene);
 
 	}

@@ -76,3 +76,14 @@
 .infoLabel{
 	-fx-font-weight: bold;
 }
+
+.table-row-cell:selected {
+   -fx-background-color: #FFE4e1; 
+}
+
+
+
+.table-row-cell:selected .text {
+       -fx-fill: #800000  ;
+
+}

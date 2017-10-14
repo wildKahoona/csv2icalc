@@ -141,7 +141,7 @@ public class MovieDetailController {
 
 		setAlterfreigabe();
 		moviefskImage.setAccessibleText(movie.getAltersfreigabe());
-		moviefskTitle.setText("FSK: ab " + movie.getAltersfreigabe() + " freigegeben");
+		moviefskTitle.setText("FSK: ab " + movie.getAltersfreigabe() + "J freigegeben");
 
 	}
 
