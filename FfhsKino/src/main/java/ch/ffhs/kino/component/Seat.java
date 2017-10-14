@@ -11,7 +11,7 @@ public class Seat extends Rectangle {
 	}
 	private Integer seatRow;
 	private Integer seatNumber;
-	private SeatType type = SeatType.NORMAL;
+	//private SeatType type = SeatType.NORMAL;
 
 	/**
 	 * Indikator, ob der Sitz zur Reservierung ausgewählt ist oder nicht
