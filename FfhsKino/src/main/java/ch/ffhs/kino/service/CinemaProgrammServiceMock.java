@@ -189,7 +189,7 @@ public class CinemaProgrammServiceMock {
 		movie3.setDesc(
 				"30 Jahre nach dem ersten Film fördert ein neuer Blade Runner ein lange unter Verschluss gehaltenes Geheimnis zu Tage.");
 		movie3.setImageRessource(String.format(imgPath, "23"));
-		movie3.setAltersfreigabe("14/12J");
+		movie3.setAltersfreigabe("12");
 		movie3.setLaengeMin(163);
 		final String code = "gCcx85zbxz4";
 		String url = "http://www.youtube.com/embed/" + code + "?rel=0;3&amp;autohide=1&amp;showinfo=0";

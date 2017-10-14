@@ -35,8 +35,7 @@ public class MovieDetailController {
 	@FXML
 	Label movieLenght;
 
-	@FXML
-	ImageView fskImage;
+	
 
 	@FXML
 	ImageView movieImage;
@@ -76,6 +75,10 @@ public class MovieDetailController {
 
 	@FXML
 	Hyperlink movieLink;
+
+	@FXML Label moviefskTitle;
+
+	@FXML ImageView moviefskImage;
 
 	@FXML
 	public void startTrailer(MouseEvent event) {
@@ -119,7 +122,6 @@ public class MovieDetailController {
 		// FIXME:USE FSK PICTURE
 		// fskImage.setImage(new
 		// Image(getClass().getResourceAsStream(movie.getAltersfreigabe())));
-		fskImage.setAccessibleText(movie.getAltersfreigabe());
 		movieGenre.setText(movie.getGenreText().toString());
 		movieDescription.setText(movie.getDesc());
 
@@ -136,6 +138,25 @@ public class MovieDetailController {
 
 		movieCriticsStarImage.setImage(newImage);
 		movieCriticsValue.setText(String.valueOf(movie.getCriticsStar()));
+
+		setAlterfreigabe();
+		moviefskImage.setAccessibleText(movie.getAltersfreigabe());
+		moviefskTitle.setText("FSK: ab "+movie.getAltersfreigabe()+" freigegeben");
+
+
+	}
+
+	private void setAlterfreigabe() {
+		String fskPath = "/ch/ffhs/kino/images/FSK_ab_%s.png";
+		try {
+
+			String format = String.format(fskPath, movie.getAltersfreigabe());
+			moviefskImage.setImage(
+					new Image(getClass().getResourceAsStream(format)));
+		} catch (Exception e) {
+			moviefskImage.setImage(new Image(getClass().getResourceAsStream(String.format(fskPath, 0))));
+
+		}
 	}
 
 	private WritableImage getCropedCriticsStars() {
