@@ -9,6 +9,14 @@ public class Show {
 
 	public enum ShowType {
 		NORMAL, THREE_D;
+		public  boolean isThreeD() {
+			if (THREE_D.equals(this)) {
+				return true;
+			}
+			return false;
+
+		}
+
 	}
 
 	public Movie getMovie() {
@@ -31,5 +39,7 @@ public class Show {
 	public String toString() {
 		return "Show [movie=" + movie + ", language=" + language + "]";
 	}
+
+	
 
 }

@@ -13,6 +13,7 @@ import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Show;
 import ch.ffhs.kino.model.TicketPrice;
+import ch.ffhs.kino.model.Show.ShowType;
 
 /**
  * Stellt einen Mock-Service zur verfügung um die Daten auf den verschiedenen
@@ -44,9 +45,8 @@ public class CinemaProgrammServiceMock {
 	private Show show7;
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
-	
 	private List<TicketPrice> ticketPrices = new ArrayList<TicketPrice>();
-
+	
 	public CinemaProgrammServiceMock() {
 
 		init();
@@ -63,6 +63,7 @@ public class CinemaProgrammServiceMock {
 	public List<TicketPrice> getTicketPrices() {
 		return ticketPrices;
 	}
+	
 	public Booking getBooking() {
 
 		Booking booking = new Booking();
@@ -75,14 +76,14 @@ public class CinemaProgrammServiceMock {
 	private void init() {
 		// MockData
 
-		initPrices();
-		
 		initMovies();
 
 		initShows();
-
+		
 		initHalls();
 		
+		initPrices();
+
 		for (int i = 0; i < 200; i++) {
 
 			double random = Math.random();
@@ -90,7 +91,7 @@ public class CinemaProgrammServiceMock {
 			Vorstellung event1 = new Vorstellung();
 			event1.setDate(new Date(2017, Integer.valueOf((int) (random * 10)), Integer.valueOf((int) (random2 * 10)),
 					21, 15));
-			
+
 			switch (i % 4) {
 			case 0:
 				event1.setHall(hallRex1);
@@ -132,7 +133,17 @@ public class CinemaProgrammServiceMock {
 				event1.setShow(show7);
 				break;
 			}
-
+			switch (i % 4) {
+			case 0:
+				event1.setType(ShowType.THREE_D);
+				break;
+			default:
+				event1.setType(ShowType.NORMAL);
+				break;
+			}
+			
+			
+			
 			vorstellungen.add(event1);
 
 		}
@@ -171,13 +182,16 @@ public class CinemaProgrammServiceMock {
 
 	private void initMovies() {
 
+		String imgPath= "/ch/ffhs/kino/movies/mov%s.jpg";
+		
+		
 		// Hereinspaziert
 		movie1 = new Movie();
 		movie1.setTitle("Hereinspaziert");
 		movie1.setGenre(GenreType.COMEDY);
 		movie1.setDesc(
 				"Die neunköpfige Romafamilie im Garten des Linksintellektuellen Jean-Etienne stellt seine Überzeugungen auf die Probe.");
-		movie1.setImageRessource("/ch/ffhs/kino/movies/movies/mov20.jpg");
+		movie1.setImageRessource(String.format(imgPath, "20"));
 		movie1.setAltersfreigabe("12J");
 
 		// Barry Seal - Only in America
@@ -186,7 +200,7 @@ public class CinemaProgrammServiceMock {
 		movie2.setGenre(GenreType.ACTION, GenreType.COMEDY, GenreType.DRAMA, GenreType.THRILLER);
 		movie2.setDesc(
 				"Einige Waisenkinder finden ein Zuhause bei einem Puppenmacher. Schon bald geraten sie ins Visier einer seiner Kreationen.");
-		movie2.setImageRessource("/ch/ffhs/kino/movies/mov4.jpg");
+		movie2.setImageRessource(String.format(imgPath, "4"));
 		movie2.setAltersfreigabe("14/12J");
 
 		// Blade Runner 2049
@@ -195,12 +209,18 @@ public class CinemaProgrammServiceMock {
 		movie3.setGenre(GenreType.SCIENCE_FICTION, GenreType.THRILLER);
 		movie3.setDesc(
 				"30 Jahre nach dem ersten Film fördert ein neuer Blade Runner ein lange unter Verschluss gehaltenes Geheimnis zu Tage.");
-		movie3.setImageRessource("/ch/ffhs/kino/movies/mov23.jpg");
-		movie3.setAltersfreigabe("14/12J");
-
-		final String code = "f0o1KcTu5tc";
+		movie3.setImageRessource(String.format(imgPath, "23"));
+		movie3.setAltersfreigabe("12");
+		movie3.setLaengeMin(163);
+		final String code = "gCcx85zbxz4";
 		String url = "http://www.youtube.com/embed/" + code + "?rel=0;3&amp;autohide=1&amp;showinfo=0";
 		movie3.setTrailer(url);
+		movie3.setWebseite("http://www.imdb.com/title/tt1856101/");
+		movie3.setCriticsStar(4.3);
+		movie3.setOriginalLanguage(MovieLanguage.ENGLISH);
+		movie3.setSubtitle(MovieLanguage.FRANZOESISCH);
+		movie3.setRegie("Denis Vileneuve");
+		movie3.addActors("Ana de Armas").addActors("Dave Bautista").addActors("Edward James Olmos").addActors("Harrison Ford");
 	}
 
 	private void initHalls()
@@ -226,4 +246,7 @@ public class CinemaProgrammServiceMock {
 	public Movie getMovie() {
 		return movie3;
 	}
+	
+	
+	
 }

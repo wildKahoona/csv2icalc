@@ -11,9 +11,9 @@ import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	private static Stage primaryStage; // **Declare static Stage**
-	private static final int STAGE_WIDTH = 800;
+	private static final int STAGE_WIDTH = 1100;
 	private static final String CSS = "ch/ffhs/kino/layout/controlStyle.css";
 	private static final CinemaProgrammServiceMock cinemaProgrammService = new CinemaProgrammServiceMock();
 
@@ -33,6 +33,12 @@ public class Main extends Application {
 
 	static public Stage getPrimaryStage() {
 		return Main.primaryStage;
+	}
+
+	public static HostServices getHostServ() {
+		Main m = new Main();
+		return m.getHostServices();
+
 	}
 
 	static {
@@ -45,13 +51,14 @@ public class Main extends Application {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
-		// startKinoProgramm();
-		startVorstellung(cinemaProgrammService.getVorstellung());
-		//startTicketZahlen(cinemaProgrammService.getBooking());
+		startKinoProgramm();
+		// startVorstellung(cinemaProgrammService.getVorstellung());
+		// startTicketZahlen(cinemaProgrammService.getBooking());
 	}
 
 	public static void main(String[] args) {
 		launch(args);
+
 	}
 
 	public static void startKinoProgramm() throws IOException {
@@ -59,7 +66,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/programm.fxml"));
 		Scene scene = new Scene((Pane) loader.load());
 		ProgrammController controller = loader.<ProgrammController>getController();
-		controller.setVorstellungen(cinemaProgrammService.getProgramm());
+		controller.initVorstellungen(cinemaProgrammService.getProgramm());
 		show(scene);
 
 	}
@@ -68,7 +75,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Kino REX - " + movie.getTitle());
 
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/movieDetail.fxml"));
-		Scene scene = new Scene((TitledPane) loader.load());
+		Scene scene = new Scene((GridPane) loader.load());
 		// Parameterübergabe
 		MovieDetailController controller = loader.<MovieDetailController>getController();
 		controller.setMovie(movie);
