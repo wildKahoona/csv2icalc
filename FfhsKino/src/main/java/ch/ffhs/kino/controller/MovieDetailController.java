@@ -36,9 +36,6 @@ public class MovieDetailController {
 	Label movieLenght;
 
 	@FXML
-	ImageView fskImage;
-
-	@FXML
 	ImageView movieImage;
 
 	@FXML
@@ -76,6 +73,12 @@ public class MovieDetailController {
 
 	@FXML
 	Hyperlink movieLink;
+
+	@FXML
+	Label moviefskTitle;
+
+	@FXML
+	ImageView moviefskImage;
 
 	@FXML
 	public void startTrailer(MouseEvent event) {
@@ -119,7 +122,6 @@ public class MovieDetailController {
 		// FIXME:USE FSK PICTURE
 		// fskImage.setImage(new
 		// Image(getClass().getResourceAsStream(movie.getAltersfreigabe())));
-		fskImage.setAccessibleText(movie.getAltersfreigabe());
 		movieGenre.setText(movie.getGenreText().toString());
 		movieDescription.setText(movie.getDesc());
 
@@ -136,6 +138,23 @@ public class MovieDetailController {
 
 		movieCriticsStarImage.setImage(newImage);
 		movieCriticsValue.setText(String.valueOf(movie.getCriticsStar()));
+
+		setAlterfreigabe();
+		moviefskImage.setAccessibleText(movie.getAltersfreigabe());
+		moviefskTitle.setText("FSK: ab " + movie.getAltersfreigabe() + "J freigegeben");
+
+	}
+
+	private void setAlterfreigabe() {
+		String fskPath = "/ch/ffhs/kino/images/FSK_ab_%s.png";
+		try {
+
+			String format = String.format(fskPath, movie.getAltersfreigabe());
+			moviefskImage.setImage(new Image(getClass().getResourceAsStream(format)));
+		} catch (Exception e) {
+			moviefskImage.setImage(new Image(getClass().getResourceAsStream(String.format(fskPath, 0))));
+
+		}
 	}
 
 	private WritableImage getCropedCriticsStars() {
@@ -168,33 +187,8 @@ public class MovieDetailController {
 
 	@FXML
 	public void breadcrumbAction(MouseEvent event) {
-		Object source = event.getSource();
-		try {
-			if (source instanceof Label) {
+		ControllerUtils.breadcrumbAction(event.getSource());
 
-				Label label = (Label) source;
-
-				if (!label.isDisable()) {
-					String id = label.getId();
-					if (id.equals("bc_programm")) {
-						Main.startKinoProgramm();
-					} else if (id.equals("bc_vorstellung")) {
-						Main.startVorstellung(null);
-					} else if (id.equals("bc_bezahlen")) {
-						Main.startTicketZahlen(null);
-					} else if (id.equals("bc_sitzplatz")) {
-						Main.startVorstellung(null);
-
-					}
-
-				}
-
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

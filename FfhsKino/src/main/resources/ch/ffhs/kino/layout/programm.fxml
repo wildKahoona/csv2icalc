@@ -1,10 +1,46 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
-	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ffhs.kino.controller.ProgrammController">
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.CheckBox?>
+<GridPane id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.ProgrammController">
+
+	<!-- Breadcrumb -->
+	<HBox styleClass="breadcrumb" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
+		<children>
+			<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " />
+			<Label id="bc_vorstellung" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
+			<Label id="bc_sitzplatz" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
+			<Label id="bc_bezahlen" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+		</children>
+	</HBox>
 
 
-	<TextField fx:id="searchKey" promptText="Search" onKeyPressed="#search" />
-	<TableView fx:id="programmtable" GridPane.rowIndex="1" />
+	<!-- Title -->
+	<GridPane hgap="30.0" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1">
+		<children>
+			<Label text="Wochenprogramm" styleClass="h1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+		</children>
+
+	</GridPane>
+	<Separator GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+	<Label styleClass="infoLabel" text="Tickets: Einfach die gewünschte Spielzeit anklicken." GridPane.rowIndex="3" />
+
+	<HBox GridPane.rowIndex="4" GridPane.columnIndex="0" spacing="20">
+		<Label text="Genre: " />
+		<ComboBox fx:id="sucheGenre" onAction="#search" />
+		<Label text="Sprache: " />
+		<ComboBox fx:id="sucheLanguage" onAction="#search" />
+		<CheckBox fx:id="suche3D" text="3D" onAction="#search" />
+	</HBox>
+	<HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="4">
+		<TextField fx:id="sucheBegriff" onKeyPressed="#search" promptText="Search" />
+		<Button text="Suchen" onMouseClicked="#search" />
+	</HBox>
+
+
+
+	<TableView fx:id="programmtable" GridPane.rowIndex="5" GridPane.columnSpan="2" />
 </GridPane>

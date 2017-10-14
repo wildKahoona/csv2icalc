@@ -3,6 +3,7 @@ package ch.ffhs.kino.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -36,11 +37,16 @@ public class Movie {
 
 		}
 
+		@Override
+		public String toString() {
+			return getLongText();
+		}
+
 	}
 
 	public enum GenreType {
 		DRAMA("Drama"), ACTION("Action"), COMEDY("Komödie"), MISTRERY("Mystery"), THRILLER("Thriller"), CRIMINAL(
-				"Krimi"), HORROR("Horror"), SCIENCE_FICTION("Science Fiction"), ANIMATION("Trickfilm");
+				"Krimi"), HORROR("Horror"), SCIENCE_FICTION("Science Fiction"), ANIMATION("Trickfilm"), NONE("");
 		private String text;
 
 		public String getText() {
@@ -61,6 +67,7 @@ public class Movie {
 		}
 	}
 
+	private UUID id = UUID.randomUUID();
 	private MovieLanguage originalLanguage = MovieLanguage.NONE;
 	private MovieLanguage subtitle = MovieLanguage.NONE;
 	private String regie;
@@ -195,10 +202,10 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "Movie [originalLanguage=" + originalLanguage + ", subtitle=" + subtitle + ", regie=" + regie
-				+ ", actors=" + actors + ", title=" + title + ", genre=" + genre + ", desc=" + desc
-				+ ", imageRessource=" + imageRessource + ", altersfreigabe=" + altersfreigabe + ", laengeMin="
-				+ laengeMin + ", webseite=" + webseite + ", criticsStar=" + criticsStar + ", trailer=" + trailer + "]";
+		return "Movie [id=" + id + ", originalLanguage=" + originalLanguage + ", regie=" + regie + ", actors=" + actors
+				+ ", title=" + title + ", genre=" + genre + ", desc=" + desc + ", imageRessource=" + imageRessource
+				+ ", altersfreigabe=" + altersfreigabe + ", laengeMin=" + laengeMin + ", webseite=" + webseite
+				+ ", criticsStar=" + criticsStar + ", trailer=" + trailer + "]";
 	}
 
 	public Movie addActors(String actor) {

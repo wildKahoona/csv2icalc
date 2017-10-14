@@ -29,16 +29,16 @@
 			<children>
 				<Label fx:id="movieTitle" styleClass="h1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 				<Label fx:id="movieLenght" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-				<ImageView fx:id="fskImage" fitHeight="30.0" fitWidth="30.0" styleClass="fskImage" GridPane.columnIndex="2" GridPane.halignment="RIGHT"
-					GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
+				<Label fx:id="moviefskTitle" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+				<ImageView fx:id="moviefskImage" fitHeight="30.0" fitWidth="30.0" styleClass="fskImage" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
 			</children>
-
+       
 		</GridPane>
 		<Separator GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 
 
 		<!-- Bild & Kritik -->
-		<VBox alignment="TOP_CENTER" maxWidth="300.0"  prefWidth="200.0" spacing="20.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+		<VBox alignment="TOP_CENTER" maxWidth="300.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
 			<children>
 				<ImageView fx:id="movieImage" pickOnBounds="true" preserveRatio="true" />
 				<Button onMouseClicked="#startTrailer" text="Trailer" />
@@ -59,7 +59,7 @@
 		<!-- DetailInfos -->
 		<AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="3">
 			<children>
-				<VBox fx:id="detailContainer" spacing="20.0" >
+				<VBox fx:id="detailContainer" spacing="20.0">
 					<children>
 						<Label styleClass="infoLabel" text="Tickets: Einfach die gewünschte Spielzeit anklicken." />
 						<TableView fx:id="vorstellungenTable">
@@ -82,12 +82,19 @@
 								<ColumnConstraints halignment="RIGHT" />
 								<ColumnConstraints />
 							</columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
 						</GridPane>
 
 						<!-- Beschreibung -->
 						<VBox styleClass="borderSolid">
 							<children>
-								<Label fx:id="movieDescription" prefWidth="200.0" alignment="TOP_LEFT"   />
+								<Label fx:id="movieDescription" alignment="TOP_LEFT" prefWidth="400.0" 	wrapText="true" />
 								<Hyperlink fx:id="movieLink" alignment="CENTER_RIGHT" contentDisplay="RIGHT" onMouseClicked="#webseiteStart" text="Mehr Informationen(Webseite)" />
 							</children>
 						</VBox>
@@ -103,4 +110,15 @@
 			</children>
 		</AnchorPane>
 	</children>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
 </GridPane>
