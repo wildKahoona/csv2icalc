@@ -4,7 +4,6 @@ import java.util.Date;
 
 import ch.ffhs.kino.model.Show.ShowType;
 
-
 public class Vorstellung {
 
 	private Show show;

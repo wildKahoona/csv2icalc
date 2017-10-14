@@ -2,6 +2,8 @@ package ch.ffhs.kino.model;
 
 import java.text.DecimalFormat;
 
+import ch.ffhs.kino.component.Seat;
+
 public class Ticket {
 
 	public enum TicketType {
@@ -33,8 +35,16 @@ public class Ticket {
 	}
 
 	private Seat seat;
+	public String seatDescription;
 	private TicketType ticketType;
+	private TicketPrice ticketPrice;
 
+	public Ticket(Seat seat) {
+		this.seat = seat;
+		this.seatDescription = "Reihe " + seat.getSeatRow() + ", Platz " + seat.getSeatNumber();
+		this.ticketType = TicketType.ADULT; // Default
+	}
+	
 	public Seat getSeat() {
 		return seat;
 	}
@@ -57,4 +67,15 @@ public class Ticket {
 
 	}
 
+	public String getSeatDescription(){
+		return seatDescription;
+	}
+
+	public TicketPrice getTicketPrice() {
+		return ticketPrice;
+	}
+
+	public void setTicketPrice(TicketPrice ticketPrice) {
+		this.ticketPrice = ticketPrice;
+	}
 }

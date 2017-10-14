@@ -12,6 +12,7 @@ import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Show;
+import ch.ffhs.kino.model.TicketPrice;
 
 /**
  * Stellt einen Mock-Service zur verfügung um die Daten auf den verschiedenen
@@ -43,6 +44,8 @@ public class CinemaProgrammServiceMock {
 	private Show show7;
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
+	
+	private List<TicketPrice> ticketPrices = new ArrayList<TicketPrice>();
 
 	public CinemaProgrammServiceMock() {
 
@@ -57,6 +60,9 @@ public class CinemaProgrammServiceMock {
 		return vorstellungen.get(0);
 	}
 
+	public List<TicketPrice> getTicketPrices() {
+		return ticketPrices;
+	}
 	public Booking getBooking() {
 
 		Booking booking = new Booking();
@@ -69,10 +75,14 @@ public class CinemaProgrammServiceMock {
 	private void init() {
 		// MockData
 
+		initPrices();
+		
 		initMovies();
 
 		initShows();
 
+		initHalls();
+		
 		for (int i = 0; i < 200; i++) {
 
 			double random = Math.random();
@@ -80,7 +90,7 @@ public class CinemaProgrammServiceMock {
 			Vorstellung event1 = new Vorstellung();
 			event1.setDate(new Date(2017, Integer.valueOf((int) (random * 10)), Integer.valueOf((int) (random2 * 10)),
 					21, 15));
-
+			
 			switch (i % 4) {
 			case 0:
 				event1.setHall(hallRex1);
@@ -193,6 +203,26 @@ public class CinemaProgrammServiceMock {
 		movie3.setTrailer(url);
 	}
 
+	private void initHalls()
+	{
+		// Kinosaal konfigurieren
+		hallRex1.configureSeatPlan(14, 10);
+		hallRex1.setSeatNotAvailable(5, 0);
+		hallRex1.setSeatNotAvailable(5, 1);
+		hallRex1.setSeatNotAvailable(5, 8);
+		hallRex1.setSeatNotAvailable(5, 9);
+		
+		hallRex2.configureSeatPlan(15, 8);
+		hallRex3.configureSeatPlan(25, 15);
+	}
+	
+	private void initPrices()
+	{
+		// Preise
+		ticketPrices.add(new TicketPrice("Erwachsener", 19.00));
+		ticketPrices.add(new TicketPrice("Kind", 12.00));
+	}
+	
 	public Movie getMovie() {
 		return movie3;
 	}

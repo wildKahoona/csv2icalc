@@ -4,19 +4,60 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.Insets?>
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
 	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ch.ffhs.kino.controller.VorstellungController">
-
+	<columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+    </columnConstraints>
 	<children>
+	
+		<Label text="Vorstellung"  GridPane.columnIndex="0" />
+		<Label text="[Platzhalter]" GridPane.columnIndex="1" />
+		<Separator GridPane.columnSpan="2" GridPane.rowIndex="2" />
+		
+		<TitledPane text="Sitzplatz-Auswahl" collapsible="false" GridPane.rowIndex="3" GridPane.columnIndex="0">
+			<VBox>
+	          <GridPane fx:id="hallGrid"
+	            alignment="CENTER"
+	            prefHeight="9999"
+	            prefWidth="9999"
+	            hgap="2"
+	            vgap="2"/>
+	        </VBox>
+		</TitledPane>
+	
+		<TitledPane text="Ihre Reservierung" collapsible="false" GridPane.rowIndex="3" GridPane.columnIndex="1">
+			<VBox fx:id="ticketGrid"
+	            alignment="TOP_LEFT"
+	            prefHeight="9999"
+	            prefWidth="9999">
+	        </VBox>
+			<!-- <TableView fx:id="ticketTable">
+				<columns>
+					<TableColumn fx:id="colSeatDescription" text="Sitz" />
+					<TableColumn fx:id="colPrice" text="Preis" />
+					<TableColumn fx:id="colDelete" text="Delete" />
+				</columns>
+			</TableView> -->
+		</TitledPane>	
+	</children>
+	
+<!-- 	<children>
 		<Label text="Vorstellung" />
 		<Label text="[Platzhalter]" GridPane.columnIndex="1" />
 		<Separator GridPane.columnSpan="2" GridPane.rowIndex="1" />
-		<TableView fx:id="kinoSaal" styleClass="kinoSaal" GridPane.rowIndex="3">
+		
+          
+ 		<TableView fx:id="kinoSaal" styleClass="kinoSaal" GridPane.rowIndex="3">
 
 		</TableView>
 		<Label text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" GridPane.rowIndex="2" />
-		<HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
+		
+ 		<HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
 			<children>
 				<ImageView pickOnBounds="true" preserveRatio="true" />
 				<Label text="frei" />
@@ -28,7 +69,7 @@
 				<Label text="meine Plätze" />
 				<ImageView pickOnBounds="true" preserveRatio="true" />
 			</children>
-		</HBox>
+		</HBox> 
 		<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
 			<children>
 				<GridPane>
@@ -45,5 +86,5 @@
 
 		<Button mnemonicParsing="false" text="Ticket hinzufügen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4"
 			GridPane.valignment="TOP" />
-	</children>
+	</children> -->
 </GridPane>

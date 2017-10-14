@@ -83,7 +83,7 @@ public class Main extends Application {
 
 		// Parameterübergabe
 		VorstellungController controller = loader.<VorstellungController>getController();
-		controller.setVorstellung(vorstellung);
+		controller.setVorstellung(vorstellung, cinemaProgrammService.getTicketPrices());
 		show(scene);
 
 	}
