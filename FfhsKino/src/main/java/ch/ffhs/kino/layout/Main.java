@@ -11,9 +11,9 @@ import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	private static Stage primaryStage; // **Declare static Stage**
-	private static final int STAGE_WIDTH = 800;
+	private static final int STAGE_WIDTH = 1100;
 	private static final String CSS = "ch/ffhs/kino/layout/controlStyle.css";
 	private static final CinemaProgrammServiceMock cinemaProgrammService = new CinemaProgrammServiceMock();
 
@@ -33,6 +33,12 @@ public class Main extends Application {
 
 	static public Stage getPrimaryStage() {
 		return Main.primaryStage;
+	}
+
+	public static HostServices getHostServ() {
+		Main m = new Main();
+		return m.getHostServices();
+
 	}
 
 	static {
@@ -52,6 +58,7 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+
 	}
 
 	public static void startKinoProgramm() throws IOException {
