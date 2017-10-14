@@ -13,6 +13,13 @@
   
 }
 
+/*TODO: Doesn't work */
+.rightOriented{    
+	-fx-alignment: CENTER;
+	
+		
+}
+
 
 /*Table ohne Überschrift */
 .noheader .column-header-background {
@@ -23,12 +30,12 @@
 
 
 .h1{
--fx-font: NORMAL 20.0 "Tahoma";
+	-fx-font: NORMAL 20.0 "Tahoma";
 }
 
 .h2{
--fx-font: NORMAL 15.0 "Tahoma";
--fx-padding: 15 ;
+	-fx-font: NORMAL 15.0 "Tahoma";
+	-fx-padding: 15.0 ;
 }
 
 .text-field {
@@ -36,11 +43,36 @@
   
 }
 
-.long{-fx-pref-width:180px;  width:180px;}
-.medium{-fx-pref-width:120px; width:180px; }
-.small{-fx-pref-width:50px; width:180px; }
-.solidblackborder{ -fx-border-color: black; -fx-padding: 15 ;}
+.long{-fx-pref-width:180.0px;  -fx-width:180.0px;}
+.medium{-fx-pref-width:120.0px; -fx-width:180.0px; }
+.small{-fx-pref-width:50.0px; -fx-width:180.0px; }
+.solidblackborder{ -fx-border-color: black; -fx-padding: 15.0 ;}
 
 .kinoSaal{
+}
+
+
+
+.breadcrumb{
+	/*-fx-cursor:hand;*/
+	-fx-spacing:12.0px;
+	-fx-font: 12.0pt "Cambria Bold";
+
+}
+
+.borderSolid{
+		-fx-border-style:	solid ;
 	
+}
+
+#content{
+		-fx-padding: 15.0 ;   
+		-fx-background-image: url("images/background.jpg");
+		-fx-background-repeat: stretch;   
+		
+		
+} 
+
+.infoLabel{
+	-fx-font-weight: bold;
 }
