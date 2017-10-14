@@ -32,16 +32,7 @@
 				<Label fx:id="moviefskTitle" GridPane.columnIndex="2" GridPane.rowIndex="0" />
 				<ImageView fx:id="moviefskImage" fitHeight="30.0" fitWidth="30.0" styleClass="fskImage" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
 			</children>
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-         </rowConstraints>
-
+       
 		</GridPane>
 		<Separator GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 

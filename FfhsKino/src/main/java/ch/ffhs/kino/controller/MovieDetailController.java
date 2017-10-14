@@ -35,8 +35,6 @@ public class MovieDetailController {
 	@FXML
 	Label movieLenght;
 
-	
-
 	@FXML
 	ImageView movieImage;
 
@@ -76,9 +74,11 @@ public class MovieDetailController {
 	@FXML
 	Hyperlink movieLink;
 
-	@FXML Label moviefskTitle;
+	@FXML
+	Label moviefskTitle;
 
-	@FXML ImageView moviefskImage;
+	@FXML
+	ImageView moviefskImage;
 
 	@FXML
 	public void startTrailer(MouseEvent event) {
@@ -141,8 +141,7 @@ public class MovieDetailController {
 
 		setAlterfreigabe();
 		moviefskImage.setAccessibleText(movie.getAltersfreigabe());
-		moviefskTitle.setText("FSK: ab "+movie.getAltersfreigabe()+" freigegeben");
-
+		moviefskTitle.setText("FSK: ab " + movie.getAltersfreigabe() + " freigegeben");
 
 	}
 
@@ -151,8 +150,7 @@ public class MovieDetailController {
 		try {
 
 			String format = String.format(fskPath, movie.getAltersfreigabe());
-			moviefskImage.setImage(
-					new Image(getClass().getResourceAsStream(format)));
+			moviefskImage.setImage(new Image(getClass().getResourceAsStream(format)));
 		} catch (Exception e) {
 			moviefskImage.setImage(new Image(getClass().getResourceAsStream(String.format(fskPath, 0))));
 
@@ -189,33 +187,8 @@ public class MovieDetailController {
 
 	@FXML
 	public void breadcrumbAction(MouseEvent event) {
-		Object source = event.getSource();
-		try {
-			if (source instanceof Label) {
+		ControllerUtils.breadcrumbAction(event.getSource());
 
-				Label label = (Label) source;
-
-				if (!label.isDisable()) {
-					String id = label.getId();
-					if (id.equals("bc_programm")) {
-						Main.startKinoProgramm();
-					} else if (id.equals("bc_vorstellung")) {
-						Main.startVorstellung(null);
-					} else if (id.equals("bc_bezahlen")) {
-						Main.startTicketZahlen(null);
-					} else if (id.equals("bc_sitzplatz")) {
-						Main.startVorstellung(null);
-
-					}
-
-				}
-
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

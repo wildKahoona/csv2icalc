@@ -7,11 +7,13 @@ public class ProgrammTableModel {
 	private SimpleStringProperty film;
 	private SimpleStringProperty sprache;
 	private SimpleStringProperty saal;
-
-	public ProgrammTableModel(String film, String sprache, String saal) {
+	private SimpleStringProperty genre;
+	
+	public ProgrammTableModel(String film, String sprache, String saal, String genre) {
 		this.film = new SimpleStringProperty(film);
 		this.sprache = new SimpleStringProperty(sprache);
 		this.saal = new SimpleStringProperty(saal);
+		this.genre = new SimpleStringProperty(genre);
 	}
 
 	public String getFilm() {
@@ -36,6 +38,13 @@ public class ProgrammTableModel {
 
 	public void setSaal(String saal) {
 		this.saal.set(saal);
+	}
+	public String getGenre() {
+		return genre.get();
+	}
+
+	public void setGenre(String genre) {
+		this.genre.set(genre);
 	}
 
 }
