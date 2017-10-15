@@ -51,8 +51,8 @@ public class Main extends Application {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
-		startKinoProgramm();
-		// startVorstellung(cinemaProgrammService.getVorstellung());
+		// startKinoProgramm();
+		startVorstellung(cinemaProgrammService.getVorstellung());
 		// startTicketZahlen(cinemaProgrammService.getBooking());
 	}
 
@@ -87,10 +87,11 @@ public class Main extends Application {
 		primaryStage.setTitle("Kino REX - Vorstellung");
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/vorstellung.fxml"));
 		Scene scene = new Scene((GridPane) loader.load());
+		//primaryStage.setMinWidth(900.0);
 
 		// Parameterübergabe
 		VorstellungController controller = loader.<VorstellungController>getController();
-		controller.setVorstellung(vorstellung);
+		controller.setVorstellung(vorstellung, cinemaProgrammService.getTicketPrices());
 		show(scene);
 
 	}

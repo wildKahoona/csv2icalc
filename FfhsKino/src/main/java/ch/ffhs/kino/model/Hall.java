@@ -1,26 +1,14 @@
 package ch.ffhs.kino.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SimpleTimeZone;
-
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 
 public class Hall {
 
 	private String hallName;
 	private CinemaPlaces cinema;
-
-	private int row;
+	private int rows;
 	private int columns;
-
-	List<Seat> seatlist = new ArrayList<Seat>();
-
-	public Hall() {
-
-		seatlist.add(new Seat(1, 1));
-
-	}
+	private Boolean[][] seatPlan;
 
 	public Hall(String hallName, CinemaPlaces cinema) {
 		this.hallName = hallName;
@@ -43,9 +31,43 @@ public class Hall {
 		this.cinema = cinema;
 	}
 
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public int getColumns() {
+		return columns;
+	}
+
+	public void setColumns(int columns) {
+		this.columns = columns;
+	}
+		
+	public Boolean[][] getSeatPlan() {
+		return seatPlan;
+	}
+
+	public void configureSeatPlan(int rows, int columns) {
+		this.rows = rows;
+		this.columns = columns;
+		seatPlan = new Boolean[rows][columns];
+		for (int row = 0; row < (rows ); row++) {
+	    	for (int column = 0; column < (columns ); column++) {
+	    		seatPlan[row][column] = true;
+	    	}
+		} 
+	}
+	
+	public void setSeatNotAvailable(int row, int column){
+		this.seatPlan[row][column] = false;
+	}
+
 	@Override
 	public String toString() {
 		return "Hall [hallName=" + hallName + ", cinema=" + cinema + "]";
 	}
-
 }
