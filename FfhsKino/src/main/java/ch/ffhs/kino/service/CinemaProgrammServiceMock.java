@@ -6,6 +6,7 @@ import java.util.List;
 
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 import ch.ffhs.kino.model.Vorstellung;
+import ch.ffhs.kino.component.Seat;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Movie;
@@ -14,6 +15,8 @@ import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Show;
 import ch.ffhs.kino.model.TicketPrice;
 import ch.ffhs.kino.model.Show.ShowType;
+import ch.ffhs.kino.model.Ticket;
+import ch.ffhs.kino.model.Ticket.TicketType;
 
 /**
  * Stellt einen Mock-Service zur verfügung um die Daten auf den verschiedenen
@@ -46,6 +49,7 @@ public class CinemaProgrammServiceMock {
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
 	private List<TicketPrice> ticketPrices = new ArrayList<TicketPrice>();
+	private List<Booking> bookings = new ArrayList<Booking>();
 	
 	public CinemaProgrammServiceMock() {
 
@@ -73,6 +77,14 @@ public class CinemaProgrammServiceMock {
 		return booking;
 	}
 
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
+	}
+	
 	private void init() {
 		// MockData
 
@@ -141,13 +153,10 @@ public class CinemaProgrammServiceMock {
 				event1.setType(ShowType.NORMAL);
 				break;
 			}
-			
-			
-			
 			vorstellungen.add(event1);
-
 		}
 
+		initBookings();
 	}
 
 	private void initShows() {
@@ -247,9 +256,32 @@ public class CinemaProgrammServiceMock {
 		ticketPrices.add(new TicketPrice("Kind", 12.00));
 	}
 	
+	private void initBookings() {
+		Booking booking = new Booking();
+		Vorstellung vorstellung = getVorstellung();
+		booking.setEvent(vorstellung);
+		
+		Ticket ticket1 = new Ticket(new Seat(3, 5));
+		ticket1.setTicketType(TicketType.ADULT);
+		Ticket ticket2 = new Ticket(new Seat(3, 6));
+		ticket2.setTicketType(TicketType.KIND);
+		Ticket ticket3 = new Ticket(new Seat(3, 7));
+		ticket3.setTicketType(TicketType.KIND);
+		
+		List<Ticket> tickets = new ArrayList<Ticket>();
+		tickets.add(ticket1);
+		tickets.add(ticket2);
+		tickets.add(ticket3);
+		
+		booking.setTickets(tickets);
+		bookings.add(booking);
+	}
+	
 	public Movie getMovie() {
 		return movie3;
 	}
+
+
 	
 	
 	
