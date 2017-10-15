@@ -1,3 +1,4 @@
+
 package ch.ffhs.kino.service;
 
 import java.util.ArrayList;
@@ -7,13 +8,17 @@ import java.util.List;
 
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 import ch.ffhs.kino.model.Vorstellung;
+import ch.ffhs.kino.component.Seat;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Show;
+import ch.ffhs.kino.model.TicketPrice;
 import ch.ffhs.kino.model.Show.ShowType;
+import ch.ffhs.kino.model.Ticket;
+import ch.ffhs.kino.model.Ticket.TicketType;
 
 /**
  * Stellt einen Mock-Service zur verfügung um die Daten auf den verschiedenen
@@ -45,7 +50,9 @@ public class CinemaProgrammServiceMock {
 	private Show show7;
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
-
+	private List<TicketPrice> ticketPrices = new ArrayList<TicketPrice>();
+	private List<Booking> bookings = new ArrayList<Booking>();
+	
 	public CinemaProgrammServiceMock() {
 
 		init();
@@ -59,6 +66,10 @@ public class CinemaProgrammServiceMock {
 		return vorstellungen.get(0);
 	}
 
+	public List<TicketPrice> getTicketPrices() {
+		return ticketPrices;
+	}
+	
 	public Booking getBooking() {
 
 		Booking booking = new Booking();
@@ -68,12 +79,24 @@ public class CinemaProgrammServiceMock {
 		return booking;
 	}
 
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
+	}
+	
 	private void init() {
 		// MockData
 
 		initMovies();
 
 		initShows();
+		
+		initHalls();
+		
+		initPrices();
 
 		for (int i = 0; i < 200; i++) {
 
@@ -82,6 +105,7 @@ public class CinemaProgrammServiceMock {
 			Vorstellung event1 = new Vorstellung();
 			event1.setDate(new GregorianCalendar(2017, 9,16, 21, 15).getTime());
 			System.out.println(event1.getDate());
+
 			switch (i % 4) {
 			case 0:
 				event1.setHall(hallRex1);
@@ -131,11 +155,10 @@ public class CinemaProgrammServiceMock {
 				event1.setType(ShowType.NORMAL);
 				break;
 			}
-
 			vorstellungen.add(event1);
-
 		}
 
+		initBookings();
 	}
 
 	private void initShows() {
@@ -170,8 +193,9 @@ public class CinemaProgrammServiceMock {
 
 	private void initMovies() {
 
-		String imgPath = "/ch/ffhs/kino/movies/mov%s.jpg";
-
+		String imgPath= "/ch/ffhs/kino/movies/mov%s.jpg";
+		
+		
 		// Hereinspaziert
 		movie1 = new Movie();
 		movie1.setTitle("Hereinspaziert");
@@ -207,12 +231,54 @@ public class CinemaProgrammServiceMock {
 		movie3.setOriginalLanguage(MovieLanguage.ENGLISH);
 		movie3.setSubtitle(MovieLanguage.FRANZOESISCH);
 		movie3.setRegie("Denis Vileneuve");
-		movie3.addActors("Ana de Armas").addActors("Dave Bautista").addActors("Edward James Olmos")
-				.addActors("Harrison Ford");
+		movie3.addActors("Ana de Armas").addActors("Dave Bautista").addActors("Edward James Olmos").addActors("Harrison Ford");
 	}
 
+	private void initHalls()
+	{
+		// Kinosaal konfigurieren
+		hallRex1.configureSeatPlan(14, 10);
+		hallRex1.setSeatNotAvailable(5, 0);
+		hallRex1.setSeatNotAvailable(5, 1);
+		hallRex1.setSeatNotAvailable(5, 8);
+		hallRex1.setSeatNotAvailable(5, 9);
+
+		hallRex2.configureSeatPlan(15, 8);
+		hallRex3.configureSeatPlan(25, 15);
+	}
+	
+	private void initPrices()
+	{
+		// Preise
+		ticketPrices.add(new TicketPrice("Erwachsener", 19.00));
+		ticketPrices.add(new TicketPrice("Kind", 12.00));
+	}
+	
+	private void initBookings() {
+		Booking booking = new Booking();
+		Vorstellung vorstellung = getVorstellung();
+		booking.setEvent(vorstellung);
+		
+		// Tickets von dieser Buchung
+		Ticket ticket1 = new Ticket(new Seat(3, 5, 35));
+		ticket1.setTicketType(TicketType.ADULT);
+		Ticket ticket2 = new Ticket(new Seat(3, 6, 36));
+		ticket2.setTicketType(TicketType.KIND);
+		Ticket ticket3 = new Ticket(new Seat(3, 7, 37));
+		ticket3.setTicketType(TicketType.KIND);
+		
+		List<Ticket> tickets = new ArrayList<Ticket>();
+		tickets.add(ticket1);
+		tickets.add(ticket2);
+		tickets.add(ticket3);
+		
+		booking.setTickets(tickets);
+		bookings.add(booking);
+		vorstellung.setBookings(bookings);
+	}
+	
 	public Movie getMovie() {
 		return movie3;
 	}
-
+	
 }
