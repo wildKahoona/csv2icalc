@@ -3,11 +3,8 @@ package ch.ffhs.kino.controller;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import ch.ffhs.kino.model.Hall;
-import ch.ffhs.kino.model.Movie;
-import ch.ffhs.kino.model.Show;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
 import ch.ffhs.kino.model.TicketPrice;
@@ -19,29 +16,23 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
@@ -50,19 +41,8 @@ public class VorstellungController {
 	 * Birgit
 	 *  TODO: Fertigstellen
 	 */
-	Vorstellung vorstellung;
+	private Vorstellung vorstellung;
 	//List<TicketPrice> ticketPrices;
-
-	public Vorstellung getVorstellung() {
-		return vorstellung;
-	}
-
-	public void setVorstellung(Vorstellung vorstellung, List<TicketPrice> ticketPrices) {
-		this.vorstellung = vorstellung;
-		initTitle();
-		this.ticketPriceData = FXCollections.observableArrayList(ticketPrices);
-		this.renderHallGrid();
-	}
 
 	/**
 	 * Das GridPane des Kinosaals mit den Sitzen
@@ -82,9 +62,10 @@ public class VorstellungController {
 	Label vorstellungChoice;
 	
 	@FXML
-    Label timeLabel;
+	Label timeLabel;
 	
-	DoubleProperty time = new SimpleDoubleProperty();
+	@FXML
+	Button buyButton;
     
 //	@FXML
 //	private TableView<Ticket> ticketTable;
@@ -109,11 +90,8 @@ public class VorstellungController {
 	
 	private ObservableList<TicketPrice> ticketPriceData;
 	
-	private AnimationTimer timer;
 	private long endTime ;
-	private Timer timer1;
-	
-	Timeline timeline;
+	private Timeline timeline;
 	
 	@FXML
 	protected void initialize() {	
@@ -158,6 +136,17 @@ public class VorstellungController {
 //		//Die Tabelle anzeigen.
 //		ticketTable.setItems(ticketData);
 //		ticketTable.setEditable(true);
+	}
+	
+	public Vorstellung getVorstellung() {
+		return vorstellung;
+	}
+
+	public void setVorstellung(Vorstellung vorstellung, List<TicketPrice> ticketPrices) {
+		this.vorstellung = vorstellung;
+		initTitle();
+		this.ticketPriceData = FXCollections.observableArrayList(ticketPrices);
+		this.renderHallGrid();
 	}
 	
 	private void initTitle() {

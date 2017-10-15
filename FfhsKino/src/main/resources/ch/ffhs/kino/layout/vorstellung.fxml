@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
 
 <GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.VorstellungController">
 	<columnConstraints>
@@ -33,27 +34,42 @@
 		</GridPane>
 		<Separator GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 	
-		<!-- Sitzplatzplan && Tickets -->
-		<HBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2" style="-fx-background-color:green">
+		
+		<HBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
 	         
-	         <GridPane fx:id="hallGrid"
-	           alignment="TOP_CENTER"
-	           prefHeight="9999"
-	           prefWidth="9999"
-	           hgap="2"
-	           vgap="2"/>
+	         <!-- Column 0: Sitzplatzplan (FARBE nur damit ich weiss, wie das Grid ist)-->
+	         <VBox GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-background-color:green">
+		         <!-- Hier kommt noch der Text: Bitte wählen Sie Ihre Plätze im Saalplan aus: -->
+		         <!-- Hier kommt noch die Leinwand -->
+		         <GridPane fx:id="hallGrid"
+				           alignment="TOP_CENTER"
+				           prefHeight="9999"
+				           prefWidth="9999"
+				           hgap="2"
+				           vgap="2"/>
+				 <!-- Hier kommt noch die Legende -->
+	         </VBox>
+	         
 	      
-	      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-background-color:yellow"> 
-			<HBox>
-	      		<Label text="Buchungsvorgang läuft ab in: " styleClass="h1"/>
-	      		<Label fx:id="timeLabel" styleClass="h1"/>
-	      	</HBox>
-	      		<VBox fx:id="ticketGrid"
-		            alignment="TOP_LEFT"
-		            prefHeight="9999"
-	           prefWidth="9999">
-		        </VBox>	 
-	      </VBox>
+		      <!-- Column 1: Tickets (FARBE nur damit ich weiss, wie das Grid ist)-->
+		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-background-color:lightblue"> 
+		      		<!-- Buchungstimer -->
+		      		<GridPane>
+						<children>				
+							<Label GridPane.rowIndex="0" GridPane.columnIndex="0" text="Buchungsvorgang läuft ab in " styleClass="h2"/>
+							<Label fx:id="timeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="h2"/>
+							<Button fx:id="buyButton" GridPane.rowIndex="0" GridPane.columnIndex="2" mnemonicParsing="false" text="Kaufen" GridPane.halignment="RIGHT" />
+							
+							<!-- <Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" /> -->
+						</children>
+					</GridPane>
+					<!-- Tickets -->
+		      		<VBox fx:id="ticketGrid"
+				          alignment="TOP_LEFT"
+				          prefHeight="9999"
+			           	  prefWidth="9999">
+			        </VBox>	 
+		      </VBox>
 	      
 	     </HBox> 	
 		      
