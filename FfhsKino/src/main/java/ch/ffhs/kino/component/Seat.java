@@ -70,7 +70,6 @@ public class Seat extends Rectangle {
 		this.seatNumber = seatNumber;
 	}
 
-
 	public Integer getSeatColumn() {
 		return seatColumn;
 	}

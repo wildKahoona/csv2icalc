@@ -1,7 +1,12 @@
 package ch.ffhs.kino.controller;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Ticket;
@@ -9,14 +14,19 @@ import ch.ffhs.kino.model.Ticket.TicketType;
 import ch.ffhs.kino.model.TicketPrice;
 import ch.ffhs.kino.component.Seat;
 import ch.ffhs.kino.component.TicketRow;
+import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Vorstellung;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,6 +34,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -56,13 +68,13 @@ public class VorstellungController {
 	}
 	
 	@FXML
-	Label vorstellungChoice;
+	private Label vorstellungChoice;
 	
 	@FXML
-	Label timeLabel;
+	private Label timeLabel;
 	
 	@FXML
-	Button buyButton;
+	private Button buyButton;
     
 //	@FXML
 //	private TableView<Ticket> ticketTable;
@@ -95,6 +107,24 @@ public class VorstellungController {
 		initTimeline();
 	
 		initTicketControl();
+		
+		buyButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));		
+		buyButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Hello World!");
+                try {
+                	// Booking erstellen
+                	Booking booking = new Booking();
+                	booking.setEvent(vorstellung);
+                	booking.setTickets(ticketData);
+                	Main.startTicketZahlen(booking);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+        });
+		
 		
 //		timer = new AnimationTimer() {
 //		    
@@ -200,12 +230,52 @@ public class VorstellungController {
 		});
 	}
 
+	//private Boolean isTimeOver = false;
+	private BooleanProperty isTimeOver = new SimpleBooleanProperty(false);
+	
 	private void initTimeline() {
+		
+		this.isTimeOver.addListener((value, oldValue, newValue) -> {
+	    	if (newValue == true) {
+				
+	    	  	// Selektierte Sitze freigeben
+	    		selectedSeats.forEach((seat) -> { 
+	    			seat.deselect();
+	    		});
+	    		selectedSeats.clear();
+	    		
+	    		// Ticket entfernen
+	    		ticketData.clear();
+	    		
+	    		Alert alert = new Alert(AlertType.INFORMATION);
+	    		alert.setTitle("Information Dialog");
+	    		alert.setHeaderText("Look, an Information Dialog");
+	    		alert.setContentText("I have a great message for you!");
+
+	    		alert.showAndWait();
+	    			    		
+	    		isTimeOver.set(false);
+	    	}
+	    	});
+		
 		timeline = new Timeline(
 				new KeyFrame(Duration.seconds(1), e -> {
 			    	long diff = endTime - System.currentTimeMillis();
-			        SimpleDateFormat fmt = new SimpleDateFormat("mm:ss");
-			        timeLabel.setText(fmt.format(diff));
+			    	if(diff <= (long)0) {
+			    		timeline.stop();
+			    		
+			    		
+			    		
+			    		// Meldung an den Benutzer
+			    		Platform.runLater(new Runnable() {
+			    		      @Override public void run() {
+			    		    	  isTimeOver.set(true); 
+			    		      }
+			    		});			    					    		
+			    	}else {
+			    		SimpleDateFormat fmt = new SimpleDateFormat("mm:ss");
+				        timeLabel.setText(fmt.format(diff));
+			    	} 
 			    })
 			);
 		timeline.setCycleCount( Animation.INDEFINITE );
@@ -213,6 +283,8 @@ public class VorstellungController {
 
 	public void StartTimeAnimation(){
 		endTime = System.currentTimeMillis() + (600 * 1000); // 10 Minuten
+		//isTimeOver.set(false);
+		//endTime = System.currentTimeMillis() + (6 * 1000);
 		timeline.play();
 	}
 	
@@ -263,25 +335,30 @@ public class VorstellungController {
 	    	}
 	    	
 	        seat.getState().addListener((e, oldValue, newValue) -> {
-	          if (newValue) {
-	        	  if(selectedSeats.size() == 0)
-	        		  StartTimeAnimation();	        	  
-	        	  this.selectedSeats.addAll(seat);
-	        	  // Ticket für diesen Sitzplatz hinzufügen
-	        	  Ticket ticket = new Ticket(seat);
-	        	  ticketData.add(ticket);
-	          }
-	          else {
-	            this.selectedSeats.removeAll(seat);
-	            if(selectedSeats.size() == 0)
-	            	StopTimeAnimation();
-	            for(Ticket ticket : ticketData) {
-	                if(ticket.getSeat().equals(seat)) {
-	                	// Ticket für diesen Sitzplatz entfernen
-	                	ticketData.remove(ticket);
-	                }
-	            } 
-	          }
+	        	if(isTimeOver.get() == false) {
+		        	if (newValue) {
+			        	  if(selectedSeats.size() == 0)
+			        		  StartTimeAnimation();	        	  
+			        	  selectedSeats.add(seat);
+			        	  // Ticket für diesen Sitzplatz hinzufügen
+			        	  Ticket ticket = new Ticket(seat);
+		        	  ticketData.add(ticket);
+			          }
+			          else {
+			            this.selectedSeats.remove(seat);
+			            if(selectedSeats.size() == 0)
+			            	StopTimeAnimation();
+			            for(Ticket ticket : ticketData) {
+			                if(ticket.getSeat().equals(seat)) {
+			                	// Ticket für diesen Sitzplatz entfernen
+			                	ticketData.remove(ticket);
+			                }
+			            } 
+			          }		        		
+	        	}
+        	  
+
+
 	        });
 	        
 	        this.hallGrid.add(seat, column, row);   	

@@ -2,9 +2,11 @@ package ch.ffhs.kino.controller;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
+import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.table.model.TicketTableModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 public class TicketZahlenController {
@@ -26,15 +29,22 @@ public class TicketZahlenController {
 	private TableView<TicketTableModel> tableView;
 
 	@FXML
-	private Label vorstellung;
+	private Label vorstellungChoice;
+	
 	@FXML
 	private GridPane kk;
 
 	@FXML
 	private ComboBox<String> monat;
+	
 	@FXML
 	private ComboBox<String> jahr;
 
+	@FXML
+	public void breadcrumbAction(MouseEvent event) {
+		ControllerUtils.breadcrumbAction(event.getSource());
+	}
+	
 	@FXML
 	public void initialize() {
 
@@ -51,13 +61,13 @@ public class TicketZahlenController {
 
 		monat.setItems(options);
 		jahr.setItems(jahre);
-
 	}
 
 	private Booking booking;
 
 	public void setBooking(Booking booking) {
 		this.booking = booking;
+		setTitle();
 	}
 
 	public Booking getBooking() {
@@ -86,4 +96,12 @@ public class TicketZahlenController {
 		kk.setVisible(true);
 	}
 
+	private void setTitle() {
+		Vorstellung event = booking.getEvent();
+		String movieTitle = event.getShow().getMovie().getTitle();
+		String movieLanguage = event.getShow().getLanguage().getText();
+				
+		SimpleDateFormat fmt = new SimpleDateFormat("E dd MMM yyyy HH:mm");		
+		vorstellungChoice.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(event.getDate()) + ", " + event.getHall().getHallName());
+	}
 }

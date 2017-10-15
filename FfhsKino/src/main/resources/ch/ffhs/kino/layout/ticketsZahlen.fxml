@@ -25,9 +25,90 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.Pane?>
 
+<GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.TicketZahlenController">
+	<!-- <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+    </columnConstraints> -->
+	<children>
+		<!-- Breadcrumb (Zeile 1) -->
+		<HBox styleClass="breadcrumb" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
+			<children>
+				<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " />
+				<Label id="bc_vorstellung" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
+				<Label id="bc_sitzplatz" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
+				<Label id="bc_bezahlen" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+			</children>
+		</HBox>
+	
+		<!-- Title (Zeile 2) -->
+		<GridPane hgap="30.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+			<children>
+				<Label text="Vorstellung" styleClass="h1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+				<Label fx:id="vorstellungChoice" text="z.B. Blade Runner 20.10.2017 18:30 Uhr..." styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+			</children>    
+		</GridPane>
+		<Separator GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+		
+		<!-- Inhalt (Zeile 3) -->
+		<HBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
+		
+			<!-- Zahlungsmaske -->
+			<GridPane GridPane.rowIndex="3" GridPane.columnIndex="0" >
+				<HBox GridPane.rowIndex="0" GridPane.columnIndex="0" spacing="10" alignment="TOP_LEFT" >
+					<Label text="E-Mail*:" />
+					<TextField fx:id="email" promptText="E-Mail-Adresse eingeben" />
+				</HBox>
+				<GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER_LEFT" styleClass="solidblackborder">
+					<Label text="Ihre Zahlungsart:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="h2" />
+					
+					<RadioButton GridPane.rowIndex="1" GridPane.columnIndex="0"
+								 onAction="#kkSelected" mnemonicParsing="false" text="Kreditkarte" >
+						<toggleGroup>
+							<ToggleGroup fx:id="zahlungsart" />
+						</toggleGroup>
+					</RadioButton>
+					
+					<RadioButton GridPane.rowIndex="2" GridPane.columnIndex="0"
+								 onAction="#paypalSelected" mnemonicParsing="false" text="Paypal" toggleGroup="$zahlungsart" />
 
-<GridPane alignment="CENTER" prefWidth="1000" hgap="10.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml" fx:controller="ch.ffhs.kino.controller.TicketZahlenController">
-	<padding>
+					<GridPane fx:id="kk" GridPane.rowIndex="3" GridPane.columnIndex="0">
+						<Label text="Mit Kreditkarte bezahlen" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" />
+						<Label text="Kreditkartennummer*:" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" />
+						<TextField fx:id="kknummer" promptText="Kreditkartennummer eingeben" styleClass="long" GridPane.columnIndex="0" GridPane.rowIndex="5"
+							GridPane.columnSpan="2" />
+						<Label text="Gültig bis*:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+			
+						<ComboBox fx:id="monat" promptText="Monat" styleClass="medium" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+						<ComboBox fx:id="jahr" promptText="Jahr" styleClass="small" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+						<Label text="CVV*:" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+						<TextField fx:id="cvv" promptText="CVV" styleClass="small" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+						<TextField fx:id="vorname" promptText="Vorname" styleClass="medium" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+						<TextField fx:id="nachname" promptText="Nachname" styleClass="medium" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+					</GridPane>
+			
+					<Button text="Bezahlen" GridPane.rowIndex="4" GridPane.columnIndex="0" 
+					onAction="#pay" styleClass="medium"/>
+				</GridPane>
+			</GridPane>
+			
+			<!-- Buchungsinformation -->
+			<VBox GridPane.rowIndex="3" GridPane.columnIndex="1" spacing="10" alignment="TOP_RIGHT" >
+				<HBox alignment="TOP_LEFT" >
+					<Label text="Buchungsvorgang läuft ab in: 06:22" styleClass="h2"/>
+					<Label fx:id="timeLabel" styleClass="h2"/>
+				</HBox>
+				<Label text="Erwachsene:2, Kinder:1 Total:50.00 CHF" />
+			</VBox>
+	
+		</HBox>
+		
+		
+	
+	</children>
+
+
+<!-- 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 	</padding>
 	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Vorstellung:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -40,7 +121,7 @@
 		<TextField fx:id="email" promptText="E-Mail-Adresse eingeben" />
 	</HBox>
 
-	<!-- Zahlungsart -->
+	Zahlungsart
 	<GridPane alignment="CENTER_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="solidblackborder">
 		<Label text="Ihre Zahlungsart:" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
 
@@ -72,12 +153,12 @@
 
 		<Button text="Bezahlen" onAction="#pay" styleClass="medium" GridPane.columnIndex="0" GridPane.rowIndex="9" />
 	</GridPane>
-	<!-- Buchungsinformation -->
+	Buchungsinformation
 	<VBox spacing="10" alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
 		<Label text="Buchungsvorgang läuft ab in: 06:22" />
 		<Label text="Erwachsene:2, Kinder:1 Total:50.00 CHF" />
 	</VBox>
-	<!--  Ticket Tabelle -->
+	 Ticket Tabelle
 	<TableView fx:id="tableView" styleClass="noheader" GridPane.columnIndex="1" GridPane.rowIndex="4" prefHeight="10">
 		<columns>
 			<TableColumn prefWidth="100" fx:id="sitz">
@@ -104,6 +185,6 @@
 		<sortOrder>
 			<fx:reference source="sitz" />
 		</sortOrder>
-	</TableView>
+	</TableView> -->
 
 </GridPane>
