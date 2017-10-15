@@ -231,6 +231,10 @@ public class CinemaProgrammServiceMock {
 		hallRex1.setSeatNotAvailable(5, 1);
 		hallRex1.setSeatNotAvailable(5, 8);
 		hallRex1.setSeatNotAvailable(5, 9);
+		hallRex1.setSeatSold(4, 2);
+		hallRex1.setSeatSold(4, 3);
+		hallRex1.setSeatSold(4, 4);
+		hallRex1.setSeatSold(4, 5);
 		
 		hallRex2.configureSeatPlan(15, 8);
 		hallRex3.configureSeatPlan(25, 15);

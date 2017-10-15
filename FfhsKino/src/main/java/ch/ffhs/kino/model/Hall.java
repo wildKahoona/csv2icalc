@@ -16,6 +16,7 @@ public class Hall {
 
 	List<Seat> seatlist = new ArrayList<Seat>();
 	Boolean[][] seatPlan;
+	Boolean[][] soldList; // ToDo: gehört nicht hierhin (besser in ein anderes Model, muss diese Info haben für eine bestimmte Vorstellung)
 
 	public Hall() {
 		seatlist.add(new Seat(1, 1));
@@ -61,20 +62,31 @@ public class Hall {
 	public Boolean[][] getSeatPlan() {
 		return seatPlan;
 	}
+
+	public Boolean[][] getSoldList() {
+		return soldList;
+	}
+	
 	
 	public void configureSeatPlan(int rows, int columns) {
 		this.rows = rows;
 		this.columns = columns;
 		seatPlan = new Boolean[rows][columns];
+		soldList = new Boolean[rows][columns];
 		for (int row = 0; row < (rows ); row++) {
 	    	for (int column = 0; column < (columns ); column++) {
 	    		seatPlan[row][column] = true;
+	    		soldList[row][column] = false;
 	    	}
 		} 
 	}
 	
 	public void setSeatNotAvailable(int row, int column){
 		this.seatPlan[row][column] = false;
+	}
+	
+	public void setSeatSold(int row, int column){
+		this.soldList[row][column] = true;
 	}
 	
 	@Override
