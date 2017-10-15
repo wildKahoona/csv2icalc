@@ -3,6 +3,7 @@ package ch.ffhs.kino.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -32,6 +34,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
 public class ProgrammController {
@@ -70,7 +73,7 @@ public class ProgrammController {
 	private final ObservableList<ProgrammTableModel> data = FXCollections.observableArrayList();
 
 	@FXML
-	ComboBox sucheGenre;
+	ComboBox<GenreType> sucheGenre;
 
 	@FXML
 	CheckBox suche3D;
@@ -91,13 +94,94 @@ public class ProgrammController {
 	}
 
 	private void initTable() {
-		columns.add("Sprache");
-		columns.add("Saal");
 
+		TableColumn<ProgrammTableModel, ProgrammTableModel> filmCol = createFilmColumn();
+		programmtable.getColumns().add(filmCol);
+
+		createWeekColumns();
+
+	}
+
+	private void createWeekColumns() {
+		// Nächstee Sieben Tage laden
+		GregorianCalendar heute = new GregorianCalendar();
+		for (int i = 0; i < 7; i++) {
+			heute.add(GregorianCalendar.DAY_OF_YEAR, 1);
+
+			SimpleDateFormat fmt = new SimpleDateFormat("EEE dd.MM");
+
+			String string = fmt.format(heute.getTime());
+
+			TableColumn<ProgrammTableModel, String> column = new TableColumn<>(string);
+			column.getProperties().put("Date", heute.getTime());
+			column.setCellValueFactory(new PropertyValueFactory<ProgrammTableModel, String>(string));
+			column.setCellFactory(
+					new Callback<TableColumn<ProgrammTableModel, String>, TableCell<ProgrammTableModel, String>>() {
+						@Override
+						public TableCell<ProgrammTableModel, String> call(TableColumn<ProgrammTableModel, String> col) {
+							final TableCell<ProgrammTableModel, String> cell = new TableCell<ProgrammTableModel, String>() {
+								@Override
+								public void updateItem(String firstName, boolean empty) {
+									super.updateItem(firstName, empty);
+
+									ObservableMap<Object, Object> properties = col.getProperties();
+									Date object = (Date) properties.get("Date");
+									List<Vorstellung> timesForShow = getTimesForShow(filteredVorstellungen, object,
+											null, null, null);
+
+									SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
+									if (timesForShow != null) {
+										HBox hBox = new HBox();
+
+										for (Vorstellung vorstellung : timesForShow) {
+
+											Hyperlink value = new Hyperlink();
+											value.getProperties().put("vorstellung", vorstellung);
+											value.setText(fmt.format(vorstellung.getDate()));
+											hBox.getChildren().add(value);
+
+											value.addEventHandler(MouseEvent.MOUSE_CLICKED,
+													new EventHandler<MouseEvent>() {
+														@Override
+														public void handle(MouseEvent event) {
+															try {
+																Hyperlink hl = (Hyperlink) event.getSource();
+
+																Vorstellung v = (Vorstellung) hl.getProperties()
+																		.get("vorstellung");
+																Main.startVorstellung(v);
+															} catch (IOException e) {
+																e.printStackTrace();
+															}
+														}
+													});
+
+										}
+										setGraphic(hBox);
+
+									}
+									if (empty) {
+
+										setText(null);
+									} else {
+										setText(firstName);
+									}
+								}
+							};
+
+							return cell;
+						}
+
+					});
+			programmtable.getColumns().add(column);
+		}
+	}
+
+	private TableColumn<ProgrammTableModel, ProgrammTableModel> createFilmColumn() {
 		// https://stackoverflow.com/questions/16360323/javafx-table-how-to-add-components
-		TableColumn<ProgrammTableModel, ProgrammTableModel> btnCol = new TableColumn<>("Film");
-		btnCol.setMinWidth(220);
-		btnCol.setCellValueFactory(
+		TableColumn<ProgrammTableModel, ProgrammTableModel> filmCol = new TableColumn<>("Film");
+		filmCol.setMinWidth(220);
+		filmCol.setCellValueFactory(
 				new Callback<CellDataFeatures<ProgrammTableModel, ProgrammTableModel>, ObservableValue<ProgrammTableModel>>() {
 					@Override
 					public ObservableValue<ProgrammTableModel> call(
@@ -106,7 +190,7 @@ public class ProgrammController {
 					}
 				});
 
-		btnCol.setCellFactory(
+		filmCol.setCellFactory(
 				new Callback<TableColumn<ProgrammTableModel, ProgrammTableModel>, TableCell<ProgrammTableModel, ProgrammTableModel>>() {
 					@Override
 					public TableCell<ProgrammTableModel, ProgrammTableModel> call(
@@ -119,6 +203,8 @@ public class ProgrammController {
 								if (programm != null) {
 
 									final Hyperlink title = setFilmGraphics(programm);
+									title.getProperties().put("movie", programm.getMovie());
+
 									title.setOnAction(new EventHandler<ActionEvent>() {
 										@Override
 										public void handle(ActionEvent event) {
@@ -173,72 +259,7 @@ public class ProgrammController {
 						};
 					}
 				});
-		programmtable.getColumns().add(btnCol);
-
-		// Nächstee Sieben Tage laden
-		GregorianCalendar heute = new GregorianCalendar();
-		for (int i = 0; i < 7; i++) {
-			heute.add(GregorianCalendar.DAY_OF_YEAR, 1);
-
-			SimpleDateFormat fmt = new SimpleDateFormat("EEE dd.MM");
-
-			columns.add(fmt.format(heute.getTime()));
-
-		}
-
-		for (String string : columns) {
-			TableColumn<ProgrammTableModel, String> column = new TableColumn<>(string);
-			column.setCellValueFactory(new PropertyValueFactory<ProgrammTableModel, String>(string));
-			column.setCellFactory(
-					new Callback<TableColumn<ProgrammTableModel, String>, TableCell<ProgrammTableModel, String>>() {
-						@Override
-						public TableCell<ProgrammTableModel, String> call(TableColumn<ProgrammTableModel, String> col) {
-							final TableCell<ProgrammTableModel, String> cell = new TableCell<ProgrammTableModel, String>() {
-								@Override
-								public void updateItem(String firstName, boolean empty) {
-									super.updateItem(firstName, empty);
-									if (empty) {
-										setText(null);
-									} else {
-										setText(firstName);
-									}
-								}
-							};
-							cell.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-								@Override
-								public void handle(MouseEvent event) {
-
-									Object source = event.getSource();
-									TableColumn<ProgrammTableModel, String> tableColumn = cell.getTableColumn();
-
-									if (tableColumn.getText().equals("Film")) {
-										try {
-											// nicht die beste Lösung ..
-											for (Vorstellung vorstellung : filteredVorstellungen) {
-												if (vorstellung.getShow().getMovie().getTitle()
-														.equals(cell.getItem())) {
-													Main.startMovieDetail(vorstellung.getShow().getMovie());
-													break;
-												}
-											}
-
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-
-									System.out.println(source);
-									System.out.println("double click on " + cell.getItem());
-
-								}
-							});
-							return cell;
-						}
-
-					});
-			programmtable.getColumns().add(column);
-		}
-
+		return filmCol;
 	}
 
 	protected void initRows() {
@@ -246,7 +267,8 @@ public class ProgrammController {
 		for (Vorstellung vorstellung : filteredVorstellungen) {
 			data.add(new ProgrammTableModel(vorstellung.getShow().getMovie().getTitle(),
 					vorstellung.getShow().getLanguage().getText(), vorstellung.getHall().getHallName(),
-					vorstellung.getShow().getMovie().getGenreText(), vorstellung.getType().isThreeD()));
+					vorstellung.getShow().getMovie().getGenreText(), vorstellung.getType().isThreeD(),
+					vorstellung.getShow().getMovie()));
 
 		}
 
@@ -271,7 +293,7 @@ public class ProgrammController {
 			}
 			if (sucheGenre != null) {
 				if (sucheGenre.getValue() != null) {
-					if (sucheGenre.getValue() != "") {
+					if (sucheGenre.getValue() != GenreType.NONE) {
 
 						if (!vorstellung.getShow().getMovie().getGenreText()
 								.contains(sucheGenre.getValue().toString())) {
@@ -324,4 +346,38 @@ public class ProgrammController {
 		ControllerUtils.breadcrumbAction(event.getSource());
 
 	}
+
+	private List<Vorstellung> getTimesForShow(List<Vorstellung> vorstellungen, Date date, String hall, String Language,
+			String MovieTitle) {
+
+		List<Vorstellung> temp = new ArrayList<Vorstellung>();
+		if (vorstellungen != null) {
+			for (Vorstellung vorstellung : vorstellungen) {
+
+				if (date != null) {
+					// Same day
+					SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+					if (fmt.format(date).equals(fmt.format(vorstellung.getDate()))) {
+
+						if (vorstellung.getHall().toString().equals(hall)) {
+							if (vorstellung.getShow().getLanguage().toString().equals(Language)) {
+								if (vorstellung.getShow().getMovie().getTitle().equals(MovieTitle)) {
+									temp.add(vorstellung);
+								}
+							}
+
+						}
+					}
+
+					ArrayList<Vorstellung> arrayList = new ArrayList<Vorstellung>();
+
+					arrayList.add(filteredVorstellungen.get(0));
+					return arrayList;
+				}
+			}
+		}
+		return null;
+
+	}
+
 }

@@ -1,5 +1,10 @@
 package ch.ffhs.kino.table.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.ffhs.kino.model.Movie;
+import ch.ffhs.kino.model.Vorstellung;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -10,17 +15,27 @@ public class ProgrammTableModel {
 	private SimpleStringProperty saal;
 	private SimpleStringProperty genre;
 	private SimpleBooleanProperty threeD;
+	private Movie movie;
 
-	public ProgrammTableModel(String film, String sprache, String saal, String genre, Boolean threeD) {
+	public ProgrammTableModel(String film, String sprache, String saal, String genre, Boolean threeD, Movie movie) {
 		this.film = new SimpleStringProperty(film);
 		this.sprache = new SimpleStringProperty(sprache);
 		this.saal = new SimpleStringProperty(saal);
 		this.genre = new SimpleStringProperty(genre);
 		this.threeD = new SimpleBooleanProperty(threeD);
+		this.movie = movie;
 	}
 
 	public String getFilm() {
 		return film.get();
+	}
+
+	public Movie getMovie() {
+		return movie;
+	}
+
+	public void setMovie(Movie movie) {
+		this.movie = movie;
 	}
 
 	public void setFilm(String film) {
@@ -59,5 +74,4 @@ public class ProgrammTableModel {
 		this.threeD.set(threeD);
 	}
 
-	
 }

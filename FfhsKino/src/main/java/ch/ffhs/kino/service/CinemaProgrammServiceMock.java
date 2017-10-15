@@ -2,6 +2,7 @@ package ch.ffhs.kino.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
@@ -79,9 +80,8 @@ public class CinemaProgrammServiceMock {
 			double random = Math.random();
 			double random2 = Math.random();
 			Vorstellung event1 = new Vorstellung();
-			event1.setDate(new Date(2017, Integer.valueOf((int) (random * 10)), Integer.valueOf((int) (random2 * 10)),
-					21, 15));
-
+			event1.setDate(new GregorianCalendar(2017, 9,16, 21, 15).getTime());
+			System.out.println(event1.getDate());
 			switch (i % 4) {
 			case 0:
 				event1.setHall(hallRex1);
@@ -131,9 +131,7 @@ public class CinemaProgrammServiceMock {
 				event1.setType(ShowType.NORMAL);
 				break;
 			}
-			
-			
-			
+
 			vorstellungen.add(event1);
 
 		}
@@ -172,9 +170,8 @@ public class CinemaProgrammServiceMock {
 
 	private void initMovies() {
 
-		String imgPath= "/ch/ffhs/kino/movies/mov%s.jpg";
-		
-		
+		String imgPath = "/ch/ffhs/kino/movies/mov%s.jpg";
+
 		// Hereinspaziert
 		movie1 = new Movie();
 		movie1.setTitle("Hereinspaziert");
@@ -210,13 +207,12 @@ public class CinemaProgrammServiceMock {
 		movie3.setOriginalLanguage(MovieLanguage.ENGLISH);
 		movie3.setSubtitle(MovieLanguage.FRANZOESISCH);
 		movie3.setRegie("Denis Vileneuve");
-		movie3.addActors("Ana de Armas").addActors("Dave Bautista").addActors("Edward James Olmos").addActors("Harrison Ford");
+		movie3.addActors("Ana de Armas").addActors("Dave Bautista").addActors("Edward James Olmos")
+				.addActors("Harrison Ford");
 	}
 
 	public Movie getMovie() {
 		return movie3;
 	}
-	
-	
-	
+
 }
