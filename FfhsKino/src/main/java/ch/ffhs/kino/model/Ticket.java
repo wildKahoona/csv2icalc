@@ -35,14 +35,12 @@ public class Ticket {
 	}
 
 	private Seat seat;
-	public String seatDescription;
 	private TicketType ticketType;
 	private TicketPrice ticketPrice;
 	private Booking booking;
 
 	public Ticket(Seat seat) {
 		this.seat = seat;
-		this.seatDescription = "Reihe " + seat.getSeatRow() + ", Platz " + seat.getSeatNumber();
 		this.ticketType = TicketType.ADULT; // Default
 	}
 	
@@ -66,10 +64,6 @@ public class Ticket {
 		DecimalFormat formatter = new DecimalFormat("#0.00");
 		return formatter.format(getTicketType().getCost());
 
-	}
-
-	public String getSeatDescription(){
-		return seatDescription;
 	}
 
 	public TicketPrice getTicketPrice() {

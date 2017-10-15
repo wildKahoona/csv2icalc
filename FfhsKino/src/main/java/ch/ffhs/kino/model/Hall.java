@@ -1,9 +1,5 @@
 package ch.ffhs.kino.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ch.ffhs.kino.component.Seat;
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 
 public class Hall {
@@ -12,9 +8,7 @@ public class Hall {
 	private CinemaPlaces cinema;
 	private int rows;
 	private int columns;
-
-	Boolean[][] seatPlan;
-	Boolean[][] soldList; // ToDo: gehört nicht hierhin (besser in ein anderes Model, muss diese Info haben für eine bestimmte Vorstellung)
+	private Boolean[][] seatPlan;
 
 	public Hall(String hallName, CinemaPlaces cinema) {
 		this.hallName = hallName;
@@ -57,20 +51,13 @@ public class Hall {
 		return seatPlan;
 	}
 
-	public Boolean[][] getSoldList() {
-		return soldList;
-	}
-	
-	
 	public void configureSeatPlan(int rows, int columns) {
 		this.rows = rows;
 		this.columns = columns;
 		seatPlan = new Boolean[rows][columns];
-		soldList = new Boolean[rows][columns];
 		for (int row = 0; row < (rows ); row++) {
 	    	for (int column = 0; column < (columns ); column++) {
 	    		seatPlan[row][column] = true;
-	    		soldList[row][column] = false;
 	    	}
 		} 
 	}
@@ -78,11 +65,7 @@ public class Hall {
 	public void setSeatNotAvailable(int row, int column){
 		this.seatPlan[row][column] = false;
 	}
-	
-	public void setSeatSold(int row, int column){
-		this.soldList[row][column] = true;
-	}
-	
+
 	@Override
 	public String toString() {
 		return "Hall [hallName=" + hallName + ", cinema=" + cinema + "]";

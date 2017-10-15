@@ -240,11 +240,7 @@ public class CinemaProgrammServiceMock {
 		hallRex1.setSeatNotAvailable(5, 1);
 		hallRex1.setSeatNotAvailable(5, 8);
 		hallRex1.setSeatNotAvailable(5, 9);
-		hallRex1.setSeatSold(4, 2);
-		hallRex1.setSeatSold(4, 3);
-		hallRex1.setSeatSold(4, 4);
-		hallRex1.setSeatSold(4, 5);
-		
+
 		hallRex2.configureSeatPlan(15, 8);
 		hallRex3.configureSeatPlan(25, 15);
 	}
@@ -261,11 +257,12 @@ public class CinemaProgrammServiceMock {
 		Vorstellung vorstellung = getVorstellung();
 		booking.setEvent(vorstellung);
 		
-		Ticket ticket1 = new Ticket(new Seat(3, 5));
+		// Tickets von dieser Buchung
+		Ticket ticket1 = new Ticket(new Seat(3, 5, 35));
 		ticket1.setTicketType(TicketType.ADULT);
-		Ticket ticket2 = new Ticket(new Seat(3, 6));
+		Ticket ticket2 = new Ticket(new Seat(3, 6, 36));
 		ticket2.setTicketType(TicketType.KIND);
-		Ticket ticket3 = new Ticket(new Seat(3, 7));
+		Ticket ticket3 = new Ticket(new Seat(3, 7, 37));
 		ticket3.setTicketType(TicketType.KIND);
 		
 		List<Ticket> tickets = new ArrayList<Ticket>();
@@ -275,6 +272,7 @@ public class CinemaProgrammServiceMock {
 		
 		booking.setTickets(tickets);
 		bookings.add(booking);
+		vorstellung.setBookings(bookings);
 	}
 	
 	public Movie getMovie() {

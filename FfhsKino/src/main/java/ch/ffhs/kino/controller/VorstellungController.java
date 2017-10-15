@@ -2,8 +2,7 @@ package ch.ffhs.kino.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Timer;
-
+import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
@@ -13,20 +12,18 @@ import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.model.Vorstellung;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.animation.Animation;
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -43,7 +40,7 @@ public class VorstellungController {
 	 */
 	private Vorstellung vorstellung;
 	//List<TicketPrice> ticketPrices;
-
+	
 	/**
 	 * Das GridPane des Kinosaals mit den Sitzen
 	 */
@@ -88,8 +85,7 @@ public class VorstellungController {
      */
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
-	private ObservableList<TicketPrice> ticketPriceData;
-	
+	//private ObservableList<TicketPrice> ticketPriceData;	
 	private long endTime ;
 	private Timeline timeline;
 	
@@ -145,7 +141,7 @@ public class VorstellungController {
 	public void setVorstellung(Vorstellung vorstellung, List<TicketPrice> ticketPrices) {
 		this.vorstellung = vorstellung;
 		initTitle();
-		this.ticketPriceData = FXCollections.observableArrayList(ticketPrices);
+		//this.ticketPriceData = FXCollections.observableArrayList(ticketPrices);
 		this.renderHallGrid();
 	}
 	
@@ -159,50 +155,47 @@ public class VorstellungController {
 	
 	private void initTicketControl() {
 		// Eigenes Control definiert, da TableView nicht so viel kann:
-		ticketData.addListener(new ListChangeListener<Ticket>() {
-			@Override
-			public void onChanged(ListChangeListener.Change change) {
-				ticketGrid.getChildren().clear();
-				for(Ticket ticket : ticketData) {
-					
-					// ToDo: Styles auslagern ins css
-					TicketRow row = new TicketRow();
-					row.setStyle("-fx-padding: 5;");
-					row.setTicket(ticket);
-					
-					Label label = new Label();
-					label.setText(ticket.getSeatDescription());
-					label.setStyle("-fx-padding: 5;");
-					label.setTextAlignment(TextAlignment.CENTER);	
-					row.getChildren().add(label);
-					
-					ComboBox<TicketType> cbxTicketType = new ComboBox<>();
-					cbxTicketType.setStyle("-fx-padding: 0,5;");
-					cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));					
-					cbxTicketType.getSelectionModel().select(ticket.getTicketType());
-					cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
-					    @Override
-					    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
-					        if(newValue != null){
-					        	ticket.setTicketType(newValue);
-					        }
-					    }
-					});					
-					row.getChildren().add(cbxTicketType);
+		ticketData.addListener((ListChangeListener<Ticket>) change -> {
+			ticketGrid.getChildren().clear();
+			for(Ticket ticket : ticketData) {
+				
+				// ToDo: Styles auslagern ins css
+				TicketRow row = new TicketRow();
+				row.setStyle("-fx-padding: 5;");
+				row.setTicket(ticket);
+				
+				Label label = new Label();
+				label.setText(ticket.getSeat().toString());
+				label.setStyle("-fx-padding: 5;");
+				label.setTextAlignment(TextAlignment.CENTER);	
+				row.getChildren().add(label);
+				
+				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
+				cbxTicketType.setStyle("-fx-padding: 0,5;");
+				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));					
+				cbxTicketType.getSelectionModel().select(ticket.getTicketType());
+				cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
+				    @Override
+				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
+				        if(newValue != null){
+				        	ticket.setTicketType(newValue);
+				        }
+				    }
+				});					
+				row.getChildren().add(cbxTicketType);
 
-					FontAwesomeIcon icon = new FontAwesomeIcon();
-					icon.setIconName("TRASH");
-					icon.setSize("1.5em");
-					//icon.setStyle("-fx-padding: 5;");
-					//icon.setTextAlignment(TextAlignment.CENTER);
-					icon.setOnMouseClicked(e -> {
-				        ticket.getSeat().deselect();
-				        ticketData.remove(ticket);
-				    });				
-					
-					row.getChildren().add(icon);
-					ticketGrid.getChildren().add(row);
-				}
+				FontAwesomeIcon icon = new FontAwesomeIcon();
+				icon.setIconName("TRASH");
+				icon.setSize("1.5em");
+				//icon.setStyle("-fx-padding: 5;");
+				//icon.setTextAlignment(TextAlignment.CENTER);
+				icon.setOnMouseClicked(e -> {
+			        ticket.getSeat().deselect();
+			        ticketData.remove(ticket);
+			    });				
+				
+				row.getChildren().add(icon);
+				ticketGrid.getChildren().add(row);
 			}
 		});
 	}
@@ -234,8 +227,7 @@ public class VorstellungController {
 		Hall hall = vorstellung.getHall();
 		int rows = hall.getRows();
 	    int columns = hall.getColumns();
-	    Boolean[][] seatPlan = hall.getSeatPlan();   
-	    Boolean[][] soldList = hall.getSoldList();
+	    Boolean[][] seatPlan = hall.getSeatPlan();
        
 		this.selectedSeats.clear();
 	
@@ -256,20 +248,18 @@ public class VorstellungController {
 	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
 		
 	    // Hier werden die Controls für die Sitzplätze entsprechend der Sitzplatz-Definition der Halle erstelllt 
+	    int seatCounter = 1;
 	    for (int row = 0; row < (rows ); row++) {
 	      for (int column = 0; column < (columns ); column++) {
 	        
-	    	Seat seat = new Seat(row , column);
+	    	Seat seat = new Seat(row , column, seatCounter);
+	    	seatCounter++;
 	        seat.widthProperty().bind(size);
 	        seat.heightProperty().bind(size);
 	
 	    	if(seatPlan[row][column] == false){
 	    		seat.setDisable(true);
 	    		seat.setOpacity(0);
-	    	}
-	    	
-	    	if(soldList[row][column] == true){
-	    		seat.setSold();
 	    	}
 	    	
 	        seat.getState().addListener((e, oldValue, newValue) -> {
@@ -296,7 +286,22 @@ public class VorstellungController {
 	        
 	        this.hallGrid.add(seat, column, row);   	
 	      }
-	    }	
+	    }
+	    
+	    // Verkaufte Plätze markieren
+	    List<Booking> bookings = vorstellung.getBookings();
+	    for (Booking booking : bookings) {
+	    	List<Ticket> tickets = booking.getTickets();
+	    	for(Ticket ticket : tickets) {
+	    		Seat bookedSeat = ticket.getSeat();
+	    		for(Node node : hallGrid.getChildren()) {
+	    			Seat seat = (Seat)node;
+	    			if(seat.getSeatNumber() == bookedSeat.getSeatNumber()) {
+	    				seat.setSold();
+	    			}
+	    		}
+	    	}
+	    }
 	}
 
 //	private void resizeSeat(Number newValue) {

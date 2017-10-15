@@ -9,7 +9,9 @@ public class Seat extends Rectangle {
 	public enum SeatType {
 		NORMAL, PREMIUM, HANDYCAP, NONE;
 	}
+	
 	private Integer seatRow;
+	private Integer seatColumn;
 	private Integer seatNumber;
 	//private SeatType type = SeatType.NORMAL;
 
@@ -19,17 +21,13 @@ public class Seat extends Rectangle {
 	private BooleanProperty selected = new SimpleBooleanProperty(false);
 	
 	/**
-	 * Indikator, ob der Sitz reserviert ist oder nicht.
-	 */
-//	private BooleanProperty reserved = new SimpleBooleanProperty(false);
-	  
-	/**
 	 * Indikator, ob  der Sitz bereits verkauft wurde oder nicht.
 	 */
 	private BooleanProperty sold = new SimpleBooleanProperty(false);
 	
-	public Seat(Integer seatRow, Integer seatNumber) {
-		this.seatRow = seatRow;
+	public Seat(Integer seatRow, Integer seatColumn, Integer seatNumber) {
+		this.seatRow = seatRow + 1;
+		this.setSeatColumn(seatColumn + 1);
 		this.seatNumber = seatNumber;
 		
 		this.getStyleClass().add("seat");
@@ -41,13 +39,6 @@ public class Seat extends Rectangle {
 	          this.getStyleClass().remove("seat-selected");
 	    	});
 
-//	      this.reserved.addListener((value, oldValue, newValue) -> {
-//	        if (newValue)
-//	          this.getStyleClass().add("seat-reserved");
-//	        else
-//	          this.getStyleClass().remove("seat-reserved");
-//	      });
-
 	      this.sold.addListener((value, oldValue, newValue) -> {
 	        if (newValue)
 				this.getStyleClass().add("seat-sold");
@@ -57,7 +48,6 @@ public class Seat extends Rectangle {
 
 	      this.setOnMouseClicked(e -> {
 	        // Wenn dieses Sitz verkauft wurde, darf er nicht ausgewählt werden
-//	        if (this.reserved.get() || this.sold.get())
 	    	if (this.sold.get())
 	          return;
 	        this.toggle();
@@ -80,11 +70,19 @@ public class Seat extends Rectangle {
 		this.seatNumber = seatNumber;
 	}
 
+
+	public Integer getSeatColumn() {
+		return seatColumn;
+	}
+
+	public void setSeatColumn(Integer seatColumn) {
+		this.seatColumn = seatColumn;
+	}
+	
 	/**
 	 * Einen Sitz selektieren
 	*/
 	public void select() {
-//		this.reserved.set(false);
 	    this.selected.set(true);
 	}
 
@@ -113,27 +111,18 @@ public class Seat extends Rectangle {
 	      this.deselect();
 	    }
 	}
-
-	/**
-	 * Einen Sitz reservieren
-	 */
-//	public void reserve() {
-//	    this.selected.set(false);
-//	    this.reserved.set(true);
-//	}
 	  
-	  /**
-	   * Status des Sitzes (ausgewählt oder nicht)
-	   *
-	   * @return Boolean Indikator, ob der Sitz ausgewählt ist oder nicht.
-	   */
-	  public BooleanProperty getState() {
-	    return this.selected;
-	  }
+	/**
+	 * Status des Sitzes (ausgewählt oder nicht)
+	 *
+	 * @return Boolean Indikator, ob der Sitz ausgewählt ist oder nicht.
+	 */
+	public BooleanProperty getState() {
+		return this.selected;
+	}
 	  
 	@Override
 	public String toString() {
-		return "Reihe " + getSeatRow() + ", Platz " + getSeatNumber();
+		return "Reihe " + getSeatRow() + ", Platz " + getSeatColumn();
 	}
-
 }
