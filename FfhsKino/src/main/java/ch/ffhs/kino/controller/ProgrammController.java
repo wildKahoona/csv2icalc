@@ -37,11 +37,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
+
+/**
+ * TODO: Denis: Movies gruppieren
+ * TODO: Denis: Richtige Zeiten anzeigen
+ * FIXME: Methode implementieren die Zeiten nach Saal Movie und Sprache zurückgibt  Denis Bittante
+ */
 public class ProgrammController {
 
-	/**
-	 * TODO: Denis Fertigstellen
-	 */
+	
 	@FXML
 	TableView<ProgrammTableModel> programmtable;
 
@@ -215,8 +219,7 @@ public class ProgrammController {
 													try {
 														Main.startMovieDetail(vorstellung.getShow().getMovie());
 													} catch (IOException e) {
-														// TODO Auto-generated
-														// catch block
+													// do nothing else
 														e.printStackTrace();
 													}
 													break;

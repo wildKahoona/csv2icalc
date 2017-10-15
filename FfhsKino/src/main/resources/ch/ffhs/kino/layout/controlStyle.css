@@ -13,13 +13,6 @@
   
 }
 
-/*TODO: Doesn't work */
-.rightOriented{    
-	-fx-alignment: CENTER;
-	
-		
-}
-
 
 /*Table ohne Überschrift */
 .noheader .column-header-background {
@@ -47,9 +40,6 @@
 .medium{-fx-pref-width:120.0px; -fx-width:180.0px; }
 .small{-fx-pref-width:50.0px; -fx-width:180.0px; }
 .solidblackborder{ -fx-border-color: black; -fx-padding: 15.0 ;}
-
-.kinoSaal{
-}
 
 
 
@@ -610,9 +600,7 @@
 		
 } 
 
-.infoLabel{
-	-fx-font-weight: bold;
-}
+
 
 .table-row-cell:selected {
    -fx-background-color: #FFE4e1; 

@@ -1,7 +1,5 @@
 package ch.ffhs.kino.controller;
 
-import java.io.IOException;
-
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Movie;
 import javafx.fxml.FXML;
@@ -19,7 +17,7 @@ import javafx.scene.web.WebView;
 public class MovieDetailController {
 
 	/**
-	 * Denis TODO: +Navigation TODO: Fertigstellen
+	 *  TODO: Denis Vorstellungsübersicht laden
 	 */
 
 	private Movie movie;
@@ -119,9 +117,6 @@ public class MovieDetailController {
 		movieTitle.setText(movie.getTitle());
 		movieLenght.setText(String.format("Länge: %S min.", movie.getLaengeMin()));
 
-		// FIXME:USE FSK PICTURE
-		// fskImage.setImage(new
-		// Image(getClass().getResourceAsStream(movie.getAltersfreigabe())));
 		movieGenre.setText(movie.getGenreText().toString());
 		movieDescription.setText(movie.getDesc());
 
