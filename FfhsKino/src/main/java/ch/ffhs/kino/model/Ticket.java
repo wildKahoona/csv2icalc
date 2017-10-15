@@ -38,6 +38,7 @@ public class Ticket {
 	public String seatDescription;
 	private TicketType ticketType;
 	private TicketPrice ticketPrice;
+	private Booking booking;
 
 	public Ticket(Seat seat) {
 		this.seat = seat;
@@ -77,5 +78,13 @@ public class Ticket {
 
 	public void setTicketPrice(TicketPrice ticketPrice) {
 		this.ticketPrice = ticketPrice;
+	}
+
+	public Booking getBooking() {
+		return booking;
+	}
+
+	public void setBooking(Booking booking) {
+		this.booking = booking;
 	}
 }

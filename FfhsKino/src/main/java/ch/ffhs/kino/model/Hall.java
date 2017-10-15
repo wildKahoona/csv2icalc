@@ -10,17 +10,11 @@ public class Hall {
 
 	private String hallName;
 	private CinemaPlaces cinema;
-
 	private int rows;
 	private int columns;
 
-	List<Seat> seatlist = new ArrayList<Seat>();
 	Boolean[][] seatPlan;
 	Boolean[][] soldList; // ToDo: gehört nicht hierhin (besser in ein anderes Model, muss diese Info haben für eine bestimmte Vorstellung)
-
-	public Hall() {
-		seatlist.add(new Seat(1, 1));
-	}
 
 	public Hall(String hallName, CinemaPlaces cinema) {
 		this.hallName = hallName;
