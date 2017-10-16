@@ -7,10 +7,11 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
@@ -230,6 +231,12 @@ public class VorstellungController {
 		// Eigenes Control definiert, da TableView mit dem Button nicht so gut geht:
 		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
 		
+		//Comparator<Ticket> comparator = Comparator.comparingInt(Ticket::getScore);
+		
+//		List result = ticketData.stream().sorted((o1, o2)->o1.getSeat().getSeatRow().
+//                compareTo(o2.getSeat().getSeatColumn())).
+//                collect(Collectors.toList());
+		//ticketData.sorted();
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			ticketGrid.getChildren().clear();
 			for(Ticket ticket : ticketData) {
