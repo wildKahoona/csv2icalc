@@ -243,7 +243,10 @@ public class VorstellungController {
 				
 				// ToDo: Styles auslagern ins css
 				TicketRow row = new TicketRow();
-				row.setStyle("-fx-padding: 5;");
+				row.setMaxWidth(320.00);
+				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+				        + "-fx-border-color: gray;");
 				row.setTicket(ticket);
 				
 				// Information zum Sitz (Reihe, Nummer)

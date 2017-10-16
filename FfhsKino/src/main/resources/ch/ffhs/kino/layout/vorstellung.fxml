@@ -147,12 +147,11 @@
 	         </VBox>
 	         
 	      
-		      <!-- Column 1: Tickets (FARBE nur damit ich weiss, wie das Grid ist)-->
-		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-background-color:lightblue"> 
+		      <!-- Column 1: Tickets (FARBE nur damit ich weiss, wie das Grid ist  style="-fx-background-color:lightblue")-->
+		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1"> 
 		      		<!-- Buchungstimer -->
 		      		<GridPane>
-						<children>				
-							
+						<children>								
 							<HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
 								<Label text="Buchungsvorgang läuft ab in " styleClass="h2" style="-fx-padding: 15 5 15 15;"/>
 								<Label fx:id="timeLabel" styleClass="h2" style="-fx-padding: 15 0 15 0;-fx-min-width: 50px;"/>
@@ -164,14 +163,11 @@
 							 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
 									styleClass="button-primary" GridPane.halignment="RIGHT" />
 						 	</HBox>
-							
-							
-							<!-- <Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" /> -->
 						</children>
 					</GridPane>
 					
 					<!-- Tickets -->
-		      		<VBox fx:id="ticketGrid"
+		      		<VBox fx:id="ticketGrid" style="-fx-padding: 5 0 0 15;"
 				          alignment="TOP_LEFT"
 				          prefHeight="9999"
 			           	  prefWidth="9999">
