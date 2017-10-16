@@ -6,12 +6,12 @@ import java.util.List;
 
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 import ch.ffhs.kino.model.Vorstellung;
-import ch.ffhs.kino.component.Seat;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
+import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Show;
 import ch.ffhs.kino.model.TicketPrice;
 import ch.ffhs.kino.model.Show.ShowType;

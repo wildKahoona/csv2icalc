@@ -7,6 +7,9 @@
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
 
 <GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.VorstellungController">
 	<columnConstraints>
@@ -38,16 +41,78 @@
 		<HBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
 	         
 	         <!-- Column 0: Sitzplatzplan (FARBE nur damit ich weiss, wie das Grid ist)-->
-	         <VBox GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-background-color:green">
-		         <!-- Hier kommt noch der Text: Bitte wählen Sie Ihre Plätze im Saalplan aus: -->
-		         <!-- Hier kommt noch die Leinwand -->
-		         <GridPane fx:id="hallGrid"
+	         <VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
+	         	<Label text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" styleClass="h2"/>
+		         
+		         <!-- Hier kommt die Leinwand -->        	
+		         <!-- <VBox alignment="CENTER" styleClass="screen" spacing="6">
+				  <children>
+				    <Rectangle width="400" height="6" styleClass="screen-canvas" />
+				    <Label text="Leinwand" styleClass="screen-label">
+				      <tooltip>
+				        <Tooltip text="Platzierung der Leinwand in Bezug auf Sitzplätze im Saal" />
+				      </tooltip>
+				    </Label>
+				  </children>
+				</VBox> -->
+
+		         <GridPane fx:id="hallGrid" style="-fx-border-width: 5; -fx-border-radius: 10; -fx-border-color: gray;"
 				           alignment="TOP_CENTER"
 				           prefHeight="9999"
 				           prefWidth="9999"
 				           hgap="2"
-				           vgap="2"/>
-				 <!-- Hier kommt noch die Legende -->
+				           vgap="2"/>	
+				           		           
+				 <!-- Legende -->
+				 <HBox style="-fx-padding: 20px 0" alignment="CENTER" spacing="40">
+					<children>
+						<HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seat_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Frei" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Verfügbare Sitzplätze, die ausgewählt werden können" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+				        
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatSold_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Verkauft" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Verkaufte Sitzplätze, die nicht reserviert werden können" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+					    
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatSelected_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Meine Plätze" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Sitzplätze für die Reservierung ausgewählt" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+					    
+				  	</children>
+				  </HBox>
 	         </VBox>
 	         
 	      
@@ -58,7 +123,7 @@
 						<children>				
 							<Label GridPane.rowIndex="0" GridPane.columnIndex="0" text="Buchungsvorgang läuft ab in " styleClass="h2"/>
 							<Label fx:id="timeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="h2"/>
-							<Button fx:id="buyButton" GridPane.rowIndex="0" GridPane.columnIndex="2" mnemonicParsing="false" text="Kaufen" GridPane.halignment="RIGHT" />
+							<Button fx:id="buyButton" GridPane.rowIndex="0" GridPane.columnIndex="2" mnemonicParsing="false" text="Kaufen" styleClass="button-primary" GridPane.halignment="RIGHT" />
 							
 							<!-- <Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" /> -->
 						</children>

@@ -4,15 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
+import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
 import ch.ffhs.kino.model.TicketPrice;
-import ch.ffhs.kino.component.Seat;
+import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Vorstellung;
@@ -39,9 +42,15 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
@@ -85,13 +94,15 @@ public class VorstellungController {
 //	@FXML
 //	private TableColumn<Ticket, TicketType> colPrice;
 	
-    
+//	@FXML
+//	private ImageView imageView;
 	/**
 	 * Die Liste der ausgewählten Sitze
 	 */
 	// ObservableList: damit ich Änderungen nachverfolgen kann
-	private ObservableList<Seat> selectedSeats = FXCollections.observableArrayList();
+	private ObservableList<SeatView> selectedSeats = FXCollections.observableArrayList();
 	
+	//private CardView views[][];
 	/**
      * Die Liste der Reservierungen
      */
@@ -108,22 +119,55 @@ public class VorstellungController {
 	
 		initTicketControl();
 		
-		buyButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));		
-		buyButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-                try {
-                	// Booking erstellen
-                	Booking booking = new Booking();
-                	booking.setEvent(vorstellung);
-                	booking.setTickets(ticketData);
-                	Main.startTicketZahlen(booking);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-        });
+		buyButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
+		buyButton.setTooltip(new Tooltip("Zur Zahlungsabwicklung"));
+		buyButton.setOnAction(commandBuyHandler);
+		
+//		imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//
+//		     @Override
+//		     public void handle(MouseEvent event) {
+//		    	 // Click Mouse Event for Image...
+//		         event.consume();
+//		     }
+//		});
+		
+		//imageView.setStyle("-fx-background-color:transparent;");
+		//imageView.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("JavafxSm.gif"))));
+
+//		imageView.setOnMouseEntered(new EventHandler<MouseEvent>
+//	    () {
+//
+//	        @Override
+//	        public void handle(MouseEvent t) {
+//	        	imageView.setStyle("-fx-effect: dropshadow(gaussian, #54acd2, 1, 1, 0, 0);");
+//	        }
+//	    });
+//
+//		imageView.setOnMouseExited(new EventHandler<MouseEvent>
+//	    () {
+//
+//	        @Override
+//	        public void handle(MouseEvent t) {
+//	        	imageView.setStyle("-fx-background-color:transparent;");
+//	        }
+//	    });
+	    
+//		buyButton.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                System.out.println("Hello World!");
+//                try {
+//                	// Booking erstellen
+//                	Booking booking = new Booking();
+//                	booking.setEvent(vorstellung);
+//                	booking.setTickets(ticketData);
+//                	Main.startTicketZahlen(booking);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//            }
+//        });
 		
 		
 //		timer = new AnimationTimer() {
@@ -172,7 +216,8 @@ public class VorstellungController {
 		this.vorstellung = vorstellung;
 		initTitle();
 		//this.ticketPriceData = FXCollections.observableArrayList(ticketPrices);
-		this.renderHallGrid();
+		//this.renderHallGrid();
+		this.renderSeatView();
 	}
 	
 	private void initTitle() {
@@ -220,7 +265,10 @@ public class VorstellungController {
 				//icon.setStyle("-fx-padding: 5;");
 				//icon.setTextAlignment(TextAlignment.CENTER);
 				icon.setOnMouseClicked(e -> {
-			        ticket.getSeat().deselect();
+			        int seatNumber = ticket.getSeat().getSeatNumber();
+			        SeatView seatView =  selectedSeats.stream().filter(x -> x.getSeat().getSeatNumber() == seatNumber).findFirst().get();
+			        seatView.deselect();
+			        //ticket.getSeat().deselect();
 			        ticketData.remove(ticket);
 			    });				
 				
@@ -292,95 +340,197 @@ public class VorstellungController {
 		timeline.stop();
 	}
 	
+//	private void renderHallGrid() {
+//		Hall hall = vorstellung.getHall();
+//		int rows = hall.getRows();
+//	    int columns = hall.getColumns();
+//	    Boolean[][] seatPlan = hall.getSeatPlan();
+//       
+//		this.selectedSeats.clear();
+//	
+//	    ReadOnlyDoubleProperty gridWidth = this.hallGrid.widthProperty();
+//	    ReadOnlyDoubleProperty gridHeight = this.hallGrid.heightProperty();
+//	
+////	    double x = gridWidth.get();
+////	    double y = gridHeight.get();
+////	    
+////	    NumberBinding size1 = gridWidth.subtract(220).divide(columns).subtract(0);
+////	    NumberBinding size2 = gridHeight.subtract(20).divide(rows).subtract(2);
+//	    
+//	    // Für den Zoom-Effekt
+//	    // High-Level Binding (Fluent API)
+//	    // Man braucht nun keine zusätzlichen Listener für Variablen-Änderungen mehr zu erstellen 
+//	    NumberBinding size = new When(gridWidth.divide(columns).lessThan(gridHeight.divide(rows)))
+//	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
+//	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
+//		
+//	    // Hier werden die Controls für die Sitzplätze entsprechend der Sitzplatz-Definition der Halle erstelllt 
+//	    int seatCounter = 1;
+//	    for (int row = 0; row < (rows ); row++) {
+//	      for (int column = 0; column < (columns ); column++) {
+//	        
+//	    	Seat seat = new Seat(row , column, seatCounter);
+//	    	seatCounter++;
+//	        seat.widthProperty().bind(size);
+//	        seat.heightProperty().bind(size);
+//	
+//	    	if(seatPlan[row][column] == false){
+//	    		seat.setDisable(true);
+//	    		seat.setOpacity(0);
+//	    	}
+//	    	
+//	        seat.getState().addListener((e, oldValue, newValue) -> {
+//	        	if(isTimeOver.get() == false) {
+//		        	if (newValue) {
+//			        	  if(selectedSeats.size() == 0)
+//			        		  StartTimeAnimation();	        	  
+//			        	  selectedSeats.add(seat);
+//			        	  // Ticket für diesen Sitzplatz hinzufügen
+//			        	  Ticket ticket = new Ticket(seat);
+//		        	  ticketData.add(ticket);
+//			          }
+//			          else {
+//			            this.selectedSeats.remove(seat);
+//			            if(selectedSeats.size() == 0)
+//			            	StopTimeAnimation();
+//			            for(Ticket ticket : ticketData) {
+//			                if(ticket.getSeat().equals(seat)) {
+//			                	// Ticket für diesen Sitzplatz entfernen
+//			                	ticketData.remove(ticket);
+//			                }
+//			            } 
+//			          }		        		
+//	        	}
+//        	  
+//
+//
+//	        });
+//	        
+//	        this.hallGrid.add(seat, column, row);   	
+//	      }
+//	    }
+//	    
+//	    // Verkaufte Plätze markieren
+//	    List<Booking> bookings = vorstellung.getBookings();
+//	    for (Booking booking : bookings) {
+//	    	List<Ticket> tickets = booking.getTickets();
+//	    	for(Ticket ticket : tickets) {
+//	    		Seat bookedSeat = ticket.getSeat();
+//	    		for(Node node : hallGrid.getChildren()) {
+//	    			Seat seat = (Seat)node;
+//	    			if(seat.getSeatNumber() == bookedSeat.getSeatNumber()) {
+//	    				seat.setSold();
+//	    			}
+//	    		}
+//	    	}
+//	    }
+//	}
+
 	/**
 	 * Die Sitze für den entsprechenden Kinosaal zeichnen
 	*/
-	private void renderHallGrid() {
+	private void renderSeatView() {
 		Hall hall = vorstellung.getHall();
 		int rows = hall.getRows();
 	    int columns = hall.getColumns();
 	    Boolean[][] seatPlan = hall.getSeatPlan();
-       
-		this.selectedSeats.clear();
-	
-	    ReadOnlyDoubleProperty gridWidth = this.hallGrid.widthProperty();
-	    ReadOnlyDoubleProperty gridHeight = this.hallGrid.heightProperty();
-	
-//	    double x = gridWidth.get();
-//	    double y = gridHeight.get();
-//	    
-//	    NumberBinding size1 = gridWidth.subtract(220).divide(columns).subtract(0);
-//	    NumberBinding size2 = gridHeight.subtract(20).divide(rows).subtract(2);
-	    
-	    // Für den Zoom-Effekt
-	    // High-Level Binding (Fluent API)
-	    // Man braucht nun keine zusätzlichen Listener für Variablen-Änderungen mehr zu erstellen 
-	    NumberBinding size = new When(gridWidth.divide(columns).lessThan(gridHeight.divide(rows)))
-	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
-	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
-		
-	    // Hier werden die Controls für die Sitzplätze entsprechend der Sitzplatz-Definition der Halle erstelllt 
-	    int seatCounter = 1;
-	    for (int row = 0; row < (rows ); row++) {
-	      for (int column = 0; column < (columns ); column++) {
-	        
-	    	Seat seat = new Seat(row , column, seatCounter);
-	    	seatCounter++;
-	        seat.widthProperty().bind(size);
-	        seat.heightProperty().bind(size);
-	
-	    	if(seatPlan[row][column] == false){
-	    		seat.setDisable(true);
-	    		seat.setOpacity(0);
-	    	}
-	    	
-	        seat.getState().addListener((e, oldValue, newValue) -> {
-	        	if(isTimeOver.get() == false) {
-		        	if (newValue) {
-			        	  if(selectedSeats.size() == 0)
-			        		  StartTimeAnimation();	        	  
-			        	  selectedSeats.add(seat);
-			        	  // Ticket für diesen Sitzplatz hinzufügen
-			        	  Ticket ticket = new Ticket(seat);
-		        	  ticketData.add(ticket);
-			          }
-			          else {
-			            this.selectedSeats.remove(seat);
-			            if(selectedSeats.size() == 0)
-			            	StopTimeAnimation();
-			            for(Ticket ticket : ticketData) {
-			                if(ticket.getSeat().equals(seat)) {
-			                	// Ticket für diesen Sitzplatz entfernen
-			                	ticketData.remove(ticket);
-			                }
-			            } 
-			          }		        		
-	        	}
-        	  
-
-
-	        });
-	        
-	        this.hallGrid.add(seat, column, row);   	
-	      }
-	    }
-	    
-	    // Verkaufte Plätze markieren
+	    List<Integer> bookedSeatNumbers = new ArrayList<Integer>();
 	    List<Booking> bookings = vorstellung.getBookings();
 	    for (Booking booking : bookings) {
 	    	List<Ticket> tickets = booking.getTickets();
-	    	for(Ticket ticket : tickets) {
-	    		Seat bookedSeat = ticket.getSeat();
-	    		for(Node node : hallGrid.getChildren()) {
-	    			Seat seat = (Seat)node;
-	    			if(seat.getSeatNumber() == bookedSeat.getSeatNumber()) {
-	    				seat.setSold();
-	    			}
-	    		}
-	    	}
-	    }
+	    	for(Ticket ticket : tickets)
+	    		bookedSeatNumbers.add(ticket.getSeat().getSeatNumber());
+	    }	    
+	    
+	    ReadOnlyDoubleProperty gridWidth = this.hallGrid.widthProperty();
+	    ReadOnlyDoubleProperty gridHeight = this.hallGrid.heightProperty();
+	    
+	    NumberBinding size = new When(gridWidth.divide(columns).lessThan(gridHeight.divide(rows)))
+	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
+	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
+	    
+	    SeatView views[][] = new SeatView[rows][];
+	    	    
+	    //Image back = new Image(Main.class.getResourceAsStream("ch/ffhs/kino/movies/FSK_ab_16.png"));
+	    Image seatPic = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));
+	    Image soldPic = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSold_small.png"));
+	    Image selectedPic = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
+	    
+	    SeatView.setSeatPic(seatPic);
+	    SeatView.soldSeatPic(soldPic);
+	    SeatView.setSeatSelectedPic(selectedPic);
+	    
+	    int seatCounter = 1;
+	    
+        for (int r = 0; r < rows; r++) {
+            views[r] = new SeatView[columns];          
+            for (int c = 0; c < columns; c++) {
+                Seat seat = new Seat(r, c, seatCounter);
+            	SeatView seatView = new SeatView(seat); // different front images of course...
+            	views[r][c] = seatView;
+            	
+            	// Prüfe, ob der Platz verkauft ist
+            	if(bookedSeatNumbers.contains(seatCounter))
+            		seatView.setSold();
+            	
+            	// ImageViews are not resizeable, but you could use a parent that is resizeable and bind the fitWidth and fitHeight properties 
+            	// to the size of the parent using expression binding          	    	
+            	seatView.fitWidthProperty().bind(size);
+            	seatView.fitHeightProperty().bind(size);
+            	
+            	
+            	if(seatPlan[r][c] == false){
+            		seatView.setDisable(true);
+            		seatView.setOpacity(0);
+            		continue;
+    	    	}
+            	
+            	seatCounter++;
+            	         	
+            	seatView.getState().addListener((e, oldValue, newValue) -> {
+    	        	if(isTimeOver.get() == false) {
+    		        	if (newValue) {
+    			        	  if(selectedSeats.size() == 0)
+    			        		  StartTimeAnimation();	        	  
+    			        	  selectedSeats.add(seatView);
+    			        	  // Ticket für diesen Sitzplatz hinzufügen
+    			        	  Ticket ticket = new Ticket(seat);
+    			        	  ticketData.add(ticket);
+    			          }
+    			          else {
+    			            this.selectedSeats.remove(seatView);
+    			            if(selectedSeats.size() == 0)
+    			            	StopTimeAnimation();
+    			            for(Ticket ticket : ticketData) {
+    			                if(ticket.getSeat().equals(seat)) {
+    			                	// Ticket für diesen Sitzplatz entfernen
+    			                	ticketData.remove(ticket);
+    			                }
+    			            } 
+    			          }		        		
+    	        	}
+    	        });
+            	              
+                HBox box = new HBox(5);
+                box.getChildren().add(views[r][c]);
+                hallGrid.add(box, c, r);
+            }
+        }
 	}
-
+	
+    private EventHandler<ActionEvent> commandBuyHandler = (evt) -> {
+    	// Booking erstellen
+    	Booking booking = new Booking();
+    	booking.setEvent(vorstellung);
+    	booking.setTickets(ticketData);
+    	try {
+			Main.startTicketZahlen(booking);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    };
+    
 //	private void resizeSeat(Number newValue) {
 //	Hall hall = vorstellung.getHall(); 
 //    int rows = hall.getRows();

@@ -2,8 +2,6 @@ package ch.ffhs.kino.model;
 
 import java.text.DecimalFormat;
 
-import ch.ffhs.kino.component.Seat;
-
 public class Ticket {
 
 	public enum TicketType {
