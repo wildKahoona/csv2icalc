@@ -1,6 +1,7 @@
 package ch.ffhs.kino.model;
 
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
+import ch.ffhs.kino.model.Seat.SeatType;
 
 public class Hall {
 
@@ -8,7 +9,7 @@ public class Hall {
 	private CinemaPlaces cinema;
 	private int rows;
 	private int columns;
-	private Boolean[][] seatPlan;
+	private SeatType[][] seatPlan;
 
 	public Hall(String hallName, CinemaPlaces cinema) {
 		this.hallName = hallName;
@@ -47,25 +48,29 @@ public class Hall {
 		this.columns = columns;
 	}
 		
-	public Boolean[][] getSeatPlan() {
+	public SeatType[][] getSeatPlan() {
 		return seatPlan;
 	}
 
+	public void setSeatPlan(SeatType[][] seatPlan) {
+		this.seatPlan = seatPlan;
+	}
+	
 	public void configureSeatPlan(int rows, int columns) {
 		this.rows = rows;
 		this.columns = columns;
-		seatPlan = new Boolean[rows][columns];
+		seatPlan = new SeatType[rows][columns];
 		for (int row = 0; row < (rows ); row++) {
 	    	for (int column = 0; column < (columns ); column++) {
-	    		seatPlan[row][column] = true;
+	    		seatPlan[row][column] = SeatType.NORMAL;
 	    	}
 		} 
 	}
-	
-	public void setSeatNotAvailable(int row, int column){
-		this.seatPlan[row][column] = false;
-	}
 
+	public void setSeatType(int row, int column, SeatType seatType){
+		this.seatPlan[row][column] = seatType;
+	}
+	
 	@Override
 	public String toString() {
 		return "Hall [hallName=" + hallName + ", cinema=" + cinema + "]";

@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
@@ -19,6 +21,7 @@ import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Vorstellung;
+import ch.ffhs.kino.model.Seat.SeatType;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -100,7 +103,9 @@ public class VorstellungController {
 	 * Die Liste der ausgewählten Sitze
 	 */
 	// ObservableList: damit ich Änderungen nachverfolgen kann
-	private ObservableList<SeatView> selectedSeats = FXCollections.observableArrayList();
+	//private ObservableList<SeatView> selectedSeats = FXCollections.observableArrayList();
+	
+	private List<SeatView> selectedSeats = new ArrayList();
 	
 	//private CardView views[][];
 	/**
@@ -293,7 +298,7 @@ public class VorstellungController {
 	    		selectedSeats.clear();
 	    		
 	    		// Ticket entfernen
-	    		ticketData.clear();
+	    		//ticketData.clear();
 	    		
 	    		Alert alert = new Alert(AlertType.INFORMATION);
 	    		alert.setTitle("Information Dialog");
@@ -433,7 +438,7 @@ public class VorstellungController {
 		Hall hall = vorstellung.getHall();
 		int rows = hall.getRows();
 	    int columns = hall.getColumns();
-	    Boolean[][] seatPlan = hall.getSeatPlan();
+	    SeatType[][] seatPlan = hall.getSeatPlan();
 	    List<Integer> bookedSeatNumbers = new ArrayList<Integer>();
 	    List<Booking> bookings = vorstellung.getBookings();
 	    for (Booking booking : bookings) {
@@ -479,7 +484,7 @@ public class VorstellungController {
             	seatView.fitHeightProperty().bind(size);
             	
             	
-            	if(seatPlan[r][c] == false){
+            	if(seatPlan[r][c] == SeatType.NONE){
             		seatView.setDisable(true);
             		seatView.setOpacity(0);
             		continue;
@@ -501,12 +506,12 @@ public class VorstellungController {
     			            this.selectedSeats.remove(seatView);
     			            if(selectedSeats.size() == 0)
     			            	StopTimeAnimation();
-    			            for(Ticket ticket : ticketData) {
-    			                if(ticket.getSeat().equals(seat)) {
-    			                	// Ticket für diesen Sitzplatz entfernen
-    			                	ticketData.remove(ticket);
-    			                }
-    			            } 
+    			            
+    			            // Ticket aus der Liste entfernen
+    			            Optional<Ticket> removeTicket = ticketData.stream().
+    			            		filter(x -> x.getSeat().equals(seat)).findFirst();  			            
+    			            if(removeTicket.isPresent())
+    			            	ticketData.remove(removeTicket.get());
     			          }		        		
     	        	}
     	        });
