@@ -56,6 +56,7 @@
 				  </children>
 				</VBox> -->
 
+
 		         <GridPane fx:id="hallGrid" style="-fx-border-width: 5; -fx-border-radius: 10; -fx-border-color: gray;"
 				           alignment="TOP_CENTER"
 				           prefHeight="9999"
@@ -151,14 +152,19 @@
 		      		<!-- Buchungstimer -->
 		      		<GridPane>
 						<children>				
-							<Label GridPane.rowIndex="0" GridPane.columnIndex="0" text="Buchungsvorgang läuft ab in " styleClass="h2"/>
-							<Label fx:id="timeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="h2"/>
-							<ImageView GridPane.rowIndex="0" GridPane.columnIndex="2" fitHeight="20.0" fitWidth="20.0">
-						      <image>
-						      	<Image url="/ch/ffhs/kino/images/timer.png"/>
-						      </image>
-						 	</ImageView>
-							<Button fx:id="buyButton" GridPane.rowIndex="0" GridPane.columnIndex="3" mnemonicParsing="false" text="Kaufen" styleClass="button-primary" GridPane.halignment="RIGHT" />
+							
+							<HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
+								<Label text="Buchungsvorgang läuft ab in " styleClass="h2" style="-fx-padding: 15 5 15 15;"/>
+								<Label fx:id="timeLabel" styleClass="h2" style="-fx-padding: 15 0 15 0;-fx-min-width: 50px;"/>
+								<ImageView fitHeight="20.0" fitWidth="20.0">
+							      <image>
+							      	<Image url="/ch/ffhs/kino/images/timer.png"/>
+							      </image>
+							 	</ImageView>
+							 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
+									styleClass="button-primary" GridPane.halignment="RIGHT" />
+						 	</HBox>
+							
 							
 							<!-- <Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" /> -->
 						</children>

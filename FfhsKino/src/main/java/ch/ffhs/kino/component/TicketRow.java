@@ -20,6 +20,6 @@ public class TicketRow extends HBox {
 	
 	@FXML
 	protected void initialize() {
-
+		this.setAlignment(Pos.CENTER_LEFT);
 	}
 }

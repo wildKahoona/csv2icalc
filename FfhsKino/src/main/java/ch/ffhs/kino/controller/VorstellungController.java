@@ -4,11 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import java.io.IOException;
-
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import ch.ffhs.kino.model.Booking;
@@ -45,9 +46,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -226,6 +228,8 @@ public class VorstellungController {
 	
 	private void initTicketControl() {
 		// Eigenes Control definiert, da TableView mit dem Button nicht so gut geht:
+		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
+		
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			ticketGrid.getChildren().clear();
 			for(Ticket ticket : ticketData) {
@@ -235,14 +239,16 @@ public class VorstellungController {
 				row.setStyle("-fx-padding: 5;");
 				row.setTicket(ticket);
 				
+				// Information zum Sitz (Reihe, Nummer)
 				Label label = new Label();
 				label.setText(ticket.getSeat().toString());
-				label.setStyle("-fx-padding: 5;");
+				label.setStyle("-fx-padding: 3;-fx-min-width: 100px");
 				label.setTextAlignment(TextAlignment.CENTER);	
 				row.getChildren().add(label);
 				
+				// Auswahl für den Ticket-Typ
 				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
-				cbxTicketType.setStyle("-fx-padding: 0,5;");
+				cbxTicketType.setStyle("-fx-padding: 0,5;-fx-min-width: 120px;");
 				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));					
 				cbxTicketType.getSelectionModel().select(ticket.getTicketType());
 				cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
@@ -255,20 +261,35 @@ public class VorstellungController {
 				});					
 				row.getChildren().add(cbxTicketType);
 
-				FontAwesomeIcon icon = new FontAwesomeIcon();
-				icon.setIconName("TRASH"); //TRASH
-				icon.setSize("1.5em");
-				//icon.setStyle("-fx-padding: 5;");
-				//icon.setTextAlignment(TextAlignment.CENTER);
-				icon.setOnMouseClicked(e -> {
-			        int seatNumber = ticket.getSeat().getSeatNumber();
-			        SeatView seatView =  selectedSeats.stream().filter(x -> x.getSeat().getSeatNumber() == seatNumber).findFirst().get();
-			        seatView.deselect();
-			        //ticket.getSeat().deselect();
-			        ticketData.remove(ticket);
-			    });				
+				// Preis
+				String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
+				Label labelPrice = new Label();
+				labelPrice.setText(price + " CHF");
+				labelPrice.setStyle("-fx-padding: 3;-fx-min-width: 60px");
+				labelPrice.setTextAlignment(TextAlignment.CENTER);	
+				row.getChildren().add(labelPrice);
 				
-				row.getChildren().add(icon);
+				// Delete Button mit Bild
+				Button deleteButton = new Button();
+				deleteButton.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");
+				
+				ImageView imageView = new ImageView();
+				imageView.setImage(trash);
+				imageView.setFitWidth(23);
+				imageView.setFitHeight(23);
+				deleteButton.setGraphic(imageView);
+				row.getChildren().add(deleteButton);
+				
+				deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+				    @Override public void handle(ActionEvent e) {
+				    	int seatNumber = ticket.getSeat().getSeatNumber();
+				    	 SeatView seatView =  selectedSeats.stream().filter(x -> x.getSeat().getSeatNumber() == seatNumber).findFirst().get();
+				    	 seatView.deselect();
+				    	 ticketData.remove(ticket);
+				    }
+				});
+				
+				// Zeile zum Grid hinzufügen
 				ticketGrid.getChildren().add(row);
 			}
 		});
@@ -515,9 +536,10 @@ public class VorstellungController {
     	        	}
     	        });
             	              
-                HBox box = new HBox(5);
-                box.getChildren().add(views[r][c]);
-                hallGrid.add(box, c, r);
+//                HBox box = new HBox(5);
+//                box.getChildren().add(views[r][c]);
+//                hallGrid.add(box, c, r);
+            	this.hallGrid.add(views[r][c], c, r);
             }
         }
 	}

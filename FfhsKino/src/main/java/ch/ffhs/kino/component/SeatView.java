@@ -26,17 +26,7 @@ public class SeatView extends ImageView {
     	imageSelcectedSeat = image; 
     }
     
-//	public static void setSoldSeatPic(Image image) {
-//		seatSoldPic = image; 
-//	}
-    
-//    public static void setSeatSelectedPic(Image image) { 
-//    	this.seatSelectedImg = image;
-//    }
-    
-    public SeatView(Seat seat) { 
-    	//super(imageSelcectedSeat); 
-    	
+    public SeatView(Seat seat) { 	
     	this.seat = seat;
     	
         setScaleX(scale);

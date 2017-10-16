@@ -236,24 +236,22 @@ public class CinemaProgrammServiceMock {
 	private void initHalls()
 	{
 		// Kinosaal konfigurieren
-		hallRex1.configureSeatPlan(10, 10);
+		hallRex1.configureSeatPlan(11, 10);
 		// Nicht verfügbar
 		hallRex1.setSeatType(5, 0, SeatType.NONE);
 		hallRex1.setSeatType(5, 1, SeatType.NONE);
 		hallRex1.setSeatType(5, 8, SeatType.NONE);
-		hallRex1.setSeatType(5, 9, SeatType.NONE);
-			
+		hallRex1.setSeatType(5, 9, SeatType.NONE);			
 		// Handicap-Sitze
 		hallRex1.setSeatType(6, 0, SeatType.HANDYCAP);
 		hallRex1.setSeatType(6, 1, SeatType.HANDYCAP);
 		hallRex1.setSeatType(6, 8, SeatType.HANDYCAP);
-		hallRex1.setSeatType(6, 9, SeatType.HANDYCAP);
-		
+		hallRex1.setSeatType(6, 9, SeatType.HANDYCAP);		
 		// Premium-Sitze
-		hallRex1.setSeatType(9, 5, SeatType.PREMIUM);
-		hallRex1.setSeatType(9, 6, SeatType.PREMIUM);
-		hallRex1.setSeatType(9, 7, SeatType.PREMIUM);
-		hallRex1.setSeatType(9, 8, SeatType.PREMIUM);
+		hallRex1.setSeatType(8, 5, SeatType.PREMIUM);
+		hallRex1.setSeatType(8, 6, SeatType.PREMIUM);
+		hallRex1.setSeatType(8, 7, SeatType.PREMIUM);
+		hallRex1.setSeatType(8, 8, SeatType.PREMIUM);
 			
 		hallRex2.configureSeatPlan(15, 8);
 		hallRex3.configureSeatPlan(25, 15);
