@@ -119,7 +119,7 @@
 		  <artifactId>fontawesomefx</artifactId>
 		  <version>8.1</version>
 		</dependency>
-
+		
 	</dependencies>
 
 </project>

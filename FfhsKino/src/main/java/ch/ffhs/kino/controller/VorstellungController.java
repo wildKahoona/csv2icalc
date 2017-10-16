@@ -4,10 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import java.io.IOException;
-import java.net.URL;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -47,13 +47,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
@@ -97,17 +96,11 @@ public class VorstellungController {
 //	@FXML
 //	private TableColumn<Ticket, TicketType> colPrice;
 	
-//	@FXML
-//	private ImageView imageView;
 	/**
 	 * Die Liste der ausgewählten Sitze
 	 */
-	// ObservableList: damit ich Änderungen nachverfolgen kann
-	//private ObservableList<SeatView> selectedSeats = FXCollections.observableArrayList();
+	private List<SeatView> selectedSeats = new ArrayList<SeatView>();
 	
-	private List<SeatView> selectedSeats = new ArrayList();
-	
-	//private CardView views[][];
 	/**
      * Die Liste der Reservierungen
      */
@@ -220,8 +213,6 @@ public class VorstellungController {
 	public void setVorstellung(Vorstellung vorstellung, List<TicketPrice> ticketPrices) {
 		this.vorstellung = vorstellung;
 		initTitle();
-		//this.ticketPriceData = FXCollections.observableArrayList(ticketPrices);
-		//this.renderHallGrid();
 		this.renderSeatView();
 	}
 	
@@ -234,7 +225,7 @@ public class VorstellungController {
 	}
 	
 	private void initTicketControl() {
-		// Eigenes Control definiert, da TableView nicht so viel kann:
+		// Eigenes Control definiert, da TableView mit dem Button nicht so gut geht:
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			ticketGrid.getChildren().clear();
 			for(Ticket ticket : ticketData) {
@@ -265,7 +256,7 @@ public class VorstellungController {
 				row.getChildren().add(cbxTicketType);
 
 				FontAwesomeIcon icon = new FontAwesomeIcon();
-				icon.setIconName("TRASH");
+				icon.setIconName("TRASH"); //TRASH
 				icon.setSize("1.5em");
 				//icon.setStyle("-fx-padding: 5;");
 				//icon.setTextAlignment(TextAlignment.CENTER);
@@ -289,7 +280,8 @@ public class VorstellungController {
 	private void initTimeline() {
 		
 		this.isTimeOver.addListener((value, oldValue, newValue) -> {
-	    	if (newValue == true) {
+	    	
+			if (newValue == true) {
 				
 	    	  	// Selektierte Sitze freigeben
 	    		selectedSeats.forEach((seat) -> { 
@@ -311,7 +303,7 @@ public class VorstellungController {
 	    	}
 	    	});
 		
-		timeline = new Timeline(
+			timeline = new Timeline(
 				new KeyFrame(Duration.seconds(1), e -> {
 			    	long diff = endTime - System.currentTimeMillis();
 			    	if(diff <= (long)0) {
@@ -331,7 +323,7 @@ public class VorstellungController {
 			    	} 
 			    })
 			);
-		timeline.setCycleCount( Animation.INDEFINITE );
+			timeline.setCycleCount( Animation.INDEFINITE );
 	}
 
 	public void StartTimeAnimation(){
@@ -456,40 +448,47 @@ public class VorstellungController {
 	    
 	    SeatView views[][] = new SeatView[rows][];
 	    	    
-	    //Image back = new Image(Main.class.getResourceAsStream("ch/ffhs/kino/movies/FSK_ab_16.png"));
-	    Image seatPic = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));
-	    Image soldPic = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSold_small.png"));
-	    Image selectedPic = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
+	    // Bilder der Sitzplätze laden
+	    Image normalSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));
+	    Image premiumSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatPremium_small.png"));
+	    Image handicapSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatHandicap_small.png"));
+	    Image soldSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSold_small.png"));
+	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
 	    
-	    SeatView.setSeatPic(seatPic);
-	    SeatView.soldSeatPic(soldPic);
-	    SeatView.setSeatSelectedPic(selectedPic);
+	    // Bild für den ausgewählten Sitz für alle Objekte setzen
+	    SeatView.setImageSelcectedSeat(selectedSeat);
 	    
-	    int seatCounter = 1;
-	    
+	    int seatCounter = 1;	    
         for (int r = 0; r < rows; r++) {
             views[r] = new SeatView[columns];          
             for (int c = 0; c < columns; c++) {
                 Seat seat = new Seat(r, c, seatCounter);
-            	SeatView seatView = new SeatView(seat); // different front images of course...
+            	SeatView seatView = new SeatView(seat);         	
             	views[r][c] = seatView;
             	
             	// Prüfe, ob der Platz verkauft ist
-            	if(bookedSeatNumbers.contains(seatCounter))
+            	if(bookedSeatNumbers.contains(seatCounter)) {
             		seatView.setSold();
+            		seatView.setImageSeat(soldSeat);
+            	}else {                 	
+                	if(seatPlan[r][c] == SeatType.NONE){
+                		seatView.setDisable(true);
+                		seatView.setOpacity(0);
+                		continue;
+        	    	}else if (seatPlan[r][c] == SeatType.HANDYCAP){
+        	    		seatView.setImageSeat(handicapSeat);
+        	    	}else if (seatPlan[r][c] == SeatType.PREMIUM){
+        	    		seatView.setImageSeat(premiumSeat);
+        	    	}else {
+        	    		seatView.setImageSeat(normalSeat);
+        	    	}
+            	}
             	
             	// ImageViews are not resizeable, but you could use a parent that is resizeable and bind the fitWidth and fitHeight properties 
             	// to the size of the parent using expression binding          	    	
             	seatView.fitWidthProperty().bind(size);
             	seatView.fitHeightProperty().bind(size);
-            	
-            	
-            	if(seatPlan[r][c] == SeatType.NONE){
-            		seatView.setDisable(true);
-            		seatView.setOpacity(0);
-            		continue;
-    	    	}
-            	
+            	  	
             	seatCounter++;
             	         	
             	seatView.getState().addListener((e, oldValue, newValue) -> {

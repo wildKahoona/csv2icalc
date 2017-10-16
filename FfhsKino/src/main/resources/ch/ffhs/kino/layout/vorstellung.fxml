@@ -64,7 +64,7 @@
 				           vgap="2"/>	
 				           		           
 				 <!-- Legende -->
-				 <HBox style="-fx-padding: 20px 0" alignment="CENTER" spacing="40">
+				 <HBox style="-fx-padding: 5px 0" alignment="CENTER" spacing="15">
 					<children>
 						<HBox>
 					      <children>
@@ -95,7 +95,37 @@
 					        </Label>
 					      </children>
 					    </HBox>
+
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatPremium_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Premium" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Bediente Sitzplätze" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
 					    
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatHandicap_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Handicap" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Rollstuhlplätze" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+					    					    
 					    <HBox>
 					      <children>
 					        <ImageView fitHeight="20.0" fitWidth="20.0">
@@ -123,11 +153,17 @@
 						<children>				
 							<Label GridPane.rowIndex="0" GridPane.columnIndex="0" text="Buchungsvorgang läuft ab in " styleClass="h2"/>
 							<Label fx:id="timeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="h2"/>
-							<Button fx:id="buyButton" GridPane.rowIndex="0" GridPane.columnIndex="2" mnemonicParsing="false" text="Kaufen" styleClass="button-primary" GridPane.halignment="RIGHT" />
+							<ImageView GridPane.rowIndex="0" GridPane.columnIndex="2" fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/timer.png"/>
+						      </image>
+						 	</ImageView>
+							<Button fx:id="buyButton" GridPane.rowIndex="0" GridPane.columnIndex="3" mnemonicParsing="false" text="Kaufen" styleClass="button-primary" GridPane.halignment="RIGHT" />
 							
 							<!-- <Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" /> -->
 						</children>
 					</GridPane>
+					
 					<!-- Tickets -->
 		      		<VBox fx:id="ticketGrid"
 				          alignment="TOP_LEFT"

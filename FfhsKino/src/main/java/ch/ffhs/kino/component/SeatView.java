@@ -14,29 +14,28 @@ public class SeatView extends ImageView {
     static DropShadow shadowhoover = new DropShadow(5, 4, 4, Color.rgb(50, 60, 50));
     static DropShadow shadowdown = new DropShadow(2, 2, 2, Color.rgb(50, 60, 50));
     
-    static Image seatPic = null;
-    static Image seatSoldPic = null;
-    static Image seatSelectedPic = null;
+    static Image imageSelcectedSeat = null;
     
+    private Image imageSeat = null;
     private Seat seat;
 	
     private BooleanProperty selected = new SimpleBooleanProperty(false);
     private BooleanProperty sold = new SimpleBooleanProperty(false);
       
-    public static void setSeatPic(Image image) { 
-    	seatPic = image; 
+    public static void setImageSelcectedSeat(Image image) { 
+    	imageSelcectedSeat = image; 
     }
     
-	public static void soldSeatPic(Image image) {
-		seatSoldPic = image; 
-	}
+//	public static void setSoldSeatPic(Image image) {
+//		seatSoldPic = image; 
+//	}
     
-    public static void setSeatSelectedPic(Image image) { 
-    	seatSelectedPic = image;
-    }
+//    public static void setSeatSelectedPic(Image image) { 
+//    	this.seatSelectedImg = image;
+//    }
     
     public SeatView(Seat seat) { 
-    	super(seatPic); 
+    	//super(imageSelcectedSeat); 
     	
     	this.seat = seat;
     	
@@ -63,19 +62,25 @@ public class SeatView extends ImageView {
         });
     }
 
-//	public void deselect() {
-//		if (!this.selected.get()) {
-//	      return;
-//		}
-//		this.selected.set(false);
-//	}
+	public Seat getSeat() {
+		return seat;
+	}
 
+	public void setSeat(Seat seat) {
+		this.seat = seat;
+	}
+	
+	public void setImageSeat(Image imageSeat) {
+		setImage(imageSeat);
+		this.imageSeat = imageSeat;
+	}
+	
 	/**
 	 * Einen Sitz selektieren
 	*/
 	public void select() {
 	    this.selected.set(true);
-	    setImage(seatSelectedPic);
+	    setImage(imageSelcectedSeat);
 	}
 
 	/**
@@ -83,12 +88,11 @@ public class SeatView extends ImageView {
 	 */
 	public void deselect() {
 		this.selected.set(false);
-		setImage(seatPic);
+		setImage(imageSeat);
 	}
 	
 	public void setSold() {
 		this.sold.set(true);
-		setImage(seatSoldPic);
 	}
 	
 	/**
@@ -105,13 +109,5 @@ public class SeatView extends ImageView {
 	
 	public BooleanProperty getState() {
 		return this.selected;
-	}
-
-	public Seat getSeat() {
-		return seat;
-	}
-
-	public void setSeat(Seat seat) {
-		this.seat = seat;
 	}
 }
