@@ -18,9 +18,10 @@ public class SeatView extends ImageView {
     
     private Image imageSeat = null;
     private Seat seat;
+    //private Boolean isSold = false;
 	
     private BooleanProperty selected = new SimpleBooleanProperty(false);
-    private BooleanProperty sold = new SimpleBooleanProperty(false);
+    private Boolean sold = false;
       
     public static void setImageSelcectedSeat(Image image) { 
     	imageSelcectedSeat = image; 
@@ -44,7 +45,7 @@ public class SeatView extends ImageView {
         });
         setOnMouseClicked(m -> {             	
         	// Wenn dieses Sitz verkauft wurde, darf er nicht ausgewählt werden
-	    	if (this.sold.get())
+	    	if (this.sold)
 	          return;
 	    	
 	    	// Status des Sitzes umschalten
@@ -60,6 +61,14 @@ public class SeatView extends ImageView {
 		this.seat = seat;
 	}
 	
+//	public Boolean getIsSold() {
+//		return isSold;
+//	}
+//
+//	public void setIsSold(Boolean isSold) {
+//		this.isSold = isSold;
+//	}
+	
 	public void setImageSeat(Image imageSeat) {
 		setImage(imageSeat);
 		this.imageSeat = imageSeat;
@@ -69,8 +78,11 @@ public class SeatView extends ImageView {
 	 * Einen Sitz selektieren
 	*/
 	public void select() {
-	    this.selected.set(true);
-	    setImage(imageSelcectedSeat);
+	    if(!this.sold)
+	    {
+	    	this.selected.set(true);
+		    setImage(imageSelcectedSeat);
+	    }
 	}
 
 	/**
@@ -81,8 +93,13 @@ public class SeatView extends ImageView {
 		setImage(imageSeat);
 	}
 	
+	public Boolean getSold() {
+		return sold;
+	}
+
 	public void setSold() {
-		this.sold.set(true);
+		sold = true;
+		//this.sold.set(isSold);
 	}
 	
 	/**

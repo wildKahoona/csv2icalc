@@ -75,6 +75,8 @@ public class VorstellungController {
 	 */
 	private Vorstellung vorstellung;
 	
+	private SeatView views[][];
+			
 	private BooleanProperty isTimeOver = new SimpleBooleanProperty(false);
 	
 	/**
@@ -100,6 +102,9 @@ public class VorstellungController {
 	@FXML
 	private Button buyButton;
     
+	@FXML
+	private Button addTicketButton;
+	
 	@FXML
 	private TableView<TicketTableModel> ticketTable;
 	
@@ -167,6 +172,9 @@ public class VorstellungController {
 		buyButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		buyButton.setTooltip(new Tooltip("Zur Zahlungsabwicklung"));
 		buyButton.setOnAction(commandBuyHandler);
+		
+		addTicketButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
+		addTicketButton.setOnAction(commandAddTicketHandler);
 		
 		
 //		// TableView ist sehr gruusig
@@ -596,12 +604,10 @@ public class VorstellungController {
 		//isTimeOver.set(false);
 		//endTime = System.currentTimeMillis() + (6 * 1000);
 		timeline.play();
-		boxTimer.setVisible(true);
 	}
 	
 	public void StopTimeAnimation(){
 		timeline.stop();
-		boxTimer.setVisible(false);
 	}
 
 	/**
@@ -627,8 +633,8 @@ public class VorstellungController {
 	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
 	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
 	    
-	    SeatView views[][] = new SeatView[rows][];
-	    	    
+	    views = new SeatView[rows][];
+	    
 	    // Bilder der Sitzplätze laden
 	    Image normalSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));
 	    Image premiumSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatPremium_small.png"));
@@ -671,7 +677,7 @@ public class VorstellungController {
             	seatView.fitHeightProperty().bind(size);
             	  	
             	seatCounter++;
-            	         	
+            	
             	seatView.getState().addListener((e, oldValue, newValue) -> {
     	        	if(isTimeOver.get() == false) {
     		        	if (newValue) {
@@ -706,7 +712,133 @@ public class VorstellungController {
             }
         }
 	}
-	
+
+    private EventHandler<ActionEvent> commandAddTicketHandler = (evt) -> {
+    	// Ticket hinzufügen
+    	if(selectedSeats.size() == 0) {
+    		return;
+    	}
+    	
+    	int maxCol = 10;
+    	
+    	SeatView firstSeat = selectedSeats.get(0);
+    	int row = firstSeat.getSeat().getSeatRow();
+    	int col = firstSeat.getSeat().getSeatColumn();
+    	
+    	// Links next: 0 + column vom Sitz - 1 (0 + 4 - 1 = 3)
+    	// Rechts next: Anzahl colums - column vom Sitz (10 - 4 = 6)
+    	
+    	// Muss ich nach links?
+    	Boolean goLinks = false;
+    	Boolean leftSold = false;
+    	
+    	if(0 + col - 1 > maxCol - col) {
+    		if(col > 1)
+    		{
+    			SeatView nextSeat = views[row-1][col-2];	
+    			leftSold = nextSeat.getSold();
+        		if(!leftSold) {
+        			goLinks = true;
+        		}
+    		}
+    	}
+    	
+    	if(!goLinks && !leftSold) {
+	    	if(col < maxCol && col != 1)
+			{
+				SeatView nextSeat = views[row-1][col-1];
+				if(!nextSeat.getSold()) {
+	    			goLinks = true;
+					//row++;
+	    		}
+			}
+    	}
+    	
+    	
+    	if(goLinks) {
+    		for(int c=col-1; c < views[row - 1].length; c--) {
+                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
+    			
+    			// Wenn frei
+    			SeatView nextSeat = views[row - 1][c - 1];
+    			System.out.println("Values at arr["+(row - 1)+"]["+c+"] is " + views[(row - 1)][c]);
+            	nextSeat.select();
+            	
+            	firstSeat = nextSeat;
+    			break;
+            }
+    	}else {
+    		for(int c=col; c < views[row - 1].length; c++) {
+                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
+    			
+    			// Wenn frei
+    			SeatView nextSeat = views[row - 1][c];
+    			System.out.println("Values at arr["+(row - 1)+"]["+c+"] is " + views[(row - 1)][c]);
+            	nextSeat.select();
+            	
+            	firstSeat = nextSeat;
+    			break;
+            }
+    	}
+    	
+    	
+    	// Suche den besten Platz
+    	for(int r=0; r < views.length; r++) {
+            for(int c=0; c< views[r].length; c++) {
+            	
+            	
+            	
+                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
+            }
+        }
+    	
+//    	Values at arr[0][0] is SeatView@6fd4129b[styleClass=image-view]
+//		Values at arr[0][1] is SeatView@2eb33627[styleClass=image-view]
+//		Values at arr[0][2] is SeatView@4d57d155[styleClass=image-view]
+//		Values at arr[0][3] is SeatView@58fe9ffb[styleClass=image-view]
+//		Values at arr[0][4] is SeatView@17f11eb5[styleClass=image-view]
+//		Values at arr[0][5] is SeatView@20c41062[styleClass=image-view]
+//		Values at arr[0][6] is SeatView@53eab056[styleClass=image-view]
+//		Values at arr[0][7] is SeatView@7f47ec97[styleClass=image-view]
+//		Values at arr[0][8] is SeatView@60dc517c[styleClass=image-view]
+//		Values at arr[0][9] is SeatView@609b0a05[styleClass=image-view]
+//		Values at arr[1][0] is SeatView@66757e40[styleClass=image-view]
+//		Values at arr[1][1] is SeatView@2616054d[styleClass=image-view]
+//		Values at arr[1][2] is SeatView@2443e742[styleClass=image-view]
+//		Values at arr[1][3] is SeatView@1cb00aed[styleClass=image-view]
+//		Values at arr[1][4] is SeatView@51faf045[styleClass=image-view]
+//		Values at arr[1][5] is SeatView@4750bb5a[styleClass=image-view]
+//		Values at arr[1][6] is SeatView@7c123d05[styleClass=image-view]
+//		Values at arr[1][7] is SeatView@6069b708[styleClass=image-view]
+//		Values at arr[1][8] is SeatView@66170b98[styleClass=image-view]
+//		Values at arr[1][9] is SeatView@245ff66b[styleClass=image-view]
+    	
+    	
+    	
+    	
+    	
+//    	int number = firstSeat.getSeat().getSeatNumber();
+//    	SeatView nextSeat = views[row][col+1];
+//    	nextSeat.select();
+    	
+//    	selectedSeats.add(nextSeat);
+//    	Seat seat = nextSeat.getSeat();
+//    	Ticket ticket = new Ticket(seat);
+//  	  	ticketData.add(ticket);
+  	  
+  	  //SeatType[][] seatPlan = hall.getSeatPlan();
+  	  
+//    	Booking booking = new Booking();
+//    	booking.setEvent(vorstellung);
+//    	booking.setTickets(ticketData);
+//    	try {
+//			Main.startTicketZahlen(booking);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+    };
+    
     private EventHandler<ActionEvent> commandBuyHandler = (evt) -> {
     	// Booking erstellen und weiter zu zahlen
     	Booking booking = new Booking();
@@ -719,6 +851,9 @@ public class VorstellungController {
 			e.printStackTrace();
 		}
     };
+    
+    
+    
     
 //	private void renderHallGrid() {
 //	Hall hall = vorstellung.getHall();
