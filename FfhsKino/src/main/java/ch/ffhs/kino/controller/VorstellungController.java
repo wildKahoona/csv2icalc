@@ -22,6 +22,7 @@ import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Vorstellung;
+import ch.ffhs.kino.table.model.TicketTableModel;
 import ch.ffhs.kino.model.Seat.SeatType;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -33,13 +34,15 @@ import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -54,6 +57,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import javafx.scene.text.TextAlignment;
@@ -96,7 +101,13 @@ public class VorstellungController {
 	private Button buyButton;
     
 	@FXML
-	private TableView<Ticket> ticketTable;
+	private TableView<TicketTableModel> ticketTable;
+	
+	@FXML
+	private Label labelNoTickets;
+	
+	@FXML
+	private HBox boxTimer;
 //	
 //	@FXML
 //	private TableColumn<Ticket, String> colSeatDescription;
@@ -113,12 +124,15 @@ public class VorstellungController {
      * Die Liste der Reservierungen
      */
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
+	private ObservableList<TicketTableModel> ticketTableData = FXCollections.observableArrayList();
+	
+	
 	
 	private long endTime ;
 	private Timeline timeline;
 
 	// Zelle mit Delete-Button
-	private class ButtonCell extends TableCell<Ticket, Boolean> {
+	private class ButtonCell extends TableCell<TicketTableModel, Boolean> {
 	    final Button cellButton = new Button("Action");	     
 	    ButtonCell(){         
 	        cellButton.setOnAction(new EventHandler<ActionEvent>(){
@@ -128,7 +142,7 @@ public class VorstellungController {
 	                // do something when button clicked
 	            	int selectdIndex = getTableRow().getIndex();
 	            	 //delete the selected item in data
-	            	ticketData.remove(selectdIndex);
+	            	ticketTableData.remove(selectdIndex);
 	            }
 	        });
 	    }
@@ -154,37 +168,60 @@ public class VorstellungController {
 		buyButton.setTooltip(new Tooltip("Zur Zahlungsabwicklung"));
 		buyButton.setOnAction(commandBuyHandler);
 		
-		TableColumn col_id = new TableColumn("ticketType");
-		ticketTable.getColumns().add(col_id);
-        col_id.setCellValueFactory(new PropertyValueFactory<Ticket, String>("ticketType"));
-        
-		//Insert Button
-        TableColumn col_action = new TableColumn<>("Action");
-        col_action.setSortable(false);
-         
-        col_action.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Ticket, Boolean>, 
-                ObservableValue<Boolean>>() {
- 
-            @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Ticket, Boolean> p) {
-                return new SimpleBooleanProperty(p.getValue() != null);
-            }
-        });
- 
-        col_action.setCellFactory(
-                new Callback<TableColumn<Ticket, Boolean>, TableCell<Ticket, Boolean>>() {
- 
-            @Override
-            public TableCell<Ticket, Boolean> call(TableColumn<Ticket, Boolean> p) {
-                return new ButtonCell();
-            }
-         
-        });
-        ticketTable.getColumns().add(col_action);
-         
-        ticketTable.setItems(ticketData);
 		
+//		// TableView ist sehr gruusig
+//		TableColumn<TicketTableModel, String> col_id = new TableColumn<TicketTableModel, String>();
+//        col_id.setCellValueFactory(new PropertyValueFactory<TicketTableModel, String>("ticketType"));
+//        ticketTable.getColumns().add(col_id);
+//        
+//        TableColumn<TicketTableModel, String> col_price = new TableColumn<TicketTableModel, String>();
+//        col_price.setCellValueFactory(new PropertyValueFactory<TicketTableModel, String>("price"));
+//        ticketTable.getColumns().add(col_price);
+//            
+//		//Insert Button
+//        TableColumn col_action = new TableColumn<>("Action");
+//        col_action.setSortable(false);
+//         
+//        col_action.setCellValueFactory(
+//                new Callback<TableColumn.CellDataFeatures<TicketTableModel, Boolean>, 
+//                ObservableValue<Boolean>>() {
+// 
+//            @Override
+//            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<TicketTableModel, Boolean> p) {
+//                return new SimpleBooleanProperty(p.getValue() != null);
+//            }
+//        });
+// 
+//        col_action.setCellFactory(
+//                new Callback<TableColumn<TicketTableModel, Boolean>, TableCell<TicketTableModel, Boolean>>() {
+// 
+//            @Override
+//            public TableCell<TicketTableModel, Boolean> call(TableColumn<TicketTableModel, Boolean> p) {
+//                return new ButtonCell();
+//            }
+//         
+//        });
+//        ticketTable.getColumns().add(col_action);     
+//        ticketTable.setItems(ticketTableData);
+//		
+//        ticketTable.widthProperty().addListener(new ChangeListener<Number>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+//                // Get the table header
+//                Pane header = (Pane)ticketTable.lookup("TableHeaderRow");
+//                if(header!=null && header.isVisible()) {
+//                  header.setMaxHeight(0);
+//                  header.setMinHeight(0);
+//                  header.setPrefHeight(0);
+//                  header.setVisible(false);
+//                  header.setManaged(false);
+//                }
+//            }
+//        });
+        
+        
+        
+        
 //        TableColumn<Ticket, String> firstName = new TableColumn<Ticket, String>("ticketType");
 //        firstName.setCellValueFactory(new PropertyValueFactory<Ticket, String>("ticketType"));
 //        ticketTable.getColumns().add(firstName);
@@ -323,32 +360,35 @@ public class VorstellungController {
 	
 	private void initTicketControl() {
 		// TODO: echt gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM, habe ich aber nicht hingekriegt)
-		// TableView hat leider keine ButtonCell (ich habe es irgendwann aufgegeben, da zu viel Zeit investiert):
+		// TableView hat leider keine ButtonCell 
+		// ButtonCell habe ich dann doch noch geschafft,
+		// dann kam aber schon der nächste Killer: Table ist nicht direkt im Edit-Mode, man muss erst doppelklicken!!!
 		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
-		
+		boxTimer.setVisible(false);
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			ticketGrid.getChildren().clear();
 			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
+			
+			if (tickets.isEmpty()) {
+				labelNoTickets.setVisible(true);
+				boxTimer.setVisible(false);
+				return;
+			}
+			
+			labelNoTickets.setVisible(false);
+			boxTimer.setVisible(true);
 			tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
 			
-			// Pro TicketType die Anzahl zählen
-			EnumMap<TicketType, Long> map = new EnumMap<>(TicketType.class);
-			tickets.forEach(t->map.merge(t.getTicketType(), 1L, Long::sum));
-			String countText = map.entrySet().stream().map(e -> e.getKey().getTitle()+" "+e.getValue()).collect(Collectors.joining(", "));
-			
-			// Summe der Tickets auflisten
-			Double sumText = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
-				
-//			java.util.Map<String, List<Ticket>> map1 = tickets.stream().collect(Collectors.groupingBy(x -> x.getTicketType().getTitle()));
-//			java.util.Map<String, Long> map2 = tickets.stream().collect(Collectors.groupingBy(x -> x.getTicketType().getTitle(), Collectors.counting()));
-			//summeText = map2.entrySet().stream().map(e -> e.getKey()+"="+e.getValue()).collect(Collectors.joining(", "));
-            
 			TicketRow rowSumme = new TicketRow();
 			rowSumme.setMaxWidth(320.00);
 			rowSumme.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
 			        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
 			        + "-fx-border-color: gray;-fx-background-color:wheat");		
 			
+			// Pro TicketType die Anzahl zählen
+			EnumMap<TicketType, Long> map = new EnumMap<>(TicketType.class);
+			tickets.forEach(t->map.merge(t.getTicketType(), 1L, Long::sum));
+			String countText = map.entrySet().stream().map(c -> c.getKey().getTitle() + " " + c.getValue()).collect(Collectors.joining(", "));			
 			Label labelCount = new Label();
 			//labelCount.setMaxWidth(200);
 			labelCount.setWrapText(true);
@@ -357,10 +397,13 @@ public class VorstellungController {
 			labelCount.setTextAlignment(TextAlignment.CENTER);	
 			rowSumme.getChildren().add(labelCount);
 			
-			Label sumLabel = new Label();
-			sumLabel.setText(sumText.toString());
-			sumLabel.setStyle("-fx-padding: 3;-fx-max-width: 80px");
-			rowSumme.getChildren().add(sumLabel);
+			// Summe der Tickets auflisten
+			Double sum = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
+			String sumPrice = String.format(Locale.ROOT, "%.2f", sum);
+			Label sumPriceLabel = new Label();
+			sumPriceLabel.setText(sumPrice + " CHF");
+			sumPriceLabel.setStyle("-fx-padding: 3;-fx-max-width: 80px;-fx-font-weight: bold; -fx-font-size: 11pt;");
+			rowSumme.getChildren().add(sumPriceLabel);
 			
 			ticketGrid.getChildren().add(rowSumme);
 			
@@ -372,7 +415,7 @@ public class VorstellungController {
 				row.setMaxWidth(320.00);
 				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
 				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-				        + "-fx-border-color: gray;");
+				        + "-fx-border-color: gray;-fx-background-color:white");
 				row.setTicket(ticket);
 				
 				// Information zum Sitz (Reihe, Nummer)
@@ -553,10 +596,12 @@ public class VorstellungController {
 		//isTimeOver.set(false);
 		//endTime = System.currentTimeMillis() + (6 * 1000);
 		timeline.play();
+		boxTimer.setVisible(true);
 	}
 	
 	public void StopTimeAnimation(){
 		timeline.stop();
+		boxTimer.setVisible(false);
 	}
 
 	/**
@@ -636,6 +681,9 @@ public class VorstellungController {
     			        	  // Ticket für diesen Sitzplatz hinzufügen
     			        	  Ticket ticket = new Ticket(seat);
     			        	  ticketData.add(ticket);
+    			        	  
+    			        	  TicketTableModel ticketTable = new TicketTableModel();
+    			        	  ticketTableData.add(ticketTable);
     			          }
     			          else {
     			            this.selectedSeats.remove(seatView);

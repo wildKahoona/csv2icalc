@@ -13,8 +13,8 @@
 
 <GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.VorstellungController">
 	<columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
     </columnConstraints>
 	<children>
 	
@@ -151,8 +151,10 @@
 		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1"> 
 		      		<!-- Buchungstimer -->
 		      		<GridPane>
-						<children>				
-							<HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
+						<children>			
+							<Label fx:id="labelNoTickets" GridPane.rowIndex="0" GridPane.columnIndex="0" 
+								   text="Keine Tickets ausgewählt" styleClass="h2" alignment="TOP_LEFT"/>	
+							<HBox fx:id="boxTimer" GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
 								<Label text="Buchungsvorgang läuft ab in " styleClass="h2" style="-fx-padding: 15 5 15 15;"/>
 								<Label fx:id="timeLabel" styleClass="h2" style="-fx-padding: 15 0 15 0;-fx-min-width: 50px;"/>
 								<ImageView fitHeight="20.0" fitWidth="20.0">
@@ -162,11 +164,13 @@
 							 	</ImageView>
 							 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
 									    styleClass="button-primary" GridPane.halignment="RIGHT" />
+								
 						 	</HBox>
 						 	
 							<!-- Tickets -->
-							<TableView fx:id="ticketTable"/>
-				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="2" GridPane.columnIndex="0"  style="-fx-padding: 5 0 0 15;"
+							<!-- <TableView fx:id="ticketTable"/> -->
+							
+				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-padding: 5 0 0 15;"
 						          alignment="TOP_LEFT"
 						          prefHeight="9999"
 					           	  prefWidth="9999">

@@ -58,7 +58,7 @@ public class Ticket {
 		this.ticketType = ticketType;
 	}
 
-	private String getCost() {
+	public String getCost() {
 		DecimalFormat formatter = new DecimalFormat("#0.00");
 		return formatter.format(getTicketType().getCost());
 
