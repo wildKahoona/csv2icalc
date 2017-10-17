@@ -43,28 +43,8 @@
 	         <!-- Column 0: Sitzplatzplan (FARBE nur damit ich weiss, wie das Grid ist)-->
 	         <VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
 	         	<Label text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" styleClass="h2"/>
-		         
-		         <!-- Hier kommt die Leinwand -->        	
-		         <!-- <VBox alignment="CENTER" styleClass="screen" spacing="6">
-				  <children>
-				    <Rectangle width="400" height="6" styleClass="screen-canvas" />
-				    <Label text="Leinwand" styleClass="screen-label">
-				      <tooltip>
-				        <Tooltip text="Platzierung der Leinwand in Bezug auf Sitzplätze im Saal" />
-				      </tooltip>
-				    </Label>
-				  </children>
-				</VBox> -->
-
-
-		         <GridPane fx:id="hallGrid" style="-fx-border-width: 5; -fx-border-radius: 10; -fx-border-color: gray;"
-				           alignment="TOP_CENTER"
-				           prefHeight="9999"
-				           prefWidth="9999"
-				           hgap="2"
-				           vgap="2"/>	
-				           		           
-				 <!-- Legende -->
+		        
+		        <!-- Legende -->
 				 <HBox style="-fx-padding: 5px 0" alignment="CENTER" spacing="15">
 					<children>
 						<HBox>
@@ -144,6 +124,26 @@
 					    
 				  	</children>
 				  </HBox>
+				  
+		         <!-- Hier kommt die Leinwand -->        	
+		         <!-- <VBox alignment="CENTER" styleClass="screen" spacing="6">
+				  <children>
+				    <Rectangle width="400" height="6" styleClass="screen-canvas" />
+				    <Label text="Leinwand" styleClass="screen-label">
+				      <tooltip>
+				        <Tooltip text="Platzierung der Leinwand in Bezug auf Sitzplätze im Saal" />
+				      </tooltip>
+				    </Label>
+				  </children>
+				</VBox> -->
+
+				<!-- Sitzplatzplan (leider ist das Rendering zu wenig schnell, teilweise wird der rechte Teil reingerendert -->
+				<GridPane fx:id="hallGrid" style="-fx-border-width: 5; -fx-border-radius: 10; -fx-border-color: gray;"
+				          alignment="TOP_CENTER"
+				          prefHeight="9999"
+				          prefWidth="9999"
+				          hgap="2"
+				          vgap="2"/>
 	         </VBox>
 	         
 	      
@@ -151,7 +151,7 @@
 		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1"> 
 		      		<!-- Buchungstimer -->
 		      		<GridPane>
-						<children>								
+						<children>				
 							<HBox GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
 								<Label text="Buchungsvorgang läuft ab in " styleClass="h2" style="-fx-padding: 15 5 15 15;"/>
 								<Label fx:id="timeLabel" styleClass="h2" style="-fx-padding: 15 0 15 0;-fx-min-width: 50px;"/>
@@ -161,19 +161,21 @@
 							      </image>
 							 	</ImageView>
 							 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
-									styleClass="button-primary" GridPane.halignment="RIGHT" />
+									    styleClass="button-primary" GridPane.halignment="RIGHT" />
 						 	</HBox>
+						 	
+							<!-- Tickets -->
+							<!-- <TableView fx:id="ticketTable"/> -->
+				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="2" GridPane.columnIndex="0"  style="-fx-padding: 5 0 0 15;"
+						          alignment="TOP_LEFT"
+						          prefHeight="9999"
+					           	  prefWidth="9999">
+					        </VBox>
+			        			
 						</children>
 					</GridPane>
-					
-					<!-- Tickets -->
-		      		<VBox fx:id="ticketGrid" style="-fx-padding: 5 0 0 15;"
-				          alignment="TOP_LEFT"
-				          prefHeight="9999"
-			           	  prefWidth="9999">
-			        </VBox>	 
 		      </VBox>
-	      
+		      	      
 	     </HBox> 	
 		      
 		<!-- <AnchorPane GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3">

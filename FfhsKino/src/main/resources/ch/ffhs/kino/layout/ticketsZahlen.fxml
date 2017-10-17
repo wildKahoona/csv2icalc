@@ -94,11 +94,16 @@
 			
 			<!-- Buchungsinformation -->
 			<VBox GridPane.rowIndex="3" GridPane.columnIndex="1" spacing="10" alignment="TOP_RIGHT" >
-				<HBox alignment="TOP_LEFT" >
+					<!-- Tickets -->
+		      		<VBox fx:id="ticketGrid" style="-fx-padding: 5 0 0 15;"
+				          prefHeight="9999"
+			           	  prefWidth="9999">
+			        </VBox>
+				<!-- <HBox alignment="TOP_LEFT" >
 					<Label text="Buchungsvorgang läuft ab in: 06:22" styleClass="h2"/>
 					<Label fx:id="timeLabel" styleClass="h2"/>
 				</HBox>
-				<Label text="Erwachsene:2, Kinder:1 Total:50.00 CHF" />
+				<Label text="Erwachsene:2, Kinder:1 Total:50.00 CHF" /> -->
 			</VBox>
 	
 		</HBox>
