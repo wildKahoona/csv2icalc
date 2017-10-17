@@ -165,7 +165,7 @@
 						 	</HBox>
 						 	
 							<!-- Tickets -->
-							<!-- <TableView fx:id="ticketTable"/> -->
+							<TableView fx:id="ticketTable"/>
 				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="2" GridPane.columnIndex="0"  style="-fx-padding: 5 0 0 15;"
 						          alignment="TOP_LEFT"
 						          prefHeight="9999"

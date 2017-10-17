@@ -45,7 +45,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -53,8 +57,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import javafx.scene.text.TextAlignment;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
+
 
 
 public class VorstellungController {
@@ -89,8 +95,8 @@ public class VorstellungController {
 	@FXML
 	private Button buyButton;
     
-//	@FXML
-//	private TableView<Ticket> ticketTable;
+	@FXML
+	private TableView<Ticket> ticketTable;
 //	
 //	@FXML
 //	private TableColumn<Ticket, String> colSeatDescription;
@@ -110,6 +116,32 @@ public class VorstellungController {
 	
 	private long endTime ;
 	private Timeline timeline;
+
+	// Zelle mit Delete-Button
+	private class ButtonCell extends TableCell<Ticket, Boolean> {
+	    final Button cellButton = new Button("Action");	     
+	    ButtonCell(){         
+	        cellButton.setOnAction(new EventHandler<ActionEvent>(){
+
+	            @Override
+	            public void handle(ActionEvent t) {
+	                // do something when button clicked
+	            	int selectdIndex = getTableRow().getIndex();
+	            	 //delete the selected item in data
+	            	ticketData.remove(selectdIndex);
+	            }
+	        });
+	    }
+
+	    //Display button if the row is not empty
+	    @Override
+	    protected void updateItem(Boolean t, boolean empty) {
+	        super.updateItem(t, empty);
+	        if(!empty){
+	            setGraphic(cellButton);
+	        }
+	    }
+	}
 	
 	@FXML
 	protected void initialize() {	
@@ -121,6 +153,37 @@ public class VorstellungController {
 		buyButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		buyButton.setTooltip(new Tooltip("Zur Zahlungsabwicklung"));
 		buyButton.setOnAction(commandBuyHandler);
+		
+		TableColumn col_id = new TableColumn("ticketType");
+		ticketTable.getColumns().add(col_id);
+        col_id.setCellValueFactory(new PropertyValueFactory<Ticket, String>("ticketType"));
+        
+		//Insert Button
+        TableColumn col_action = new TableColumn<>("Action");
+        col_action.setSortable(false);
+         
+        col_action.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Ticket, Boolean>, 
+                ObservableValue<Boolean>>() {
+ 
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Ticket, Boolean> p) {
+                return new SimpleBooleanProperty(p.getValue() != null);
+            }
+        });
+ 
+        col_action.setCellFactory(
+                new Callback<TableColumn<Ticket, Boolean>, TableCell<Ticket, Boolean>>() {
+ 
+            @Override
+            public TableCell<Ticket, Boolean> call(TableColumn<Ticket, Boolean> p) {
+                return new ButtonCell();
+            }
+         
+        });
+        ticketTable.getColumns().add(col_action);
+         
+        ticketTable.setItems(ticketData);
 		
 //        TableColumn<Ticket, String> firstName = new TableColumn<Ticket, String>("ticketType");
 //        firstName.setCellValueFactory(new PropertyValueFactory<Ticket, String>("ticketType"));
