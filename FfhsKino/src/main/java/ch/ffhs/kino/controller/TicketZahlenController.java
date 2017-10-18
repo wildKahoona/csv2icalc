@@ -233,7 +233,7 @@ public class TicketZahlenController {
             Alert alert = new Alert(AlertType.ERROR);
             //alert.initOwner(dialogStage);
             alert.setTitle("Ungültige Eingabe");
-            alert.setHeaderText("Bitte korrigiere die ungültigen Eingaben");
+            alert.setHeaderText("Bitte korrigieren Sie die ungültigen Eingaben.");
             alert.setContentText(errorMessage);
 
             alert.showAndWait();

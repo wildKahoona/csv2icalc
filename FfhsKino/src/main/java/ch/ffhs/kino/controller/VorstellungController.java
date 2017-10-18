@@ -580,8 +580,8 @@ public class VorstellungController {
 			    		    	  // Meldung an den Benutzer
 				  	    		  Alert alert = new Alert(AlertType.WARNING);
 				  	    		  alert.setTitle("Reservierungszeit abgelaufen");
-				  	    		  alert.setHeaderText("Bitte wähle neue Plätze");
-				  	    		  alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden deine Plätze freigegeben.");
+				  	    		  alert.setHeaderText("Bitte wählen Sie neue Plätze");
+				  	    		  alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
 				  	    		  alert.showAndWait();
 			    		      }
 			    		});			    					    		
