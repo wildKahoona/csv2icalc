@@ -267,11 +267,11 @@ public class CinemaProgrammServiceMock {
 		booking.setEvent(vorstellung);
 		
 		// Tickets von dieser Buchung
-		Ticket ticket1 = new Ticket(new Seat(3, 5, 35));
+		Ticket ticket1 = new Ticket(new Seat(3, 5));
 		ticket1.setTicketType(TicketType.ADULT);
-		Ticket ticket2 = new Ticket(new Seat(3, 6, 36));
+		Ticket ticket2 = new Ticket(new Seat(3, 6));
 		ticket2.setTicketType(TicketType.KIND);
-		Ticket ticket3 = new Ticket(new Seat(3, 7, 37));
+		Ticket ticket3 = new Ticket(new Seat(3, 7));
 		ticket3.setTicketType(TicketType.KIND);
 		
 		List<Ticket> tickets = new ArrayList<Ticket>();

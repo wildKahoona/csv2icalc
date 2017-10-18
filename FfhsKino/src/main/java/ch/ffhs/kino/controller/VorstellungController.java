@@ -31,6 +31,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -43,8 +44,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -127,6 +131,7 @@ public class VorstellungController {
 
 	private long endTime ;
 	private Timeline timeline;
+	private Boolean addTicketOn = true;
 
 	// Zelle mit Delete-Button
 	private class ButtonCell extends TableCell<TicketTableModel, Boolean> {
@@ -170,6 +175,27 @@ public class VorstellungController {
 		
 		addTicketButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		addTicketButton.setOnAction(commandAddTicketHandler);
+		
+		// TableView ist soooo scheisse:
+		// kein Update auf Preis, ein Gebastel für die ButtonCell, nicht direkt im Edit-Mode !!!
+		TableColumn<TicketTableModel, TicketType> colType = new TableColumn<>("ticketType");
+		colType.setCellValueFactory(new PropertyValueFactory<>("ticketType"));
+		colType.setCellFactory(ComboBoxTableCell.<TicketTableModel, TicketType>forTableColumn(TicketType.values()));
+//		colType.setOnEditCommit((CellEditEvent<TicketTableModel, TicketType> t) -> {
+//			t.getTableView().getItems().get(t.getTablePosition().getRow()).price.set("xxx");
+//		        });
+		ticketTable.getColumns().add(colType);
+		
+	    TableColumn<TicketTableModel, SimpleStringProperty> colPrice = new TableColumn<TicketTableModel, SimpleStringProperty>();
+	    colPrice.setCellValueFactory(new PropertyValueFactory<TicketTableModel, SimpleStringProperty>("price"));
+	    ticketTable.getColumns().add(colPrice);
+	
+	    ticketTable.setItems(ticketTableData);
+	    ticketTable.setEditable(true);
+	    
+	    TicketTableModel t1 = new TicketTableModel();
+	    t1.setTicketType(TicketType.KIND);
+	    ticketTableData.add(t1);
 	}
 	
 	public Vorstellung getVorstellung() {
@@ -199,11 +225,8 @@ public class VorstellungController {
 	}
 	
 	private void initTicketControl() {
-		// TODO: echt gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM, habe ich aber nicht hingekriegt)
-		// TableView hat leider keine ButtonCell 
-		// ButtonCell habe ich dann doch noch geschafft,
-		// dann kam aber schon der nächste Killer: Table ist nicht direkt im Edit-Mode, man muss erst doppelklicken!!!
-
+		// TODO: TabelView unbrauchbar, daher hier das Ganze zusammenbasteln!!!
+		// Diese Lösung ist aber auch gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM)
 		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
 		boxTimer.setVisible(false);
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
@@ -218,9 +241,14 @@ public class VorstellungController {
 				boxTimer.setVisible(false);
 				//return;
 			}
-			
-			
-			tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
+
+			tickets.sort((lhs, rhs) -> {
+		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
+		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
+		        } else {
+		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
+		        }
+		    }); 
 			
 			TicketRow rowSumme = new TicketRow();
 			rowSumme.setMaxWidth(350.00);
@@ -318,80 +346,23 @@ public class VorstellungController {
 				
 				deleteButton.setOnAction(new EventHandler<ActionEvent>() {
 				    @Override public void handle(ActionEvent e) {
-				    	int seatNumber = ticket.getSeat().getSeatNumber();
-				    	 SeatView seatView =  selectedSeats.stream().filter(x -> x.getSeat().getSeatNumber() == seatNumber).findFirst().get();
-				    	 seatView.deselect();
-				    	 ticketData.remove(ticket);
+				    	Seat seat = ticket.getSeat();
+				    	SeatView seatView = views[seat.getSeatRow()][seat.getSeatColumn()];
+				    	if(seatView != null) {
+				    		seatView.deselect();
+					    	 ticketData.remove(ticket);
+				    	}
+				    		
+//				    	int seatNumber = ticket.getSeat().getSeatNumber();
+//				    	 SeatView seatView =  selectedSeats.stream().filter(x -> x.getSeat().getSeatNumber() == seatNumber).findFirst().get();
+//				    	 seatView.deselect();
+//				    	 ticketData.remove(ticket);
 				    }
 				});
 				
 				// Zeile zum Grid hinzufügen
 				ticketGrid.getChildren().add(row);				
 			}
-			
-//			for(Ticket ticket : ticketData) {
-//				
-//				// ToDo: Styles auslagern ins css
-//				TicketRow row = new TicketRow();
-//				row.setMaxWidth(320.00);
-//				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-//				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-//				        + "-fx-border-color: gray;");
-//				row.setTicket(ticket);
-//				
-//				// Information zum Sitz (Reihe, Nummer)
-//				Label label = new Label();
-//				label.setText(ticket.getSeat().toString());
-//				label.setStyle("-fx-padding: 3;-fx-min-width: 100px");
-//				label.setTextAlignment(TextAlignment.CENTER);	
-//				row.getChildren().add(label);
-//				
-//				// Auswahl für den Ticket-Typ
-//				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
-//				cbxTicketType.setStyle("-fx-padding: 0,5;-fx-min-width: 120px;");
-//				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));					
-//				cbxTicketType.getSelectionModel().select(ticket.getTicketType());
-//				cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
-//				    @Override
-//				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
-//				        if(newValue != null){
-//				        	ticket.setTicketType(newValue);
-//				        }
-//				    }
-//				});					
-//				row.getChildren().add(cbxTicketType);
-//
-//				// Preis
-//				String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
-//				Label labelPrice = new Label();
-//				labelPrice.setText(price + " CHF");
-//				labelPrice.setStyle("-fx-padding: 3;-fx-min-width: 60px");
-//				labelPrice.setTextAlignment(TextAlignment.CENTER);	
-//				row.getChildren().add(labelPrice);
-//				
-//				// Delete Button mit Bild
-//				Button deleteButton = new Button();
-//				deleteButton.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");
-//				
-//				ImageView imageView = new ImageView();
-//				imageView.setImage(trash);
-//				imageView.setFitWidth(23);
-//				imageView.setFitHeight(23);
-//				deleteButton.setGraphic(imageView);
-//				row.getChildren().add(deleteButton);
-//				
-//				deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-//				    @Override public void handle(ActionEvent e) {
-//				    	int seatNumber = ticket.getSeat().getSeatNumber();
-//				    	 SeatView seatView =  selectedSeats.stream().filter(x -> x.getSeat().getSeatNumber() == seatNumber).findFirst().get();
-//				    	 seatView.deselect();
-//				    	 ticketData.remove(ticket);
-//				    }
-//				});
-//				
-//				// Zeile zum Grid hinzufügen
-//				ticketGrid.getChildren().add(row);
-//			}
 		});
 	}
 
@@ -477,12 +448,11 @@ public class VorstellungController {
 	    
 	    // Bild für den ausgewählten Sitz für alle Objekte setzen	    
 	    SeatView.setImageSelcectedSeat(selectedSeat);
-	    
-	    int seatCounter = 1;	    
+	   	    
         for (int r = 0; r < rows; r++) {
             views[r] = new SeatView[columns];          
             for (int c = 0; c < columns; c++) {
-                Seat seat = new Seat(r, c, seatCounter);
+                Seat seat = new Seat(r, c);
             	SeatView seatView = new SeatView(seat);         	
             	views[r][c] = seatView;
             	
@@ -503,17 +473,18 @@ public class VorstellungController {
             	// to the size of the parent using expression binding          	    	
             	seatView.fitWidthProperty().bind(size);
             	seatView.fitHeightProperty().bind(size);
-            	  	
-            	seatCounter++;
-            	
+            	  	           	
             	seatView.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
 			        	  if(selectedSeats.size() == 0)
 			        		  StartTimeAnimation();	        	  
 			        	  selectedSeats.add(seatView);
 			        	  // Ticket für diesen Sitzplatz hinzufügen
-			        	  Ticket ticket = new Ticket(seat);
-			        	  ticketData.add(ticket);
+			        	  if(addTicketOn)
+			        	  {
+			        		  Ticket ticket = new Ticket(seat);
+			        		  ticketData.add(ticket);
+			        	  }
 			          }
 			          else {
 			            this.selectedSeats.remove(seatView);
@@ -537,14 +508,17 @@ public class VorstellungController {
 	}
 	
 	private void renderReservedSeats() {
+		addTicketOn = false;
 	    if(this.reservation != null) {
 	    	for(Ticket ticket : reservation.getTickets()) {
+	    		ticketData.add(ticket);
 	    		Seat seat = ticket.getSeat();
 	    		SeatView seatView = views[seat.getSeatRow()][seat.getSeatColumn()];
 	    		if (seatView != null)
 	    			seatView.select();
 	    	}
 	    }
+	    addTicketOn = true;
 	}
 	  
 	private void renderBookedSeats() {

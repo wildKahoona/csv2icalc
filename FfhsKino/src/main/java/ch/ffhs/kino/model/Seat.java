@@ -8,12 +8,10 @@ public class Seat {
 	
 	private Integer seatRow;
 	private Integer seatColumn;
-	private Integer seatNumber;
 	
-	public Seat(Integer seatRow, Integer seatColumn, Integer seatNumber) {
+	public Seat(Integer seatRow, Integer seatColumn) {
 		this.seatRow = seatRow;
 		this.seatColumn = seatColumn;
-		this.seatNumber = seatNumber;
 	}
 	
 	public Integer getSeatRow() {
@@ -22,14 +20,6 @@ public class Seat {
 
 	public void setSeatRow(Integer seatRow) {
 		this.seatRow = seatRow;
-	}
-
-	public Integer getSeatNumber() {
-		return seatNumber;
-	}
-
-	public void setSeatNumber(Integer seatNumber) {
-		this.seatNumber = seatNumber;
 	}
 
 	public Integer getSeatColumn() {

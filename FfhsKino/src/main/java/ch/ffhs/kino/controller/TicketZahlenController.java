@@ -163,7 +163,14 @@ public class TicketZahlenController {
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			ticketGrid.getChildren().clear();
 			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
-			tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
+			//tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
+			tickets.sort((lhs, rhs) -> {
+		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
+		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
+		        } else {
+		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
+		        }
+		    }); 
 			for(Ticket ticket : tickets) {			
 				// Erstelle das Control für die Anzeige eines Tickets
 				// TODO: Styles auslagern ins css
