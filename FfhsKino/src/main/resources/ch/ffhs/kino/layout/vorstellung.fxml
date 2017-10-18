@@ -152,9 +152,10 @@
 		      		<!-- Buchungstimer -->
 		      		<GridPane>
 						<children>			
-							<Label fx:id="labelNoTickets" GridPane.rowIndex="0" GridPane.columnIndex="0" 
+							<Label fx:id="labelNoTickets" GridPane.rowIndex="0"
 								   text="Keine Tickets ausgewählt" styleClass="h2" alignment="TOP_LEFT"/>	
-							<HBox fx:id="boxTimer" GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
+							
+							<HBox fx:id="boxTimer" GridPane.rowIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
 								<Label text="Buchungsvorgang läuft ab in " styleClass="h2" style="-fx-padding: 15 5 15 15;"/>
 								<Label fx:id="timeLabel" styleClass="h2" style="-fx-padding: 15 0 15 0;-fx-min-width: 50px;"/>
 								<ImageView fitHeight="20.0" fitWidth="20.0">
@@ -164,23 +165,27 @@
 							 	</ImageView>
 							 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
 									    styleClass="button-primary" GridPane.halignment="RIGHT" />
-								
 						 	</HBox>
 						 	
 							<!-- Tickets -->
 							<!-- <TableView fx:id="ticketTable"/> -->
-							
-				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-padding: 5 0 0 15;"
+				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="1" style="-fx-padding: 5 0 0 15;"
 						          alignment="TOP_LEFT"
 						          prefHeight="9999"
 					           	  prefWidth="9999">
 					        </VBox>
 					        
-					        <Button fx:id="addTicketButton" 
-					        		GridPane.rowIndex="3" GridPane.columnIndex="0"
-					        		mnemonicParsing="false" text="Ticket hinzufügen" 
-									GridPane.halignment="RIGHT" />
-			        			
+					        <HBox GridPane.rowIndex="2" style="-fx-padding: 5 0 0 15;">
+						        <Button fx:id="deleteTicketsButton" 
+						        		GridPane.rowIndex="3" GridPane.columnIndex="0"
+						        		mnemonicParsing="false" text="Alle Tickets entfernen" 
+										GridPane.halignment="RIGHT" />
+										
+						        <Button fx:id="addTicketButton" 
+						        		GridPane.rowIndex="3" GridPane.columnIndex="0"
+						        		mnemonicParsing="false" text="Ticket hinzufügen" 
+										GridPane.halignment="RIGHT" />			
+			        		</HBox>	
 						</children>
 					</GridPane>
 		      </VBox>

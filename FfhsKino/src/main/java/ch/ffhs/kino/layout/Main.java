@@ -25,7 +25,7 @@ public class Main extends Application {
 	private static Stage primaryStage; // **Declare static Stage**
 	private static final int STAGE_WIDTH = 1100;
 	private static final String CSS = "ch/ffhs/kino/layout/controlStyle.css";
-	private static final CinemaProgrammServiceMock cinemaProgrammService = new CinemaProgrammServiceMock();
+	public static final CinemaProgrammServiceMock cinemaProgrammService = new CinemaProgrammServiceMock();
 
 	private void setPrimaryStage(Stage stage) {
 		Main.primaryStage = stage;

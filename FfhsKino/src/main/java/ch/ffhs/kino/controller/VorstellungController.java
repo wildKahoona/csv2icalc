@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -76,8 +77,6 @@ public class VorstellungController {
 	private Vorstellung vorstellung;
 	
 	private SeatView views[][];
-			
-	private BooleanProperty isTimeOver = new SimpleBooleanProperty(false);
 	
 	/**
 	 * Das GridPane des Kinosaals mit den Sitzen
@@ -101,7 +100,10 @@ public class VorstellungController {
 	
 	@FXML
 	private Button buyButton;
-    
+	
+	@FXML
+	private Button deleteTicketsButton;
+	
 	@FXML
 	private Button addTicketButton;
 	
@@ -123,7 +125,7 @@ public class VorstellungController {
 	/**
 	 * Die Liste der ausgewählten Sitze
 	 */
-	private List<SeatView> selectedSeats = new ArrayList<SeatView>();
+	private ObservableList<SeatView> selectedSeats = FXCollections.observableArrayList();
 	
 	/**
      * Die Liste der Reservierungen
@@ -172,6 +174,9 @@ public class VorstellungController {
 		buyButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		buyButton.setTooltip(new Tooltip("Zur Zahlungsabwicklung"));
 		buyButton.setOnAction(commandBuyHandler);
+		
+		deleteTicketsButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
+		deleteTicketsButton.setOnAction(commandDeleteTicketsHandler);
 		
 		addTicketButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		addTicketButton.setOnAction(commandAddTicketHandler);
@@ -561,25 +566,6 @@ public class VorstellungController {
 	}
 
 	private void initTimeline() {
-		
-		this.isTimeOver.addListener((value, oldValue, newValue) -> {	    	
-			if (newValue == true) {			
-	    	  	// Alle ausgewählten Sitze freigeben
-	    		selectedSeats.forEach((seat) -> { 
-	    			seat.deselect();
-	    		});
-	    		selectedSeats.clear();
-
-	    		Alert alert = new Alert(AlertType.WARNING);
-	    		alert.setTitle("Information Dialog");
-	    		alert.setHeaderText("Look, an Information Dialog");
-	    		alert.setContentText("I have a great message for you!");
-	    		alert.showAndWait();
-	    			    		
-	    		isTimeOver.set(false);
-	    	}
-	    	});
-		
 			timeline = new Timeline(
 				new KeyFrame(Duration.seconds(1), e -> {
 			    	long diff = endTime - System.currentTimeMillis();
@@ -587,7 +573,15 @@ public class VorstellungController {
 			    		timeline.stop();
 			    		Platform.runLater(new Runnable() {
 			    		      @Override public void run() {
-			    		    	  isTimeOver.set(true); 
+			    		    	  // Ausgewählte Sitze freigeben
+			    		    	  clearSelectedSeats();
+			    		    	  
+			    		    	  // Meldung an den Benutzer
+				  	    		  Alert alert = new Alert(AlertType.WARNING);
+				  	    		  alert.setTitle("Reservierungszeit abgelaufen");
+				  	    		  alert.setHeaderText("Bitte wähle neue Plätze");
+				  	    		  alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden deine Plätze freigegeben.");
+				  	    		  alert.showAndWait();
 			    		      }
 			    		});			    					    		
 			    	}else {
@@ -599,9 +593,24 @@ public class VorstellungController {
 			timeline.setCycleCount( Animation.INDEFINITE );
 	}
 
+	private void clearSelectedSeats() {
+		// ACHTUNG: NICHT THREAD-SICHER (hat mich viele Stunden gekostet)!!!
+//		selectedSeats.forEach((seat) -> { 
+//			seat.deselect();
+//		});
+//		selectedSeats.clear();
+		
+		// THREAD-SICHER
+		Iterator<SeatView> seats = this.selectedSeats.iterator();
+		while (seats.hasNext()) {
+			SeatView seat = seats.next();
+			seats.remove();
+			seat.deselect();
+		}
+	}
+	  
 	public void StartTimeAnimation(){
 		endTime = System.currentTimeMillis() + (600 * 1000); // 10 Minuten
-		//isTimeOver.set(false);
 		//endTime = System.currentTimeMillis() + (6 * 1000);
 		timeline.play();
 	}
@@ -679,30 +688,28 @@ public class VorstellungController {
             	seatCounter++;
             	
             	seatView.getState().addListener((e, oldValue, newValue) -> {
-    	        	if(isTimeOver.get() == false) {
-    		        	if (newValue) {
-    			        	  if(selectedSeats.size() == 0)
-    			        		  StartTimeAnimation();	        	  
-    			        	  selectedSeats.add(seatView);
-    			        	  // Ticket für diesen Sitzplatz hinzufügen
-    			        	  Ticket ticket = new Ticket(seat);
-    			        	  ticketData.add(ticket);
-    			        	  
-    			        	  TicketTableModel ticketTable = new TicketTableModel();
-    			        	  ticketTableData.add(ticketTable);
-    			          }
-    			          else {
-    			            this.selectedSeats.remove(seatView);
-    			            if(selectedSeats.size() == 0)
-    			            	StopTimeAnimation();
-    			            
-    			            // Ticket aus der Liste entfernen
-    			            Optional<Ticket> removeTicket = ticketData.stream().
-    			            		filter(x -> x.getSeat().equals(seat)).findFirst();  			            
-    			            if(removeTicket.isPresent())
-    			            	ticketData.remove(removeTicket.get());
-    			          }		        		
-    	        	}
+		        	if (newValue) {
+			        	  if(selectedSeats.size() == 0)
+			        		  StartTimeAnimation();	        	  
+			        	  selectedSeats.add(seatView);
+			        	  // Ticket für diesen Sitzplatz hinzufügen
+			        	  Ticket ticket = new Ticket(seat);
+			        	  ticketData.add(ticket);
+			        	  
+//			        	  TicketTableModel ticketTable = new TicketTableModel();
+//			        	  ticketTableData.add(ticketTable);
+			          }
+			          else {
+			            this.selectedSeats.remove(seatView);
+			            if(selectedSeats.size() == 0)
+			            	StopTimeAnimation();
+			            
+			            // Ticket aus der Liste entfernen
+			            Optional<Ticket> removeTicket = ticketData.stream().
+			            		filter(x -> x.getSeat().equals(seat)).findFirst();  			            
+			            if(removeTicket.isPresent())
+			            	ticketData.remove(removeTicket.get());
+			          }		        		
     	        });
             	              
 //                HBox box = new HBox(5);
@@ -712,7 +719,35 @@ public class VorstellungController {
             }
         }
 	}
-
+	
+//	  private boolean[][] getSeats(Vorstellung vorstellung) {
+////		  List<Integer> bookedSeatNumbers = new ArrayList<Integer>();
+//		  
+//		  boolean[][] bookedSeats = new boolean[rows][seats];
+//		  List<Booking> bookings = vorstellung.getBookings();
+//		    for (Booking booking : bookings) {
+//		    	for(Ticket ticket : booking.getTickets())
+//		    		bookedSeats[ticket.getSeat().getSeatRow()][ticket.getSeat().getSeatColumn()] = true;
+//		    }	    
+//		    
+////		    int rows = showtime.auditorium.get().rows.get();
+////		    int seats = showtime.auditorium.get().seats.get();
+////
+////		    boolean[][] reservedSeats = new boolean[rows][seats];
+////
+////		    for (Reservation reservation: showtime.reservations) {
+////		      for (Ticket ticket: reservation.tickets) {
+////		        reservedSeats[ticket.row.get()][ticket.seat.get()] = true;
+////		      }
+////		    }
+////
+////		    return reservedSeats;
+//	}
+	  
+	private EventHandler<ActionEvent> commandDeleteTicketsHandler = (evt) -> {
+		clearSelectedSeats();
+	};
+	
     private EventHandler<ActionEvent> commandAddTicketHandler = (evt) -> {
     	// Ticket hinzufügen
     	if(selectedSeats.size() == 0) {
@@ -721,62 +756,71 @@ public class VorstellungController {
     	
     	int maxCol = 10;
     	
-    	SeatView firstSeat = selectedSeats.get(0);
-    	int row = firstSeat.getSeat().getSeatRow();
-    	int col = firstSeat.getSeat().getSeatColumn();
+    	SeatView lastSeat = selectedSeats.get(selectedSeats.size() - 1);
+    	int row = lastSeat.getSeat().getSeatRow();
+    	int col = lastSeat.getSeat().getSeatColumn();
     	
-    	// Links next: 0 + column vom Sitz - 1 (0 + 4 - 1 = 3)
+    	// Links next: column vom Sitz - 1 (0 + 4 - 1 = 3)
     	// Rechts next: Anzahl colums - column vom Sitz (10 - 4 = 6)
     	
-    	// Muss ich nach links?
+    	
     	Boolean goLinks = false;
     	Boolean leftSold = false;
+    	Boolean isSeatFree = true;
     	
-    	if(0 + col - 1 > maxCol - col) {
-    		if(col > 1)
+    	// Muss ich nach links?
+    	// - wenn der letzte Platz von der Mitte rechts liegt
+    	// - wenn der letzte Platz nicht am rechten Ende ist
+    	// - wenn der nächste mögliche Platz frei ist
+    	if(col > maxCol - col) {
+    		if(col > 0)
     		{
-    			SeatView nextSeat = views[row-1][col-2];	
-    			leftSold = nextSeat.getSold();
-        		if(!leftSold) {
-        			goLinks = true;
-        		}
+    			SeatView nextSeat = views[row][col-1];	
+    			if(nextSeat.getSold() || nextSeat.getIsSelected())
+    				isSeatFree = false;
+    			
+    			goLinks = isSeatFree;
+//    			leftSold = nextSeat.getSold() || nextSeat.getIsSelected();
+//        		if(!leftSold) {
+//        			goLinks = true;
+//        		}
     		}
     	}
     	
-    	if(!goLinks && !leftSold) {
-	    	if(col < maxCol && col != 1)
+    	// Muss ich nach rechts?
+    	if(!goLinks && isSeatFree) {
+	    	if(col < maxCol && col != 0)
 			{
-				SeatView nextSeat = views[row-1][col-1];
-				if(!nextSeat.getSold()) {
+				SeatView nextSeat = views[row][col+1];
+				if(nextSeat.getSold() || nextSeat.getIsSelected()) {
 	    			goLinks = true;
-					//row++;
 	    		}
 			}
     	}
     	
     	
     	if(goLinks) {
-    		for(int c=col-1; c < views[row - 1].length; c--) {
+    		for(int c=col-1; c < views[row].length; c--) {
                 //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
     			
     			// Wenn frei
-    			SeatView nextSeat = views[row - 1][c - 1];
-    			System.out.println("Values at arr["+(row - 1)+"]["+c+"] is " + views[(row - 1)][c]);
+    			SeatView nextSeat = views[row][c];
+    			System.out.println("Values at arr["+(row)+"]["+c+"] is " + views[(row)][c]);
             	nextSeat.select();
             	
-            	firstSeat = nextSeat;
+            	lastSeat = nextSeat;
     			break;
             }
     	}else {
-    		for(int c=col; c < views[row - 1].length; c++) {
+    		for(int c=col+1; c < views[row].length; c++) {
                 //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
     			
     			// Wenn frei
-    			SeatView nextSeat = views[row - 1][c];
-    			System.out.println("Values at arr["+(row - 1)+"]["+c+"] is " + views[(row - 1)][c]);
+    			SeatView nextSeat = views[row][c];
+    			System.out.println("Values at arr["+(row)+"]["+c+"] is " + views[(row)][c]);
             	nextSeat.select();
             	
-            	firstSeat = nextSeat;
+            	lastSeat = nextSeat;
     			break;
             }
     	}

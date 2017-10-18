@@ -11,8 +11,8 @@ public class Seat {
 	private Integer seatNumber;
 	
 	public Seat(Integer seatRow, Integer seatColumn, Integer seatNumber) {
-		this.seatRow = seatRow + 1;
-		this.setSeatColumn(seatColumn + 1);
+		this.seatRow = seatRow;
+		this.seatColumn = seatColumn;
 		this.seatNumber = seatNumber;
 	}
 	
@@ -42,6 +42,6 @@ public class Seat {
 	
 	@Override
 	public String toString() {
-		return "Reihe " + getSeatRow() + ", Platz " + getSeatColumn();
+		return "Reihe " + (getSeatRow() + 1) + ", Platz " + (getSeatColumn() + 1);
 	}
 }

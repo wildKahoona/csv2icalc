@@ -86,6 +86,11 @@ public class CinemaProgrammServiceMock {
 		this.bookings = bookings;
 	}
 	
+	public void addBooking(Booking booking) {
+		List<Booking> bookings = getBookings();
+		bookings.add(booking);
+	}
+	
 	private void init() {
 		// MockData
 

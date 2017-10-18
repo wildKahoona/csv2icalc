@@ -13,12 +13,11 @@ public class SeatView extends ImageView {
 	static final double scale = 0.95;
     static DropShadow shadowhoover = new DropShadow(5, 4, 4, Color.rgb(50, 60, 50));
     static DropShadow shadowdown = new DropShadow(2, 2, 2, Color.rgb(50, 60, 50));
-    
     static Image imageSelcectedSeat = null;
     
     private Image imageSeat = null;
     private Seat seat;
-    //private Boolean isSold = false;
+    private Boolean isSelected = false;
 	
     private BooleanProperty selected = new SimpleBooleanProperty(false);
     private Boolean sold = false;
@@ -61,13 +60,21 @@ public class SeatView extends ImageView {
 		this.seat = seat;
 	}
 	
-//	public Boolean getIsSold() {
-//		return isSold;
-//	}
-//
-//	public void setIsSold(Boolean isSold) {
-//		this.isSold = isSold;
-//	}
+	public Boolean getIsSelected() {
+		return isSelected;
+	}
+
+	public void setIsSelected(Boolean isSelected) {
+		this.isSelected = isSelected;
+	}
+	
+	public Boolean getSold() {
+		return sold;
+	}
+
+	public void setSold() {
+		sold = true;
+	}
 	
 	public void setImageSeat(Image imageSeat) {
 		setImage(imageSeat);
@@ -78,9 +85,9 @@ public class SeatView extends ImageView {
 	 * Einen Sitz selektieren
 	*/
 	public void select() {
-	    if(!this.sold)
-	    {
+	    if(!this.sold) {
 	    	this.selected.set(true);
+	    	setIsSelected(true);
 		    setImage(imageSelcectedSeat);
 	    }
 	}
@@ -90,16 +97,8 @@ public class SeatView extends ImageView {
 	 */
 	public void deselect() {
 		this.selected.set(false);
+		//setIsSelected(false);
 		setImage(imageSeat);
-	}
-	
-	public Boolean getSold() {
-		return sold;
-	}
-
-	public void setSold() {
-		sold = true;
-		//this.sold.set(isSold);
 	}
 	
 	/**

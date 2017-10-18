@@ -20,9 +20,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -45,6 +48,9 @@ public class TicketZahlenController {
 	
 	@FXML
 	private VBox ticketGrid;
+	
+	@FXML
+	private TextField email;
 	
 	@FXML
 	private GridPane kk;
@@ -70,8 +76,6 @@ public class TicketZahlenController {
 	
 	@FXML
 	public void initialize() {
-
-		
 		// Kreditkarten-Felder
 		ObservableList<String> options = FXCollections.observableArrayList();
 		DecimalFormat decim = new DecimalFormat("00");
@@ -104,9 +108,11 @@ public class TicketZahlenController {
 
 	@FXML
 	protected void pay(ActionEvent event) {
-
 		try {
-			Main.startKinoProgramm();
+			if (isInputValid()) {
+				Main.cinemaProgrammService.addBooking(booking);
+				Main.startKinoProgramm();
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -204,5 +210,27 @@ public class TicketZahlenController {
 				ticketGrid.getChildren().add(row);				
 			}
 		});
+	}
+
+	private boolean isInputValid() {
+		String errorMessage = "";
+        if (email.getText() == null || email.getText().length() == 0) {
+            errorMessage += "Keine gültige E-Mail-Adresse!\n"; 
+        }
+        
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Show the error message.
+            Alert alert = new Alert(AlertType.ERROR);
+            //alert.initOwner(dialogStage);
+            alert.setTitle("Ungültige Eingabe");
+            alert.setHeaderText("Bitte korrigiere die ungültigen Eingaben");
+            alert.setContentText(errorMessage);
+
+            alert.showAndWait();
+
+            return false;
+        }
 	}
 }
