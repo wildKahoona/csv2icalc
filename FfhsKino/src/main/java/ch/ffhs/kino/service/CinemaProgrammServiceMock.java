@@ -89,6 +89,7 @@ public class CinemaProgrammServiceMock {
 	public void addBooking(Booking booking) {
 		List<Booking> bookings = getBookings();
 		bookings.add(booking);
+		setCurrentReservation(null);
 	}
 	
 	private void init() {

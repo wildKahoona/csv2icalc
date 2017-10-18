@@ -350,7 +350,7 @@ public class VorstellungController {
 	public void setVorstellung(Vorstellung vorstellung) {
 		this.vorstellung = vorstellung;
 		initTitle();
-		this.renderSeatView();
+		renderSeatView();
 		renderReservedSeats();
 		renderBookedSeats();
 	}
@@ -358,10 +358,7 @@ public class VorstellungController {
 	public void setVorstellung(Booking reservation) {
 		this.reservation = reservation;
 		this.vorstellung = this.reservation.getEvent();
-		initTitle();
-		renderSeatView();
-		renderReservedSeats();
-		renderBookedSeats();
+		setVorstellung(this.reservation.getEvent());
 	}
 	
 	private void initTitle() {
@@ -395,10 +392,10 @@ public class VorstellungController {
 			tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
 			
 			TicketRow rowSumme = new TicketRow();
-			rowSumme.setMaxWidth(320.00);
+			rowSumme.setMaxWidth(350.00);
 			rowSumme.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
 			        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-			        + "-fx-border-color: gray;-fx-background-color:wheat");		
+			        + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 350px");		
 			
 			// Pro TicketType die Anzahl zählen
 			EnumMap<TicketType, Long> map = new EnumMap<>(TicketType.class);
@@ -408,7 +405,7 @@ public class VorstellungController {
 			//labelCount.setMaxWidth(200);
 			labelCount.setWrapText(true);
 			labelCount.setText(countText);
-			labelCount.setStyle("-fx-padding: 3;-fx-min-width: 220px;-fx-max-width: 220px");
+			labelCount.setStyle("-fx-padding: 3;-fx-min-width: 240px;-fx-max-width: 240px");
 			labelCount.setTextAlignment(TextAlignment.CENTER);	
 			rowSumme.getChildren().add(labelCount);
 			
@@ -427,22 +424,22 @@ public class VorstellungController {
 				// Erstelle das Control für die Anzeige eines Tickets
 				// TODO: Styles auslagern ins css
 				TicketRow row = new TicketRow();
-				row.setMaxWidth(320.00);
+				row.setMaxWidth(350.00);
 				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
 				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-				        + "-fx-border-color: gray;-fx-background-color:white");
+				        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
 				row.setTicket(ticket);
 				
 				// Information zum Sitz (Reihe, Nummer)
 				Label label = new Label();
 				label.setText(ticket.getSeat().toString());
-				label.setStyle("-fx-padding: 3;-fx-min-width: 100px");
+				label.setStyle("-fx-padding: 3;-fx-min-width: 120px");
 				label.setTextAlignment(TextAlignment.CENTER);	
 				row.getChildren().add(label);
 				
 				// Auswahl für den Ticket-Typ
 				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
-				cbxTicketType.setStyle("-fx-padding: 0,5;-fx-min-width: 120px;");
+				cbxTicketType.setStyle("-fx-padding: 0,5; -fx-min-width: 100px;");
 				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));
 				cbxTicketType.setConverter(new StringConverter<TicketType>() {
 				    @Override
@@ -577,6 +574,8 @@ public class VorstellungController {
 			    		      @Override public void run() {
 			    		    	  // Ausgewählte Sitze freigeben
 			    		    	  clearSelectedSeats();
+			    		    	  // Reservierung löschen
+			    		    	  Main.cinemaProgrammService.setCurrentReservation(null);
 			    		    	  
 			    		    	  // Meldung an den Benutzer
 				  	    		  Alert alert = new Alert(AlertType.WARNING);
@@ -739,9 +738,7 @@ public class VorstellungController {
 	
     private EventHandler<ActionEvent> commandAddTicketHandler = (evt) -> {
     	// Ticket hinzufügen
-    	if(selectedSeats.size() == 0) {
-    		return;
-    	}
+    	if(selectedSeats.size() == 0) return;
     	
     	int maxCol = 10;
     	
@@ -876,7 +873,8 @@ public class VorstellungController {
     	// Booking erstellen und weiter zu zahlen
     	Booking booking = new Booking();
     	booking.setEvent(vorstellung);
-    	booking.setTickets(ticketData);
+    	booking.setTickets(ticketData);    	
+    	// Aktuelle Reservierung setzten
     	Main.cinemaProgrammService.setCurrentReservation(booking);
     	try {
 			Main.startTicketZahlen(booking);
