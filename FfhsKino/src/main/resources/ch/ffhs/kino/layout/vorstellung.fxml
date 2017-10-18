@@ -184,24 +184,29 @@
 					        	<children>
 					        	<!-- <Region hgrow="ALWAYS"/> -->
 					        		<!-- <Button layoutX="104.0" layoutY="81.0" mnemonicParsing="false" text="Alle Tickets entfernen"> -->
-								    <Button fx:id="deleteTicketsButton" mnemonicParsing="false" text="Alle Tickets entfernen">
+								    <Button fx:id="deleteTicketsButton" alignment="CENTER_RIGHT"
+								    		mnemonicParsing="false" text="Alle Tickets entfernen"
+								    		GridPane.halignment="RIGHT">
 								      <graphic>
-								        <ImageView pickOnBounds="true" preserveRatio="true">
+								        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
 								          <image>
-								            <Image url="/ch/ffhs/kino/images/trash_transparent.png" />
+								            <Image url="/ch/ffhs/kino/images/trash_50.png" />
 								          </image>
 								        </ImageView>
 								      </graphic>
 								    </Button>
-							        <!-- <Button fx:id="deleteTicketsButton" alignment="CENTER_RIGHT"
-							        		GridPane.rowIndex="3" GridPane.columnIndex="0"
-							        		mnemonicParsing="false" text="Alle Tickets entfernen" 
-											GridPane.halignment="RIGHT" /> -->
 											
 							        <Button fx:id="addTicketButton" alignment="CENTER_RIGHT"
-							        		GridPane.rowIndex="3" GridPane.columnIndex="0"
 							        		mnemonicParsing="false" text="Ticket hinzufügen" 
-											GridPane.halignment="RIGHT" />			
+											GridPane.halignment="RIGHT" >			
+										<graphic>
+								        	<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+								          	<image>
+								            	<Image url="/ch/ffhs/kino/images/add_white.png" />
+								          	</image>
+								        	</ImageView>
+								      	</graphic>
+								    </Button>
 								</children>
 			        		</HBox>	
 						</children>

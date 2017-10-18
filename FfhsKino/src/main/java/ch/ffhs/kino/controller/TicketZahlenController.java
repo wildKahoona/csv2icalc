@@ -15,6 +15,8 @@ import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.model.Ticket.TicketType;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -28,6 +30,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,28 +54,47 @@ public class TicketZahlenController {
 	
 	@FXML
 	private VBox ticketGrid;
+		
+	@FXML
+	private GridPane kk;
 	
 	@FXML
 	private TextField email;
 	
 	@FXML
-	private GridPane kk;
-
-	@FXML
-	private ComboBox<String> monat;
+	private RadioButton rbtnCreditCard;
 	
 	@FXML
-	private ComboBox<String> jahr;
+	private RadioButton rbtnPayPal;
+	
+	@FXML
+	private TextField kknummer;
+
+	@FXML
+	private ComboBox<String> cbMonat;
+	
+	@FXML
+	private ComboBox<String> cbJahr;
+	
+	@FXML
+	private TextField cvv;
+	
+	@FXML
+	private TextField karteninhaber;	
 	
 	@FXML
 	private Button payButton;
-
+	
 	@FXML
 	public void breadcrumbAction(MouseEvent event) {
 		ControllerUtils.breadcrumbAction(event.getSource());
 	}
 	
+	
 	private Booking booking;
+	private Boolean payCreditCard = true;
+	private String selectedCreditCardMonth;
+	private String selectedCreditCardYear;
 	
 	/**
      * Die Liste der Reservierungen
@@ -80,10 +102,25 @@ public class TicketZahlenController {
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
 	private ValidationSupport validationSupport = new ValidationSupport();
-	private boolean isValid = true;
+	//private boolean isValid = true;
 	
 	@FXML
 	public void initialize() {
+		
+		Image imgCreditCard = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/visaCard.png"));
+		ImageView imgViewCreditCard = new ImageView(imgCreditCard);
+		imgViewCreditCard.setFitWidth(25.00);
+		imgViewCreditCard.setFitHeight(25.00);
+		rbtnCreditCard.setGraphic(imgViewCreditCard);
+		rbtnCreditCard.setSelected(payCreditCard);
+		
+		Image imgPayPal = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/payPal.png"));
+		ImageView imgViewPayPal = new ImageView(imgPayPal);
+		imgViewPayPal.setFitWidth(25.00);
+		imgViewPayPal.setFitHeight(25.00);
+		rbtnPayPal.setGraphic(imgViewPayPal);
+		rbtnPayPal.setSelected(!payCreditCard);
+		
 		// Kreditkarten-Felder
 		ObservableList<String> options = FXCollections.observableArrayList();
 		DecimalFormat decim = new DecimalFormat("00");
@@ -96,15 +133,32 @@ public class TicketZahlenController {
 			jahre.add(decim2.format(i));
 		}
 
-		monat.setItems(options);
-		jahr.setItems(jahre);
+		cbMonat.setItems(options);
+		cbJahr.setItems(jahre);
 		
-//		if(email.getText().trim().isEmpty()) {
-//			isValid = false;
-//		}else {
-//			isValid = true;
-//		}
+		cbMonat.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override public void changed(ObservableValue<? extends String> selected, String oldValue, String newValue) {
+				if (newValue != null) {
+					selectedCreditCardMonth = newValue;
+				}  
+			}
+	    });
+	    
+		cbJahr.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override public void changed(ObservableValue<? extends String> selected, String oldValue, String newValue) {
+		        if (newValue != null) {
+		        	selectedCreditCardYear = newValue;
+		        }  
+		      }
+		});		
+
 		validationSupport.registerValidator(email, Validator.createEmptyValidator("Die E-Mail-Adresse ist obligatorisch."));
+		validationSupport.registerValidator(kknummer, Validator.createEmptyValidator("Die Kreditkartennummer ist obligatorisch."));
+		validationSupport.registerValidator(cvv, Validator.createEmptyValidator("Die CVV-Nummer ist obligatorisch."));
+		validationSupport.registerValidator(karteninhaber, Validator.createEmptyValidator("Der Name des Karteninhabers ist obligatorisch."));
+		validationSupport.registerValidator(cbMonat, Validator.createEmptyValidator("Der Monat ist obligatorisch"));
+		validationSupport.registerValidator(cbJahr, Validator.createEmptyValidator("Das Jahr ist obligatorisch"));
+		
 		payButton.disableProperty().bind(validationSupport.invalidProperty());
 	}
 
@@ -126,11 +180,9 @@ public class TicketZahlenController {
 
 	@FXML
 	protected void pay(ActionEvent event) {
-		try {
-			//if (isValid) {
-				Main.cinemaProgrammService.addBooking(booking);
-				Main.startBookingConfirm(booking);
-			//}
+		try {			
+			Main.cinemaProgrammService.addBooking(booking);
+			Main.startBookingConfirm(booking);	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,11 +192,13 @@ public class TicketZahlenController {
 
 	@FXML
 	protected void paypalSelected(ActionEvent event) {
+		payCreditCard = false;
 		kk.setVisible(false);
 	}
 
 	@FXML
 	protected void kkSelected(ActionEvent event) {
+		payCreditCard = true;
 		kk.setVisible(true);
 	}
 
@@ -237,25 +291,5 @@ public class TicketZahlenController {
 		});
 	}
 
-	private boolean isInputValid() {
-		String errorMessage = "";
-        if (email.getText() == null || email.getText().length() == 0) {
-            errorMessage += "Keine gültige E-Mail-Adresse!\n"; 
-        }
-        
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            // Show the error message.
-            Alert alert = new Alert(AlertType.ERROR);
-            //alert.initOwner(dialogStage);
-            alert.setTitle("Ungültige Eingabe");
-            alert.setHeaderText("Bitte korrigieren Sie die ungültigen Eingaben.");
-            alert.setContentText(errorMessage);
 
-            alert.showAndWait();
-
-            return false;
-        }
-	}
 }
