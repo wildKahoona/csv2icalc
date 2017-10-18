@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +17,6 @@ import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
-import ch.ffhs.kino.model.TicketPrice;
 import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.layout.Main;
@@ -32,38 +30,29 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import javafx.scene.text.TextAlignment;
-import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
@@ -77,6 +66,8 @@ public class VorstellungController {
 	private Vorstellung vorstellung;
 	
 	private SeatView views[][];
+	
+	private Booking reservation;
 	
 	/**
 	 * Das GridPane des Kinosaals mit den Sitzen
@@ -133,8 +124,7 @@ public class VorstellungController {
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	private ObservableList<TicketTableModel> ticketTableData = FXCollections.observableArrayList();
 	
-	
-	
+
 	private long endTime ;
 	private Timeline timeline;
 
@@ -357,10 +347,21 @@ public class VorstellungController {
 		return vorstellung;
 	}
 
-	public void setVorstellung(Vorstellung vorstellung, List<TicketPrice> ticketPrices) {
+	public void setVorstellung(Vorstellung vorstellung) {
 		this.vorstellung = vorstellung;
 		initTitle();
 		this.renderSeatView();
+		renderReservedSeats();
+		renderBookedSeats();
+	}
+	
+	public void setVorstellung(Booking reservation) {
+		this.reservation = reservation;
+		this.vorstellung = this.reservation.getEvent();
+		initTitle();
+		renderSeatView();
+		renderReservedSeats();
+		renderBookedSeats();
 	}
 	
 	private void initTitle() {
@@ -376,6 +377,7 @@ public class VorstellungController {
 		// TableView hat leider keine ButtonCell 
 		// ButtonCell habe ich dann doch noch geschafft,
 		// dann kam aber schon der nächste Killer: Table ist nicht direkt im Edit-Mode, man muss erst doppelklicken!!!
+
 		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
 		boxTimer.setVisible(false);
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
@@ -618,7 +620,7 @@ public class VorstellungController {
 	public void StopTimeAnimation(){
 		timeline.stop();
 	}
-
+	  
 	/**
 	 * Die Sitze für den entsprechenden Kinosaal zeichnen
 	*/
@@ -627,14 +629,7 @@ public class VorstellungController {
 		int rows = hall.getRows();
 	    int columns = hall.getColumns();
 	    SeatType[][] seatPlan = hall.getSeatPlan();
-	    List<Integer> bookedSeatNumbers = new ArrayList<Integer>();
-	    List<Booking> bookings = vorstellung.getBookings();
-	    for (Booking booking : bookings) {
-	    	List<Ticket> tickets = booking.getTickets();
-	    	for(Ticket ticket : tickets)
-	    		bookedSeatNumbers.add(ticket.getSeat().getSeatNumber());
-	    }	    
-	    
+
 	    ReadOnlyDoubleProperty gridWidth = this.hallGrid.widthProperty();
 	    ReadOnlyDoubleProperty gridHeight = this.hallGrid.heightProperty();
 	    
@@ -645,13 +640,12 @@ public class VorstellungController {
 	    views = new SeatView[rows][];
 	    
 	    // Bilder der Sitzplätze laden
+	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
 	    Image normalSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));
 	    Image premiumSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatPremium_small.png"));
 	    Image handicapSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatHandicap_small.png"));
-	    Image soldSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSold_small.png"));
-	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
 	    
-	    // Bild für den ausgewählten Sitz für alle Objekte setzen
+	    // Bild für den ausgewählten Sitz für alle Objekte setzen	    
 	    SeatView.setImageSelcectedSeat(selectedSeat);
 	    
 	    int seatCounter = 1;	    
@@ -662,24 +656,19 @@ public class VorstellungController {
             	SeatView seatView = new SeatView(seat);         	
             	views[r][c] = seatView;
             	
-            	// Prüfe, ob der Platz verkauft ist
-            	if(bookedSeatNumbers.contains(seatCounter)) {
-            		seatView.setSold();
-            		seatView.setImageSeat(soldSeat);
-            	}else {                 	
-                	if(seatPlan[r][c] == SeatType.NONE){
-                		seatView.setDisable(true);
-                		seatView.setOpacity(0);
-                		continue;
-        	    	}else if (seatPlan[r][c] == SeatType.HANDYCAP){
-        	    		seatView.setImageSeat(handicapSeat);
-        	    	}else if (seatPlan[r][c] == SeatType.PREMIUM){
-        	    		seatView.setImageSeat(premiumSeat);
-        	    	}else {
-        	    		seatView.setImageSeat(normalSeat);
-        	    	}
-            	}
-            	
+            	// Je nach Sitz-Typ ein anderes Standardbild nehmen            	
+            	if(seatPlan[r][c] == SeatType.NONE){
+            		seatView.setDisable(true);
+            		seatView.setOpacity(0);
+            		continue;
+    	    	}else if (seatPlan[r][c] == SeatType.HANDYCAP){
+    	    		seatView.setImageSeat(handicapSeat);
+    	    	}else if (seatPlan[r][c] == SeatType.PREMIUM){
+    	    		seatView.setImageSeat(premiumSeat);
+    	    	}else {
+    	    		seatView.setImageSeat(normalSeat);
+    	    	}
+
             	// ImageViews are not resizeable, but you could use a parent that is resizeable and bind the fitWidth and fitHeight properties 
             	// to the size of the parent using expression binding          	    	
             	seatView.fitWidthProperty().bind(size);
@@ -695,9 +684,6 @@ public class VorstellungController {
 			        	  // Ticket für diesen Sitzplatz hinzufügen
 			        	  Ticket ticket = new Ticket(seat);
 			        	  ticketData.add(ticket);
-			        	  
-//			        	  TicketTableModel ticketTable = new TicketTableModel();
-//			        	  ticketTableData.add(ticketTable);
 			          }
 			          else {
 			            this.selectedSeats.remove(seatView);
@@ -720,30 +706,33 @@ public class VorstellungController {
         }
 	}
 	
-//	  private boolean[][] getSeats(Vorstellung vorstellung) {
-////		  List<Integer> bookedSeatNumbers = new ArrayList<Integer>();
-//		  
-//		  boolean[][] bookedSeats = new boolean[rows][seats];
-//		  List<Booking> bookings = vorstellung.getBookings();
-//		    for (Booking booking : bookings) {
-//		    	for(Ticket ticket : booking.getTickets())
-//		    		bookedSeats[ticket.getSeat().getSeatRow()][ticket.getSeat().getSeatColumn()] = true;
-//		    }	    
-//		    
-////		    int rows = showtime.auditorium.get().rows.get();
-////		    int seats = showtime.auditorium.get().seats.get();
-////
-////		    boolean[][] reservedSeats = new boolean[rows][seats];
-////
-////		    for (Reservation reservation: showtime.reservations) {
-////		      for (Ticket ticket: reservation.tickets) {
-////		        reservedSeats[ticket.row.get()][ticket.seat.get()] = true;
-////		      }
-////		    }
-////
-////		    return reservedSeats;
-//	}
+	private void renderReservedSeats() {
+	    if(this.reservation != null) {
+	    	for(Ticket ticket : reservation.getTickets()) {
+	    		Seat seat = ticket.getSeat();
+	    		SeatView seatView = views[seat.getSeatRow()][seat.getSeatColumn()];
+	    		if (seatView != null)
+	    			seatView.select();
+	    	}
+	    }
+	}
 	  
+	private void renderBookedSeats() {
+	    List<Booking> bookings = vorstellung.getBookings();
+	    if(bookings.isEmpty()) return;
+	    Image soldSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSold_small.png"));
+	    for (Booking booking : bookings) {
+	    	for(Ticket ticket : booking.getTickets()) {
+	    		Seat seat = ticket.getSeat();
+	    		SeatView seatView = views[seat.getSeatRow()][seat.getSeatColumn()];
+	    		if (seatView != null) {
+	    			seatView.setSold();
+            		seatView.setImageSeat(soldSeat);
+	    		}
+	    	}
+	    }
+	}
+	
 	private EventHandler<ActionEvent> commandDeleteTicketsHandler = (evt) -> {
 		clearSelectedSeats();
 	};
@@ -888,6 +877,7 @@ public class VorstellungController {
     	Booking booking = new Booking();
     	booking.setEvent(vorstellung);
     	booking.setTickets(ticketData);
+    	Main.cinemaProgrammService.setCurrentReservation(booking);
     	try {
 			Main.startTicketZahlen(booking);
 		} catch (IOException e) {
@@ -895,8 +885,15 @@ public class VorstellungController {
 			e.printStackTrace();
 		}
     };
-    
-    
+
+// Suche im GridPane
+//    SeatView seat = null;
+//	for (Node node: this.hallGrid.getChildren()) {
+//		if (!SeatView.class.isAssignableFrom(node.getClass())) {
+//			continue;
+//		}
+//		seat = (SeatView) node;
+//	}
     
     
 //	private void renderHallGrid() {

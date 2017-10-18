@@ -2,6 +2,7 @@ package ch.ffhs.kino.layout;
 
 import java.io.IOException;
 
+import ch.ffhs.kino.controller.BookingConfirmController;
 import ch.ffhs.kino.controller.MovieDetailController;
 import ch.ffhs.kino.controller.ProgrammController;
 import ch.ffhs.kino.controller.TicketZahlenController;
@@ -54,6 +55,7 @@ public class Main extends Application {
 		// startKinoProgramm();
 		startVorstellung(cinemaProgrammService.getVorstellung());
 		// startTicketZahlen(cinemaProgrammService.getBooking());
+		// startBookingConfirm(cinemaProgrammService.getBooking());
 	}
 
 	public static void main(String[] args) {
@@ -91,11 +93,23 @@ public class Main extends Application {
 
 		// Parameterübergabe
 		VorstellungController controller = loader.<VorstellungController>getController();
-		controller.setVorstellung(vorstellung, cinemaProgrammService.getTicketPrices());
+		controller.setVorstellung(vorstellung);
 		show(scene);
 
 	}
 
+	public static void startVorstellung() throws IOException {
+		primaryStage.setTitle("Kino REX - Vorstellung");
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/vorstellung.fxml"));
+		Scene scene = new Scene((GridPane) loader.load());
+
+		// Parameterübergabe
+		VorstellungController controller = loader.<VorstellungController>getController();
+		controller.setVorstellung(cinemaProgrammService.getCurrentReservation());
+		show(scene);
+
+	}
+	
 	public static void startTicketZahlen(Booking booking) throws IOException {
 		primaryStage.setTitle("Kino REX - Ticket");
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/ticketsZahlen.fxml"));
@@ -108,6 +122,17 @@ public class Main extends Application {
 
 	}
 
+	public static void startBookingConfirm(Booking booking) throws IOException {
+		primaryStage.setTitle("Kino REX - Ticket");
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/bookingConfirm.fxml"));
+		Scene scene = new Scene((GridPane) loader.load());
+
+		// Parameterübergabe
+		BookingConfirmController controller = loader.<BookingConfirmController>getController();
+		controller.setBooking(booking);
+		show(scene);
+	}
+	
 	private static void show(Scene scene) {
 		primaryStage.setWidth(STAGE_WIDTH);
 		scene.getStylesheets().add(CSS);

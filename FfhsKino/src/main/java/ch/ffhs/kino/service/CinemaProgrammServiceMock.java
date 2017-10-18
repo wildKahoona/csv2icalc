@@ -14,7 +14,6 @@ import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Seat.SeatType;
 import ch.ffhs.kino.model.Show;
-import ch.ffhs.kino.model.TicketPrice;
 import ch.ffhs.kino.model.Show.ShowType;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
@@ -49,8 +48,8 @@ public class CinemaProgrammServiceMock {
 	private Show show7;
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
-	private List<TicketPrice> ticketPrices = new ArrayList<TicketPrice>();
 	private List<Booking> bookings = new ArrayList<Booking>();
+	private Booking currentReservation;
 	
 	public CinemaProgrammServiceMock() {
 
@@ -64,20 +63,21 @@ public class CinemaProgrammServiceMock {
 	public Vorstellung getVorstellung() {
 		return vorstellungen.get(0);
 	}
-
-	public List<TicketPrice> getTicketPrices() {
-		return ticketPrices;
-	}
 	
 	public Booking getBooking() {
-
 		Booking booking = new Booking();
-
 		booking.setEvent(getVorstellung());
-
 		return booking;
 	}
 
+	public Booking getCurrentReservation() {
+		return currentReservation;
+	}
+
+	public void setCurrentReservation(Booking currentReservation) {
+		this.currentReservation = currentReservation;
+	}
+	
 	public List<Booking> getBookings() {
 		return bookings;
 	}
@@ -99,8 +99,6 @@ public class CinemaProgrammServiceMock {
 		initShows();
 		
 		initHalls();
-		
-		initPrices();
 
 		for (int i = 0; i < 200; i++) {
 
@@ -261,14 +259,7 @@ public class CinemaProgrammServiceMock {
 		hallRex2.configureSeatPlan(15, 8);
 		hallRex3.configureSeatPlan(25, 15);
 	}
-	
-	private void initPrices()
-	{
-		// Preise
-		ticketPrices.add(new TicketPrice("Erwachsener", 19.00));
-		ticketPrices.add(new TicketPrice("Kind", 12.00));
-	}
-	
+		
 	private void initBookings() {
 		Booking booking = new Booking();
 		Vorstellung vorstellung = getVorstellung();
@@ -295,9 +286,4 @@ public class CinemaProgrammServiceMock {
 	public Movie getMovie() {
 		return movie3;
 	}
-
-
-	
-	
-	
 }

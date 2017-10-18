@@ -34,7 +34,6 @@ public class Ticket {
 
 	private Seat seat;
 	private TicketType ticketType;
-	private TicketPrice ticketPrice;
 	private Booking booking;
 
 	public Ticket(Seat seat) {
@@ -62,14 +61,6 @@ public class Ticket {
 		DecimalFormat formatter = new DecimalFormat("#0.00");
 		return formatter.format(getTicketType().getCost());
 
-	}
-
-	public TicketPrice getTicketPrice() {
-		return ticketPrice;
-	}
-
-	public void setTicketPrice(TicketPrice ticketPrice) {
-		this.ticketPrice = ticketPrice;
 	}
 
 	public Booking getBooking() {

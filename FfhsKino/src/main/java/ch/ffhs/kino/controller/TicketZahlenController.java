@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
+
 import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
@@ -73,6 +76,7 @@ public class TicketZahlenController {
      */
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
+	ValidationSupport validationSupport = new ValidationSupport();
 	
 	@FXML
 	public void initialize() {
@@ -90,13 +94,17 @@ public class TicketZahlenController {
 
 		monat.setItems(options);
 		jahr.setItems(jahre);
+		
+		//validationSupport.registerValidator(email, Validator.createEmptyValidator("Email is required"));
 	}
 
 	public void setBooking(Booking booking) {
 		this.booking = booking;
 		setTitle();
 		initTicketControl();
+		if(this.booking == null) return;
 		List<Ticket> tickets = this.booking.getTickets();
+		if(tickets == null || tickets.isEmpty()) return;
 		for(Ticket ticket : tickets){
 			ticketData.add(ticket);
 		}
@@ -111,7 +119,7 @@ public class TicketZahlenController {
 		try {
 			if (isInputValid()) {
 				Main.cinemaProgrammService.addBooking(booking);
-				Main.startKinoProgramm();
+				Main.startBookingConfirm(booking);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
