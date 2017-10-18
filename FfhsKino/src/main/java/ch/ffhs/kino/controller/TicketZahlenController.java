@@ -63,6 +63,9 @@ public class TicketZahlenController {
 	
 	@FXML
 	private ComboBox<String> jahr;
+	
+	@FXML
+	private Button payButton;
 
 	@FXML
 	public void breadcrumbAction(MouseEvent event) {
@@ -76,7 +79,8 @@ public class TicketZahlenController {
      */
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
-	ValidationSupport validationSupport = new ValidationSupport();
+	private ValidationSupport validationSupport = new ValidationSupport();
+	private boolean isValid = true;
 	
 	@FXML
 	public void initialize() {
@@ -95,7 +99,13 @@ public class TicketZahlenController {
 		monat.setItems(options);
 		jahr.setItems(jahre);
 		
-		//validationSupport.registerValidator(email, Validator.createEmptyValidator("Email is required"));
+//		if(email.getText().trim().isEmpty()) {
+//			isValid = false;
+//		}else {
+//			isValid = true;
+//		}
+		validationSupport.registerValidator(email, Validator.createEmptyValidator("Die E-Mail-Adresse ist obligatorisch."));
+		payButton.disableProperty().bind(validationSupport.invalidProperty());
 	}
 
 	public void setBooking(Booking booking) {
@@ -117,10 +127,10 @@ public class TicketZahlenController {
 	@FXML
 	protected void pay(ActionEvent event) {
 		try {
-			if (isInputValid()) {
+			//if (isValid) {
 				Main.cinemaProgrammService.addBooking(booking);
 				Main.startBookingConfirm(booking);
-			}
+			//}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

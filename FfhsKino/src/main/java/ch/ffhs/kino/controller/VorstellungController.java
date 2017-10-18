@@ -170,177 +170,6 @@ public class VorstellungController {
 		
 		addTicketButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		addTicketButton.setOnAction(commandAddTicketHandler);
-		
-		
-//		// TableView ist sehr gruusig
-//		TableColumn<TicketTableModel, String> col_id = new TableColumn<TicketTableModel, String>();
-//        col_id.setCellValueFactory(new PropertyValueFactory<TicketTableModel, String>("ticketType"));
-//        ticketTable.getColumns().add(col_id);
-//        
-//        TableColumn<TicketTableModel, String> col_price = new TableColumn<TicketTableModel, String>();
-//        col_price.setCellValueFactory(new PropertyValueFactory<TicketTableModel, String>("price"));
-//        ticketTable.getColumns().add(col_price);
-//            
-//		//Insert Button
-//        TableColumn col_action = new TableColumn<>("Action");
-//        col_action.setSortable(false);
-//         
-//        col_action.setCellValueFactory(
-//                new Callback<TableColumn.CellDataFeatures<TicketTableModel, Boolean>, 
-//                ObservableValue<Boolean>>() {
-// 
-//            @Override
-//            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<TicketTableModel, Boolean> p) {
-//                return new SimpleBooleanProperty(p.getValue() != null);
-//            }
-//        });
-// 
-//        col_action.setCellFactory(
-//                new Callback<TableColumn<TicketTableModel, Boolean>, TableCell<TicketTableModel, Boolean>>() {
-// 
-//            @Override
-//            public TableCell<TicketTableModel, Boolean> call(TableColumn<TicketTableModel, Boolean> p) {
-//                return new ButtonCell();
-//            }
-//         
-//        });
-//        ticketTable.getColumns().add(col_action);     
-//        ticketTable.setItems(ticketTableData);
-//		
-//        ticketTable.widthProperty().addListener(new ChangeListener<Number>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-//                // Get the table header
-//                Pane header = (Pane)ticketTable.lookup("TableHeaderRow");
-//                if(header!=null && header.isVisible()) {
-//                  header.setMaxHeight(0);
-//                  header.setMinHeight(0);
-//                  header.setPrefHeight(0);
-//                  header.setVisible(false);
-//                  header.setManaged(false);
-//                }
-//            }
-//        });
-        
-        
-        
-        
-//        TableColumn<Ticket, String> firstName = new TableColumn<Ticket, String>("ticketType");
-//        firstName.setCellValueFactory(new PropertyValueFactory<Ticket, String>("ticketType"));
-//        ticketTable.getColumns().add(firstName);
-//      //Insert Button
-//        TableColumn<Ticket, Boolean> actionCol = new TableColumn<>("Action");
-//        actionCol.setSortable(false);
-//        ticketTable.getColumns().add(actionCol);
-//        
-//        actionCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ticket, Boolean>, ObservableValue<Boolean>>() {
-//        	@Override
-//        	public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Ticket, Boolean> p) {
-//        	return new SimpleBooleanProperty(p.getValue() != null);
-//        	}
-//        	});
-//
-//        actionCol.setCellFactory(new Callback<TableColumn<Ticket, Boolean>, TableCell<Ticket, Boolean>>() {
-//        	@Override
-//        	public TableCell<Ticket, Boolean> call(TableColumn<Ticket, Boolean> p) {
-//        	return new ButtonCell(ticketTable);
-//        	}
-//        	});
-//        
-//        TableColumn<Ticket, TicketType> colPrice = new TableColumn<>("Action");
-//        colPrice.setCellValueFactory(new PropertyValueFactory<>("ticketType"));
-//		colPrice.setCellFactory(ComboBoxTableCell.<Ticket, TicketType>forTableColumn(TicketType.values()));
-//		ticketTable.getColumns().add(colPrice);
-//		
-//        ticketTable.setItems(ticketData);
-//        ticketTable.setEditable(true);
-    
-		
-		
-		
-//		imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-//
-//		     @Override
-//		     public void handle(MouseEvent event) {
-//		    	 // Click Mouse Event for Image...
-//		         event.consume();
-//		     }
-//		});
-		
-		//imageView.setStyle("-fx-background-color:transparent;");
-		//imageView.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("JavafxSm.gif"))));
-
-//		imageView.setOnMouseEntered(new EventHandler<MouseEvent>
-//	    () {
-//
-//	        @Override
-//	        public void handle(MouseEvent t) {
-//	        	imageView.setStyle("-fx-effect: dropshadow(gaussian, #54acd2, 1, 1, 0, 0);");
-//	        }
-//	    });
-//
-//		imageView.setOnMouseExited(new EventHandler<MouseEvent>
-//	    () {
-//
-//	        @Override
-//	        public void handle(MouseEvent t) {
-//	        	imageView.setStyle("-fx-background-color:transparent;");
-//	        }
-//	    });
-	    
-//		buyButton.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                System.out.println("Hello World!");
-//                try {
-//                	// Booking erstellen
-//                	Booking booking = new Booking();
-//                	booking.setEvent(vorstellung);
-//                	booking.setTickets(ticketData);
-//                	Main.startTicketZahlen(booking);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//            }
-//        });
-		
-		
-//		timer = new AnimationTimer() {
-//		    
-//			@Override
-//		    public void start() {
-//				startTime = 600 * 1000; // 10 Minuten
-//		        super.start();
-//		    }
-//
-//		    @Override
-//		    public void handle(long timestamp) {
-////		        long now = System.currentTimeMillis();
-////		        time.set((now - startTime) / 1000.0);
-//		    	startTime = timestamp;
-//		        
-//		        SimpleDateFormat fmt = new SimpleDateFormat("mm:ss");
-//		        timeLabel.setText(fmt.format(startTime));
-//		    }
-//		};
-//		timer.start();
-		
-//		hallGrid.widthProperty().addListener((ov, oldValue, newValue) -> {
-//			resizeSeat(newValue);
-//        });
-//		hallGrid.heightProperty().addListener((ov, oldValue, newValue) -> {
-//			resizeSeat(newValue);
-//        });
-		
-//  	//!!! Tabelle geht leider nicht, da ich keine Button in die Zelle reintung kann !!!
-//		//Die Spalten der Tabelle definieren
-//		colSeatDescription.setCellValueFactory(new PropertyValueFactory<Ticket, String>("seatDescription"));
-//		colPrice.setCellValueFactory(new PropertyValueFactory<>("ticketType"));
-//		colPrice.setCellFactory(ComboBoxTableCell.<Ticket, TicketType>forTableColumn(TicketType.values()));
-//		
-//		//Die Tabelle anzeigen.
-//		ticketTable.setItems(ticketData);
-//		ticketTable.setEditable(true);
 	}
 	
 	public Vorstellung getVorstellung() {
@@ -381,14 +210,16 @@ public class VorstellungController {
 			ticketGrid.getChildren().clear();
 			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
 			
+			labelNoTickets.setVisible(false);
+			boxTimer.setVisible(true);
+			
 			if (tickets.isEmpty()) {
 				labelNoTickets.setVisible(true);
 				boxTimer.setVisible(false);
-				return;
+				//return;
 			}
 			
-			labelNoTickets.setVisible(false);
-			boxTimer.setVisible(true);
+			
 			tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
 			
 			TicketRow rowSumme = new TicketRow();
@@ -413,7 +244,7 @@ public class VorstellungController {
 			Double sum = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
 			String sumPrice = String.format(Locale.ROOT, "%.2f", sum);
 			Label sumPriceLabel = new Label();
-			sumPriceLabel.setText(sumPrice + " CHF");
+			sumPriceLabel.setText("Total: " + sumPrice + " CHF");
 			sumPriceLabel.setStyle("-fx-padding: 3;-fx-max-width: 80px;-fx-font-weight: bold; -fx-font-size: 11pt;");
 			rowSumme.getChildren().add(sumPriceLabel);
 			
@@ -893,6 +724,175 @@ public class VorstellungController {
 //		seat = (SeatView) node;
 //	}
     
+//	// TableView ist sehr gruusig
+//	TableColumn<TicketTableModel, String> col_id = new TableColumn<TicketTableModel, String>();
+//    col_id.setCellValueFactory(new PropertyValueFactory<TicketTableModel, String>("ticketType"));
+//    ticketTable.getColumns().add(col_id);
+//    
+//    TableColumn<TicketTableModel, String> col_price = new TableColumn<TicketTableModel, String>();
+//    col_price.setCellValueFactory(new PropertyValueFactory<TicketTableModel, String>("price"));
+//    ticketTable.getColumns().add(col_price);
+//        
+//	//Insert Button
+//    TableColumn col_action = new TableColumn<>("Action");
+//    col_action.setSortable(false);
+//     
+//    col_action.setCellValueFactory(
+//            new Callback<TableColumn.CellDataFeatures<TicketTableModel, Boolean>, 
+//            ObservableValue<Boolean>>() {
+//
+//        @Override
+//        public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<TicketTableModel, Boolean> p) {
+//            return new SimpleBooleanProperty(p.getValue() != null);
+//        }
+//    });
+//
+//    col_action.setCellFactory(
+//            new Callback<TableColumn<TicketTableModel, Boolean>, TableCell<TicketTableModel, Boolean>>() {
+//
+//        @Override
+//        public TableCell<TicketTableModel, Boolean> call(TableColumn<TicketTableModel, Boolean> p) {
+//            return new ButtonCell();
+//        }
+//     
+//    });
+//    ticketTable.getColumns().add(col_action);     
+//    ticketTable.setItems(ticketTableData);
+//	
+//    ticketTable.widthProperty().addListener(new ChangeListener<Number>() {
+//        @Override
+//        public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+//            // Get the table header
+//            Pane header = (Pane)ticketTable.lookup("TableHeaderRow");
+//            if(header!=null && header.isVisible()) {
+//              header.setMaxHeight(0);
+//              header.setMinHeight(0);
+//              header.setPrefHeight(0);
+//              header.setVisible(false);
+//              header.setManaged(false);
+//            }
+//        }
+//    });
+    
+    
+    
+    
+//    TableColumn<Ticket, String> firstName = new TableColumn<Ticket, String>("ticketType");
+//    firstName.setCellValueFactory(new PropertyValueFactory<Ticket, String>("ticketType"));
+//    ticketTable.getColumns().add(firstName);
+//  //Insert Button
+//    TableColumn<Ticket, Boolean> actionCol = new TableColumn<>("Action");
+//    actionCol.setSortable(false);
+//    ticketTable.getColumns().add(actionCol);
+//    
+//    actionCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Ticket, Boolean>, ObservableValue<Boolean>>() {
+//    	@Override
+//    	public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Ticket, Boolean> p) {
+//    	return new SimpleBooleanProperty(p.getValue() != null);
+//    	}
+//    	});
+//
+//    actionCol.setCellFactory(new Callback<TableColumn<Ticket, Boolean>, TableCell<Ticket, Boolean>>() {
+//    	@Override
+//    	public TableCell<Ticket, Boolean> call(TableColumn<Ticket, Boolean> p) {
+//    	return new ButtonCell(ticketTable);
+//    	}
+//    	});
+//    
+//    TableColumn<Ticket, TicketType> colPrice = new TableColumn<>("Action");
+//    colPrice.setCellValueFactory(new PropertyValueFactory<>("ticketType"));
+//	colPrice.setCellFactory(ComboBoxTableCell.<Ticket, TicketType>forTableColumn(TicketType.values()));
+//	ticketTable.getColumns().add(colPrice);
+//	
+//    ticketTable.setItems(ticketData);
+//    ticketTable.setEditable(true);
+
+	
+	
+	
+//	imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//
+//	     @Override
+//	     public void handle(MouseEvent event) {
+//	    	 // Click Mouse Event for Image...
+//	         event.consume();
+//	     }
+//	});
+	
+	//imageView.setStyle("-fx-background-color:transparent;");
+	//imageView.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("JavafxSm.gif"))));
+
+//	imageView.setOnMouseEntered(new EventHandler<MouseEvent>
+//    () {
+//
+//        @Override
+//        public void handle(MouseEvent t) {
+//        	imageView.setStyle("-fx-effect: dropshadow(gaussian, #54acd2, 1, 1, 0, 0);");
+//        }
+//    });
+//
+//	imageView.setOnMouseExited(new EventHandler<MouseEvent>
+//    () {
+//
+//        @Override
+//        public void handle(MouseEvent t) {
+//        	imageView.setStyle("-fx-background-color:transparent;");
+//        }
+//    });
+    
+//	buyButton.setOnAction(new EventHandler<ActionEvent>() {
+//        @Override
+//        public void handle(ActionEvent event) {
+//            System.out.println("Hello World!");
+//            try {
+//            	// Booking erstellen
+//            	Booking booking = new Booking();
+//            	booking.setEvent(vorstellung);
+//            	booking.setTickets(ticketData);
+//            	Main.startTicketZahlen(booking);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//        }
+//    });
+	
+	
+//	timer = new AnimationTimer() {
+//	    
+//		@Override
+//	    public void start() {
+//			startTime = 600 * 1000; // 10 Minuten
+//	        super.start();
+//	    }
+//
+//	    @Override
+//	    public void handle(long timestamp) {
+////	        long now = System.currentTimeMillis();
+////	        time.set((now - startTime) / 1000.0);
+//	    	startTime = timestamp;
+//	        
+//	        SimpleDateFormat fmt = new SimpleDateFormat("mm:ss");
+//	        timeLabel.setText(fmt.format(startTime));
+//	    }
+//	};
+//	timer.start();
+	
+//	hallGrid.widthProperty().addListener((ov, oldValue, newValue) -> {
+//		resizeSeat(newValue);
+//    });
+//	hallGrid.heightProperty().addListener((ov, oldValue, newValue) -> {
+//		resizeSeat(newValue);
+//    });
+	
+//	//!!! Tabelle geht leider nicht, da ich keine Button in die Zelle reintung kann !!!
+//	//Die Spalten der Tabelle definieren
+//	colSeatDescription.setCellValueFactory(new PropertyValueFactory<Ticket, String>("seatDescription"));
+//	colPrice.setCellValueFactory(new PropertyValueFactory<>("ticketType"));
+//	colPrice.setCellFactory(ComboBoxTableCell.<Ticket, TicketType>forTableColumn(TicketType.values()));
+//	
+//	//Die Tabelle anzeigen.
+//	ticketTable.setItems(ticketData);
+//	ticketTable.setEditable(true);
     
 //	private void renderHallGrid() {
 //	Hall hall = vorstellung.getHall();

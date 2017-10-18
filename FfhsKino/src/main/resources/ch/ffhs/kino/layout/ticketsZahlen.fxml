@@ -52,14 +52,14 @@
 		<Separator GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.valignment="CENTER" />
 		
 		<!-- Information -->
-			<VBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
-				<Label text="Stimmt Ihr Wunsch mit Ihrem Ticket überein? Dann können Sie mit der Zahlung fortfahren." styleClass="h2"/>
-				<Label text="Die Zustellung Ihrer Kinotickets erfolgt per E-Mail. Bitte geben Sie Ihre korrekte E-Mail-Adresse an, um Ihnen die Kinotickets zustellen zu können." styleClass="h2"/>
-				<Label text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
-			</VBox>
+		<VBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
+			<Label text="Stimmt Ihr Wunsch mit Ihrem Ticket überein? Dann können Sie mit der Zahlung fortfahren." styleClass="h2"/>
+			<Label text="Die Zustellung Ihrer Kinotickets erfolgt per E-Mail. Bitte geben Sie Ihre korrekte E-Mail-Adresse an, um Ihnen die Kinotickets zustellen zu können." styleClass="h2"/>
+			<Label text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
+		</VBox>
 			
 		<!-- Inhalt (Zeile 3) -->
-		<HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2">
+		<HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" spacing="10">
 		
 			
 			<!-- Zahlungsmaske -->
@@ -85,7 +85,7 @@
 						<Label text="Mit Kreditkarte bezahlen" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" />
 						<Label text="Kreditkartennummer*:" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" />
 						<TextField fx:id="kknummer" promptText="Kreditkartennummer eingeben" styleClass="long" GridPane.columnIndex="0" GridPane.rowIndex="5"
-							GridPane.columnSpan="2" />
+									GridPane.columnSpan="2" />
 						<Label text="Gültig bis*:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
 			
 						<ComboBox fx:id="monat" promptText="Monat" styleClass="medium" GridPane.columnIndex="0" GridPane.rowIndex="7" />
@@ -96,8 +96,8 @@
 						<TextField fx:id="nachname" promptText="Nachname" styleClass="medium" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 					</GridPane>
 			
-					<Button text="Bezahlen" GridPane.rowIndex="4" GridPane.columnIndex="0" 
-					onAction="#pay" styleClass="medium"/>
+					<Button fx:id="payButton" text="Bezahlen" GridPane.rowIndex="4" GridPane.columnIndex="0" 
+							onAction="#pay" styleClass="medium"/>
 				</GridPane>
 			</GridPane>
 			
