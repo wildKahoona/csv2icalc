@@ -181,10 +181,20 @@
 					        	  alignment="CENTER" style="-fx-padding: 5 0 0 15;-fx-background-color:lightblue" >
 					        	<children>
 					        	<!-- <Region hgrow="ALWAYS"/> -->
-							        <Button fx:id="deleteTicketsButton" alignment="CENTER_RIGHT"
+					        		<!-- <Button layoutX="104.0" layoutY="81.0" mnemonicParsing="false" text="Alle Tickets entfernen"> -->
+								    <Button fx:id="deleteTicketsButton" mnemonicParsing="false" text="Alle Tickets entfernen">
+								      <graphic>
+								        <ImageView pickOnBounds="true" preserveRatio="true">
+								          <image>
+								            <Image url="/ch/ffhs/kino/images/trash_transparent.png" />
+								          </image>
+								        </ImageView>
+								      </graphic>
+								    </Button>
+							        <!-- <Button fx:id="deleteTicketsButton" alignment="CENTER_RIGHT"
 							        		GridPane.rowIndex="3" GridPane.columnIndex="0"
 							        		mnemonicParsing="false" text="Alle Tickets entfernen" 
-											GridPane.halignment="RIGHT" />
+											GridPane.halignment="RIGHT" /> -->
 											
 							        <Button fx:id="addTicketButton" alignment="CENTER_RIGHT"
 							        		GridPane.rowIndex="3" GridPane.columnIndex="0"
