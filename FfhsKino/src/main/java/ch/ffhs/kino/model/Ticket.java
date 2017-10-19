@@ -2,12 +2,10 @@ package ch.ffhs.kino.model;
 
 import java.text.DecimalFormat;
 
-import ch.ffhs.kino.component.Seat;
-
 public class Ticket {
 
 	public enum TicketType {
-		KIND(8.5, "Kind"), ADULT(19.0, "Erwachsene"), STUDENT(11.5, "Student"), SENIOR(9, "Senior");
+		KIND(8.50, "Kind"), ADULT(19.00, "Erwachsene"), STUDENT(11.50, "Student"), SENIOR(9.00, "Senior");
 
 		private double cost;
 		private String title;
@@ -36,7 +34,6 @@ public class Ticket {
 
 	private Seat seat;
 	private TicketType ticketType;
-	private TicketPrice ticketPrice;
 	private Booking booking;
 
 	public Ticket(Seat seat) {
@@ -60,18 +57,10 @@ public class Ticket {
 		this.ticketType = ticketType;
 	}
 
-	private String getCost() {
+	public String getCost() {
 		DecimalFormat formatter = new DecimalFormat("#0.00");
 		return formatter.format(getTicketType().getCost());
 
-	}
-
-	public TicketPrice getTicketPrice() {
-		return ticketPrice;
-	}
-
-	public void setTicketPrice(TicketPrice ticketPrice) {
-		this.ticketPrice = ticketPrice;
 	}
 
 	public Booking getBooking() {

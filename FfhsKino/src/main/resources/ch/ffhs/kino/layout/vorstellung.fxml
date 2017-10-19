@@ -7,21 +7,25 @@
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
 
 <GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.VorstellungController">
 	<columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
     </columnConstraints>
 	<children>
 	
 		<!-- Breadcrumb -->
 		<HBox styleClass="breadcrumb" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
 			<children>
-				<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " />
-				<Label id="bc_vorstellung" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
-				<Label id="bc_sitzplatz" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
+				<!-- <Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " /> -->
+				<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
+				<Label id="bc_sitzplatz" disable="false" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
 				<Label id="bc_bezahlen" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+				<Label disable="true" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
 			</children>
 		</HBox>
 	
@@ -29,48 +33,185 @@
 		<GridPane hgap="30.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
 			<children>
 				<Label text="Vorstellung" styleClass="h1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-				<Label fx:id="vorstellungChoice" text="z.B. Blade Runner 20.10.2017 18:30 Uhr..." styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+				<Label fx:id="vorstellungChoice" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 			</children>    
 		</GridPane>
 		<Separator GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 	
-		
+		<!-- Inhalt (Zeile 3) -->
 		<HBox GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
 	         
-	         <!-- Column 0: Sitzplatzplan (FARBE nur damit ich weiss, wie das Grid ist)-->
-	         <VBox GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-background-color:green">
-		         <!-- Hier kommt noch der Text: Bitte wählen Sie Ihre Plätze im Saalplan aus: -->
-		         <!-- Hier kommt noch die Leinwand -->
-		         <GridPane fx:id="hallGrid"
-				           alignment="TOP_CENTER"
-				           prefHeight="9999"
-				           prefWidth="9999"
-				           hgap="2"
-				           vgap="2"/>
-				 <!-- Hier kommt noch die Legende -->
+	         <!-- Column 0: Sitzplatzplan -->
+	         <VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
+	         	<Label text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" styleClass="h2"/>
+		        
+		        <!-- Legende -->
+				 <HBox style="-fx-padding: 5px 0" alignment="CENTER" spacing="15">
+					<children>
+						<HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seat_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Frei" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Verfügbare Sitzplätze, die ausgewählt werden können" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+				        
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatSold_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Verkauft" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Verkaufte Sitzplätze, die nicht reserviert werden können" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatPremium_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Premium" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Bediente Sitzplätze" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+					    
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatHandicap_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Handicap" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Rollstuhlplätze" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+					    					    
+					    <HBox>
+					      <children>
+					        <ImageView fitHeight="20.0" fitWidth="20.0">
+						      <image>
+						      	<Image url="/ch/ffhs/kino/images/seatSelected_small.png"/>
+						      </image>
+						 	</ImageView>
+					        <Label text="Meine Plätze" styleClass="legend-label">
+					          <tooltip>
+					            <Tooltip text="Sitzplätze für die Reservierung ausgewählt" />
+					          </tooltip>
+					        </Label>
+					      </children>
+					    </HBox>
+					    
+				  	</children>
+				  </HBox>
+				  
+		         <!-- Hier kommt die Leinwand -->        	
+		         <!-- <VBox alignment="CENTER" styleClass="screen" spacing="6">
+				  <children>
+				    <Rectangle width="400" height="6" styleClass="screen-canvas" />
+				    <Label text="Leinwand" styleClass="screen-label">
+				      <tooltip>
+				        <Tooltip text="Platzierung der Leinwand in Bezug auf Sitzplätze im Saal" />
+				      </tooltip>
+				    </Label>
+				  </children>
+				</VBox> -->
+
+				<!-- Sitzplatzplan (leider ist das Rendering zu wenig schnell, teilweise wird der rechte Teil reingerendert -->
+				<GridPane fx:id="hallGrid" style="-fx-border-width: 5; -fx-border-radius: 10; -fx-border-color: gray;"
+				          alignment="TOP_CENTER"
+				          prefHeight="9999"
+				          prefWidth="9999"
+				          hgap="2"
+				          vgap="2"/>
 	         </VBox>
 	         
 	      
-		      <!-- Column 1: Tickets (FARBE nur damit ich weiss, wie das Grid ist)-->
-		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-background-color:lightblue"> 
+		      <!-- Column 1: Tickets (FARBE nur damit ich weiss, wie das Grid ist  style="-fx-background-color:lightblue")-->
+		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"> 
 		      		<!-- Buchungstimer -->
-		      		<GridPane>
-						<children>				
-							<Label GridPane.rowIndex="0" GridPane.columnIndex="0" text="Buchungsvorgang läuft ab in " styleClass="h2"/>
-							<Label fx:id="timeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="h2"/>
-							<Button fx:id="buyButton" GridPane.rowIndex="0" GridPane.columnIndex="2" mnemonicParsing="false" text="Kaufen" GridPane.halignment="RIGHT" />
+		      		<GridPane prefHeight="94.0" prefWidth="400.0">
+						<children>			
+							<Label fx:id="labelNoTickets" GridPane.rowIndex="0"
+								   text="Keine Tickets ausgewählt" styleClass="h2" alignment="TOP_LEFT"/>	
 							
-							<!-- <Label text="Total : 50.00CHF" GridPane.columnIndex="1" GridPane.rowIndex="1" /> -->
+							<HBox fx:id="boxTimer" GridPane.rowIndex="0" alignment="CENTER_LEFT" spacing="10" style="-fx-min-width: 280px">
+								<Label text="Buchungsvorgang läuft ab in " styleClass="h2" style="-fx-padding: 15 5 15 15;"/>
+								<Label fx:id="timeLabel" styleClass="h2" style="-fx-padding: 15 0 15 0;-fx-min-width: 50px;"/>
+								<ImageView fitHeight="20.0" fitWidth="20.0">
+							      <image>
+							      	<Image url="/ch/ffhs/kino/images/timer.png"/>
+							      </image>
+							 	</ImageView>
+							 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
+									    styleClass="button-primary" GridPane.halignment="RIGHT" />
+						 	</HBox>
+						 	
+					        <HBox GridPane.rowIndex="1" minWidth="350" GridPane.halignment="RIGHT"
+					        	  alignment="CENTER" style="-fx-padding: 5 0 0 15;-fx-background-color:lightblue" >
+					        	<children>
+					        	<!-- <Region hgrow="ALWAYS"/> -->
+					        		<!-- <Button layoutX="104.0" layoutY="81.0" mnemonicParsing="false" text="Alle Tickets entfernen"> -->
+								    <Button fx:id="deleteTicketsButton" alignment="CENTER_RIGHT"
+								    		mnemonicParsing="false" text="Alle Tickets entfernen"
+								    		GridPane.halignment="RIGHT">
+								      <graphic>
+								        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+								          <image>
+								            <Image url="/ch/ffhs/kino/images/trash_50.png" />
+								          </image>
+								        </ImageView>
+								      </graphic>
+								    </Button>
+											
+							        <Button fx:id="addTicketButton" alignment="CENTER_RIGHT"
+							        		mnemonicParsing="false" text="Ticket hinzufügen" 
+											GridPane.halignment="RIGHT" >			
+										<graphic>
+								        	<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+								          	<image>
+								            	<Image url="/ch/ffhs/kino/images/add_white.png" />
+								          	</image>
+								        	</ImageView>
+								      	</graphic>
+								    </Button>
+								</children>
+			        		</HBox>	
+			        		
+			        		<!-- Tickets -->
+							<!-- TabelView geht nicht so gut -->
+					        <TableView fx:id="ticketTable" GridPane.rowIndex="2"/>
+				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="2" style="-fx-padding: 5 0 0 15;-fx-background-color:green"
+						          minWidth="350"
+						          prefHeight="0"
+					           	  prefWidth="900">
+					        </VBox>
+					        
 						</children>
 					</GridPane>
-					<!-- Tickets -->
-		      		<VBox fx:id="ticketGrid"
-				          alignment="TOP_LEFT"
-				          prefHeight="9999"
-			           	  prefWidth="9999">
-			        </VBox>	 
 		      </VBox>
-	      
+		      	      
 	     </HBox> 	
 		      
 		<!-- <AnchorPane GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3">

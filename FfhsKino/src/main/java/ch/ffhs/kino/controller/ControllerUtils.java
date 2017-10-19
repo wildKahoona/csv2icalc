@@ -23,7 +23,7 @@ public class ControllerUtils {
 					} else if (id.equals("bc_bezahlen")) {
 						Main.startTicketZahlen(null);
 					} else if (id.equals("bc_sitzplatz")) {
-						Main.startVorstellung(null);
+						Main.startVorstellung();
 
 					}
 

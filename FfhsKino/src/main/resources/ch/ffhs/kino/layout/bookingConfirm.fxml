@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?> 
+<?import javafx.collections.*?> 
+
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<?scenebuilder-stylesheet controlStyle.css?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.cell.CheckBoxListCell?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.Pane?>
+
+<GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.BookingConfirmController">
+	<children>
+		<!-- Breadcrumb (Zeile 1) -->
+		<HBox styleClass="breadcrumb" GridPane.rowIndex="0">
+			<children>
+				<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " />
+				<Label id="bc_vorstellung" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
+				<Label id="bc_sitzplatz" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
+				<Label id="bc_bezahlen" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+				<Label disable="false" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
+			</children>
+		</HBox>
+	
+		<!-- Title (Zeile 2) -->
+		<GridPane hgap="30.0" GridPane.rowIndex="1">
+			<children>
+				<Label text="Bestellbestätigung: " styleClass="h1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+				<Label fx:id="vorstellungChoice" text="z.B. Blade Runner 20.10.2017 18:30 Uhr..." styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+			</children>    
+		</GridPane>
+		<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+
+		<Label text="Vielen Dank für Ihre Bestellung." GridPane.rowIndex="3" styleClass="h2" />
+		<Label text="Ihre Tickets wurden Ihnen per E-Mail zugestellt. Bitte drucken Sie diese aus und nehmen Sie diese zu der Vorstellung mit." GridPane.rowIndex="4" styleClass="h2" />
+
+		<!-- TODO: Hie kommt noch das TicketControl mit allen Tickets (ohne Funktionen) -->
+	</children>
+
+
+
+
+</GridPane>
+

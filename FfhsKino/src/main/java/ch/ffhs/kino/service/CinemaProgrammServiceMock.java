@@ -8,14 +8,14 @@ import java.util.List;
 
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 import ch.ffhs.kino.model.Vorstellung;
-import ch.ffhs.kino.component.Seat;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
+import ch.ffhs.kino.model.Seat;
+import ch.ffhs.kino.model.Seat.SeatType;
 import ch.ffhs.kino.model.Show;
-import ch.ffhs.kino.model.TicketPrice;
 import ch.ffhs.kino.model.Show.ShowType;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
@@ -50,8 +50,8 @@ public class CinemaProgrammServiceMock {
 	private Show show7;
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
-	private List<TicketPrice> ticketPrices = new ArrayList<TicketPrice>();
 	private List<Booking> bookings = new ArrayList<Booking>();
+	private Booking currentReservation;
 	
 	public CinemaProgrammServiceMock() {
 
@@ -65,26 +65,33 @@ public class CinemaProgrammServiceMock {
 	public Vorstellung getVorstellung() {
 		return vorstellungen.get(0);
 	}
-
-	public List<TicketPrice> getTicketPrices() {
-		return ticketPrices;
-	}
 	
 	public Booking getBooking() {
-
 		Booking booking = new Booking();
-
 		booking.setEvent(getVorstellung());
-
 		return booking;
 	}
 
+	public Booking getCurrentReservation() {
+		return currentReservation;
+	}
+
+	public void setCurrentReservation(Booking currentReservation) {
+		this.currentReservation = currentReservation;
+	}
+	
 	public List<Booking> getBookings() {
 		return bookings;
 	}
 
 	public void setBookings(List<Booking> bookings) {
 		this.bookings = bookings;
+	}
+	
+	public void addBooking(Booking booking) {
+		List<Booking> bookings = getBookings();
+		bookings.add(booking);
+		setCurrentReservation(null);
 	}
 	
 	private void init() {
@@ -95,8 +102,6 @@ public class CinemaProgrammServiceMock {
 		initShows();
 		
 		initHalls();
-		
-		initPrices();
 
 		for (int i = 0; i < 200; i++) {
 
@@ -237,34 +242,38 @@ public class CinemaProgrammServiceMock {
 	private void initHalls()
 	{
 		// Kinosaal konfigurieren
-		hallRex1.configureSeatPlan(14, 10);
-		hallRex1.setSeatNotAvailable(5, 0);
-		hallRex1.setSeatNotAvailable(5, 1);
-		hallRex1.setSeatNotAvailable(5, 8);
-		hallRex1.setSeatNotAvailable(5, 9);
-
+		hallRex1.configureSeatPlan(11, 10);
+		// Nicht verfügbar
+		hallRex1.setSeatType(5, 0, SeatType.NONE);
+		hallRex1.setSeatType(5, 1, SeatType.NONE);
+		hallRex1.setSeatType(5, 8, SeatType.NONE);
+		hallRex1.setSeatType(5, 9, SeatType.NONE);			
+		// Handicap-Sitze
+		hallRex1.setSeatType(6, 0, SeatType.HANDYCAP);
+		hallRex1.setSeatType(6, 1, SeatType.HANDYCAP);
+		hallRex1.setSeatType(6, 8, SeatType.HANDYCAP);
+		hallRex1.setSeatType(6, 9, SeatType.HANDYCAP);		
+		// Premium-Sitze
+		hallRex1.setSeatType(8, 5, SeatType.PREMIUM);
+		hallRex1.setSeatType(8, 6, SeatType.PREMIUM);
+		hallRex1.setSeatType(8, 7, SeatType.PREMIUM);
+		hallRex1.setSeatType(8, 8, SeatType.PREMIUM);
+			
 		hallRex2.configureSeatPlan(15, 8);
 		hallRex3.configureSeatPlan(25, 15);
 	}
-	
-	private void initPrices()
-	{
-		// Preise
-		ticketPrices.add(new TicketPrice("Erwachsener", 19.00));
-		ticketPrices.add(new TicketPrice("Kind", 12.00));
-	}
-	
+		
 	private void initBookings() {
 		Booking booking = new Booking();
 		Vorstellung vorstellung = getVorstellung();
 		booking.setEvent(vorstellung);
 		
 		// Tickets von dieser Buchung
-		Ticket ticket1 = new Ticket(new Seat(3, 5, 35));
+		Ticket ticket1 = new Ticket(new Seat(3, 5));
 		ticket1.setTicketType(TicketType.ADULT);
-		Ticket ticket2 = new Ticket(new Seat(3, 6, 36));
+		Ticket ticket2 = new Ticket(new Seat(3, 6));
 		ticket2.setTicketType(TicketType.KIND);
-		Ticket ticket3 = new Ticket(new Seat(3, 7, 37));
+		Ticket ticket3 = new Ticket(new Seat(3, 7));
 		ticket3.setTicketType(TicketType.KIND);
 		
 		List<Ticket> tickets = new ArrayList<Ticket>();
@@ -280,5 +289,4 @@ public class CinemaProgrammServiceMock {
 	public Movie getMovie() {
 		return movie3;
 	}
-	
 }
