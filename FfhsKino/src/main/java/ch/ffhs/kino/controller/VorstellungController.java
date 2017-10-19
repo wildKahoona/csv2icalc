@@ -550,6 +550,17 @@ public class VorstellungController {
 	    
 		int aRow = lastSeat.getSeat().getSeatRow() + 1;
 		int aCol = lastSeat.getSeat().getSeatColumn() + 1;
+		
+		if(aCol==columns)//und Reihe hat keine freien Plätze mehr
+		{
+			if(aRow==rows)
+			{
+				aRow=aRow-1;
+			}else {
+				aRow=aRow+1;
+			}
+		}
+		
 		int actual = aRow * 10; // 30
 		
 	    for (int r = 0; r < rows; r++) {
