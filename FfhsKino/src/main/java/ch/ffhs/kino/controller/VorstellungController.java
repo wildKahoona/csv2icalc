@@ -536,6 +536,97 @@ public class VorstellungController {
 		clearSelectedSeats();
 	};
 	
+	private SeatView checkNeibourhut(SeatView seat, int rows, int columns) {
+		// TODO Auto-generated method stub
+		int row = seat.getSeat().getSeatRow();
+		int col = seat.getSeat().getSeatColumn();
+		Boolean checkLeft = true;
+		Boolean checkRight = true;
+		Boolean checkFront = true;
+		Boolean checkBack = true;
+		Boolean firstLeft = true;
+		
+		int middleCol = rows / 2;
+		
+		if(col < middleCol)
+			firstLeft = false;
+		
+		if(row == 0) {
+			checkFront = false;
+		}
+		
+		if(col == 0) {
+			checkLeft = false;
+		}
+		
+		if(row == (rows - 1)){
+			checkBack = false;
+		}
+		
+		if(col == (columns-1)) {
+			checkRight = false;
+		}
+		
+		// Rechts oder Links?
+//		int middleRow = rows % 2;
+//		int middleCol = columns % 2;
+		SeatView seatView;
+
+		if(firstLeft)
+		{
+			if(checkLeft) {
+				// Links
+				seatView = views[row][col-1];
+				if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
+					return seatView;
+				}			
+			}
+			
+			if(checkRight) {
+				// Rechts
+				seatView = views[row][col+1];
+				if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
+					return seatView;
+				}		
+			}
+		}else {
+			if(checkRight) {
+				// Rechts
+				seatView = views[row][col+1];
+				if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
+					return seatView;
+				}		
+			}
+			
+			if(checkLeft) {
+				// Links
+				seatView = views[row][col-1];
+				if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
+					return seatView;
+				}			
+			}
+		}
+		
+		if(checkBack) {
+			// Hinten
+			seatView = views[row+1][col];
+			if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
+				return seatView;
+			}			
+		}
+			
+		if(checkFront) {
+			// Vorne
+			seatView = views[row-1][col];
+			if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
+				return seatView;
+			}			
+		}
+		
+		// Alles rundherum besetzt - DEADLOCK nächsten Sitz nehmen
+		return views[row][col-1];
+	}
+	
     private EventHandler<ActionEvent> commandAddTicketHandler = (evt) -> {
     	// Ticket hinzufügen
     	SeatView lastSeat = selectedSeats.get(selectedSeats.size() - 1);
@@ -543,190 +634,201 @@ public class VorstellungController {
 		int rows = hall.getRows();
 	    int columns = hall.getColumns();
 	    
-	    int[] bestSeat = new int[3];
-	    bestSeat[0] = 0;
-		bestSeat[1] = 0;
-		bestSeat[2] = 1000;
-	    
-		int aRow = lastSeat.getSeat().getSeatRow() + 1;
-		int aCol = lastSeat.getSeat().getSeatColumn() + 1;
-		int actual = aRow * 10; // 30
-		
-	    for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < columns; c++) {
-            	SeatView seatView = views[r][c];
-            	if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
-            		// Könnte man nehmen
-            		if( (r+1) == 3 && (c+1) >= 3 && (c+1) < 6)
-            		{
-            			int i = 1;
-            			i++;
-            		}
-            		
-            		// Differenz zum aktuellen Sitz
-            		int calcRow = aRow - (r + 1);            		
-            		int calcCol = aCol - (c + 1);
-            		
-            		// Den Betrag vom Resultat nehmen
-//            		if(calcRow < 0)
-//            			calcRow = calcRow * (-1);
-//            		if(calcCol < 0)
-//            			calcCol = calcCol * (-1);
-            		
-            		// Berechnen
-            		int calc = calcRow * 10 + calcCol;            		
-            		int deltaCalc = calc - actual;
-            		if((r+1) == aRow)
-            			deltaCalc = deltaCalc + actual;
-            		
-            		if(deltaCalc < 0)
-            			deltaCalc = deltaCalc * (-1);
-            		
-            		if(deltaCalc < bestSeat[2]) {
-	            		bestSeat[0] = r;
-	            		bestSeat[1] = c;
-	            		bestSeat[2] = deltaCalc;           		
-            		}
-            	}
-            }
+	    SeatView bestSeat = checkNeibourhut(lastSeat, rows, columns);
+	    Boolean ok = false;
+	    while(!ok) {
+	    	bestSeat = checkNeibourhut(lastSeat, rows, columns);
+		    if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+		    	ok = true;
+		    }
 	    }
-    	
-	    SeatView nextSeat = views[bestSeat[0]][bestSeat[1]];
-	    nextSeat.select();
-	    //int actual = lastSeat.getSeat().getSeatRow() * 10 + lastSeat.getSeat().getSeatColumn();
+	    bestSeat.select();
 	    
-            
-    	
-    	
-//    	if(selectedSeats.size() == 0) return;
-//    	
-//    	int maxCol = 10;
-//    	
-//    	SeatView lastSeat = selectedSeats.get(selectedSeats.size() - 1);
-//    	int row = lastSeat.getSeat().getSeatRow();
-//    	int col = lastSeat.getSeat().getSeatColumn();
-//    	
-//    	// Links next: column vom Sitz - 1 (0 + 4 - 1 = 3)
-//    	// Rechts next: Anzahl colums - column vom Sitz (10 - 4 = 6)
-//    	
-//    	
-//    	Boolean goLinks = false;
-//    	Boolean leftSold = false;
-//    	Boolean isSeatFree = true;
-//    	
-//    	// Muss ich nach links?
-//    	// - wenn der letzte Platz von der Mitte rechts liegt
-//    	// - wenn der letzte Platz nicht am rechten Ende ist
-//    	// - wenn der nächste mögliche Platz frei ist
-//    	if(col > maxCol - col) {
-//    		if(col > 0)
-//    		{
-//    			SeatView nextSeat = views[row][col-1];	
-//    			if(nextSeat.getSold() || nextSeat.getIsSelected())
-//    				isSeatFree = false;
-//    			
-//    			goLinks = isSeatFree;
-////    			leftSold = nextSeat.getSold() || nextSeat.getIsSelected();
-////        		if(!leftSold) {
-////        			goLinks = true;
-////        		}
-//    		}
-//    	}
-//    	
-//    	// Muss ich nach rechts?
-//    	if(!goLinks && isSeatFree) {
-//	    	if(col < maxCol && col != 0)
-//			{
-//				SeatView nextSeat = views[row][col+1];
-//				if(nextSeat.getSold() || nextSeat.getIsSelected()) {
-//	    			goLinks = true;
-//	    		}
-//			}
-//    	}
-//    	
-//    	
-//    	if(goLinks) {
-//    		for(int c=col-1; c < views[row].length; c--) {
-//                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
-//    			
-//    			// Wenn frei
-//    			SeatView nextSeat = views[row][c];
-//    			System.out.println("Values at arr["+(row)+"]["+c+"] is " + views[(row)][c]);
-//            	nextSeat.select();
-//            	
-//            	lastSeat = nextSeat;
-//    			break;
+	    
+//	    int[] bestSeat = new int[3];
+//	    bestSeat[0] = 0;
+//		bestSeat[1] = 0;
+//		bestSeat[2] = 1000;
+//	    
+//		int aRow = lastSeat.getSeat().getSeatRow() + 1;
+//		int aCol = lastSeat.getSeat().getSeatColumn() + 1;
+//		int actual = aRow * 10; // 30
+//		
+//	    for (int r = 0; r < rows; r++) {
+//            for (int c = 0; c < columns; c++) {
+//            	SeatView seatView = views[r][c];
+//            	if(!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected()) {
+//            		// Könnte man nehmen
+//            		if( (r+1) == 3 && (c+1) >= 3 && (c+1) < 6)
+//            		{
+//            			int i = 1;
+//            			i++;
+//            		}
+//            		
+//            		// Differenz zum aktuellen Sitz
+//            		int calcRow = aRow - (r + 1);            		
+//            		int calcCol = aCol - (c + 1);
+//            		
+//            		// Den Betrag vom Resultat nehmen
+////            		if(calcRow < 0)
+////            			calcRow = calcRow * (-1);
+////            		if(calcCol < 0)
+////            			calcCol = calcCol * (-1);
+//            		
+//            		// Berechnen
+//            		int calc = calcRow * 10 + calcCol;            		
+//            		int deltaCalc = calc - actual;
+//            		if((r+1) == aRow)
+//            			deltaCalc = deltaCalc + actual;
+//            		
+//            		if(deltaCalc < 0)
+//            			deltaCalc = deltaCalc * (-1);
+//            		
+//            		if(deltaCalc < bestSeat[2]) {
+//	            		bestSeat[0] = r;
+//	            		bestSeat[1] = c;
+//	            		bestSeat[2] = deltaCalc;           		
+//            		}
+//            	}
 //            }
-//    	}else {
-//    		for(int c=col+1; c < views[row].length; c++) {
-//                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
-//    			
-//    			// Wenn frei
-//    			SeatView nextSeat = views[row][c];
-//    			System.out.println("Values at arr["+(row)+"]["+c+"] is " + views[(row)][c]);
-//            	nextSeat.select();
-//            	
-//            	lastSeat = nextSeat;
-//    			break;
-//            }
-//    	}
+//	    }
+//    	
+//	    SeatView nextSeat = views[bestSeat[0]][bestSeat[1]];
+//	    nextSeat.select();
+//	    //int actual = lastSeat.getSeat().getSeatRow() * 10 + lastSeat.getSeat().getSeatColumn();
+//	    
+//            
 //    	
 //    	
-//    	// Suche den besten Platz
-//    	for(int r=0; r < views.length; r++) {
-//            for(int c=0; c< views[r].length; c++) {
-//            	
-//            	
-//            	
-//                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
-//            }
-//        }
-//    	
-////    	Values at arr[0][0] is SeatView@6fd4129b[styleClass=image-view]
-////		Values at arr[0][1] is SeatView@2eb33627[styleClass=image-view]
-////		Values at arr[0][2] is SeatView@4d57d155[styleClass=image-view]
-////		Values at arr[0][3] is SeatView@58fe9ffb[styleClass=image-view]
-////		Values at arr[0][4] is SeatView@17f11eb5[styleClass=image-view]
-////		Values at arr[0][5] is SeatView@20c41062[styleClass=image-view]
-////		Values at arr[0][6] is SeatView@53eab056[styleClass=image-view]
-////		Values at arr[0][7] is SeatView@7f47ec97[styleClass=image-view]
-////		Values at arr[0][8] is SeatView@60dc517c[styleClass=image-view]
-////		Values at arr[0][9] is SeatView@609b0a05[styleClass=image-view]
-////		Values at arr[1][0] is SeatView@66757e40[styleClass=image-view]
-////		Values at arr[1][1] is SeatView@2616054d[styleClass=image-view]
-////		Values at arr[1][2] is SeatView@2443e742[styleClass=image-view]
-////		Values at arr[1][3] is SeatView@1cb00aed[styleClass=image-view]
-////		Values at arr[1][4] is SeatView@51faf045[styleClass=image-view]
-////		Values at arr[1][5] is SeatView@4750bb5a[styleClass=image-view]
-////		Values at arr[1][6] is SeatView@7c123d05[styleClass=image-view]
-////		Values at arr[1][7] is SeatView@6069b708[styleClass=image-view]
-////		Values at arr[1][8] is SeatView@66170b98[styleClass=image-view]
-////		Values at arr[1][9] is SeatView@245ff66b[styleClass=image-view]
-//    	
-//    	
-//    	
-//    	
-//    	
-////    	int number = firstSeat.getSeat().getSeatNumber();
-////    	SeatView nextSeat = views[row][col+1];
-////    	nextSeat.select();
-//    	
-////    	selectedSeats.add(nextSeat);
-////    	Seat seat = nextSeat.getSeat();
-////    	Ticket ticket = new Ticket(seat);
-////  	  	ticketData.add(ticket);
-//  	  
-//  	  //SeatType[][] seatPlan = hall.getSeatPlan();
-//  	  
-////    	Booking booking = new Booking();
-////    	booking.setEvent(vorstellung);
-////    	booking.setTickets(ticketData);
-////    	try {
-////			Main.startTicketZahlen(booking);
-////		} catch (IOException e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
+////    	if(selectedSeats.size() == 0) return;
+////    	
+////    	int maxCol = 10;
+////    	
+////    	SeatView lastSeat = selectedSeats.get(selectedSeats.size() - 1);
+////    	int row = lastSeat.getSeat().getSeatRow();
+////    	int col = lastSeat.getSeat().getSeatColumn();
+////    	
+////    	// Links next: column vom Sitz - 1 (0 + 4 - 1 = 3)
+////    	// Rechts next: Anzahl colums - column vom Sitz (10 - 4 = 6)
+////    	
+////    	
+////    	Boolean goLinks = false;
+////    	Boolean leftSold = false;
+////    	Boolean isSeatFree = true;
+////    	
+////    	// Muss ich nach links?
+////    	// - wenn der letzte Platz von der Mitte rechts liegt
+////    	// - wenn der letzte Platz nicht am rechten Ende ist
+////    	// - wenn der nächste mögliche Platz frei ist
+////    	if(col > maxCol - col) {
+////    		if(col > 0)
+////    		{
+////    			SeatView nextSeat = views[row][col-1];	
+////    			if(nextSeat.getSold() || nextSeat.getIsSelected())
+////    				isSeatFree = false;
+////    			
+////    			goLinks = isSeatFree;
+//////    			leftSold = nextSeat.getSold() || nextSeat.getIsSelected();
+//////        		if(!leftSold) {
+//////        			goLinks = true;
+//////        		}
+////    		}
+////    	}
+////    	
+////    	// Muss ich nach rechts?
+////    	if(!goLinks && isSeatFree) {
+////	    	if(col < maxCol && col != 0)
+////			{
+////				SeatView nextSeat = views[row][col+1];
+////				if(nextSeat.getSold() || nextSeat.getIsSelected()) {
+////	    			goLinks = true;
+////	    		}
+////			}
+////    	}
+////    	
+////    	
+////    	if(goLinks) {
+////    		for(int c=col-1; c < views[row].length; c--) {
+////                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
+////    			
+////    			// Wenn frei
+////    			SeatView nextSeat = views[row][c];
+////    			System.out.println("Values at arr["+(row)+"]["+c+"] is " + views[(row)][c]);
+////            	nextSeat.select();
+////            	
+////            	lastSeat = nextSeat;
+////    			break;
+////            }
+////    	}else {
+////    		for(int c=col+1; c < views[row].length; c++) {
+////                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
+////    			
+////    			// Wenn frei
+////    			SeatView nextSeat = views[row][c];
+////    			System.out.println("Values at arr["+(row)+"]["+c+"] is " + views[(row)][c]);
+////            	nextSeat.select();
+////            	
+////            	lastSeat = nextSeat;
+////    			break;
+////            }
+////    	}
+////    	
+////    	
+////    	// Suche den besten Platz
+////    	for(int r=0; r < views.length; r++) {
+////            for(int c=0; c< views[r].length; c++) {
+////            	
+////            	
+////            	
+////                //System.out.println("Values at arr["+r+"]["+c+"] is " + views[r][c]);
+////            }
+////        }
+////    	
+//////    	Values at arr[0][0] is SeatView@6fd4129b[styleClass=image-view]
+//////		Values at arr[0][1] is SeatView@2eb33627[styleClass=image-view]
+//////		Values at arr[0][2] is SeatView@4d57d155[styleClass=image-view]
+//////		Values at arr[0][3] is SeatView@58fe9ffb[styleClass=image-view]
+//////		Values at arr[0][4] is SeatView@17f11eb5[styleClass=image-view]
+//////		Values at arr[0][5] is SeatView@20c41062[styleClass=image-view]
+//////		Values at arr[0][6] is SeatView@53eab056[styleClass=image-view]
+//////		Values at arr[0][7] is SeatView@7f47ec97[styleClass=image-view]
+//////		Values at arr[0][8] is SeatView@60dc517c[styleClass=image-view]
+//////		Values at arr[0][9] is SeatView@609b0a05[styleClass=image-view]
+//////		Values at arr[1][0] is SeatView@66757e40[styleClass=image-view]
+//////		Values at arr[1][1] is SeatView@2616054d[styleClass=image-view]
+//////		Values at arr[1][2] is SeatView@2443e742[styleClass=image-view]
+//////		Values at arr[1][3] is SeatView@1cb00aed[styleClass=image-view]
+//////		Values at arr[1][4] is SeatView@51faf045[styleClass=image-view]
+//////		Values at arr[1][5] is SeatView@4750bb5a[styleClass=image-view]
+//////		Values at arr[1][6] is SeatView@7c123d05[styleClass=image-view]
+//////		Values at arr[1][7] is SeatView@6069b708[styleClass=image-view]
+//////		Values at arr[1][8] is SeatView@66170b98[styleClass=image-view]
+//////		Values at arr[1][9] is SeatView@245ff66b[styleClass=image-view]
+////    	
+////    	
+////    	
+////    	
+////    	
+//////    	int number = firstSeat.getSeat().getSeatNumber();
+//////    	SeatView nextSeat = views[row][col+1];
+//////    	nextSeat.select();
+////    	
+//////    	selectedSeats.add(nextSeat);
+//////    	Seat seat = nextSeat.getSeat();
+//////    	Ticket ticket = new Ticket(seat);
+//////  	  	ticketData.add(ticket);
+////  	  
+////  	  //SeatType[][] seatPlan = hall.getSeatPlan();
+////  	  
+//////    	Booking booking = new Booking();
+//////    	booking.setEvent(vorstellung);
+//////    	booking.setTickets(ticketData);
+//////    	try {
+//////			Main.startTicketZahlen(booking);
+//////		} catch (IOException e) {
+//////			// TODO Auto-generated catch block
+//////			e.printStackTrace();
+//////		}
     };
     
     private EventHandler<ActionEvent> commandBuyHandler = (evt) -> {
@@ -743,6 +845,8 @@ public class VorstellungController {
 			e.printStackTrace();
 		}
     };
+
+
 
 // Suche im GridPane
 //    SeatView seat = null;
