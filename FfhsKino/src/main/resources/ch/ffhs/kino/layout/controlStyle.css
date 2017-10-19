@@ -56,24 +56,24 @@
 }
 
 .screen {
-  -fx-padding: 30px 0 10px;
+  -fx-padding: 30.0px 0.0 10.0px;
 }
 
 .screen-canvas {
-  -fx-arc-width: 6px;
-  -fx-arc-height: 6px;
+  -fx-arc-width: 6.0px;
+  -fx-arc-height: 6.0px;
   -fx-fill: #9365B8;
   -fx-stroke: #553982;
 }
 
 .seat {
-  -fx-arc-width: 4px;
-  -fx-arc-height: 4px;
+  -fx-arc-width: 4.0px;
+  -fx-arc-height: 4.0px;
   -fx-fill: #a5a5a5;
   -fx-stroke: #8b8b8b;
 }
 .seat:hover {
-  -fx-effect: dropshadow(gaussian, #54acd2, 1, 1, 0, 0);
+  -fx-effect: dropshadow(gaussian, #54acd2, 1.0, 1.0, 0.0, 0.0);
 }
 
 .seat-selected {
@@ -94,7 +94,7 @@
   /*-fx-fill: #d14841;*/
   /*-fx-stroke: #B8312F;*/	
   /*-fx-background-color: skyblue, derive(skyblue, 25%);*/	
-  -fx-background-insets: -20, -10;
+  -fx-background-insets: -20.0, -10.0;
   /*-fx-background-image: url("/ch/ffhs/kino/images/FSK_ab_16.png");*/	
   -fx-background-image: url("/images/FSK_ab_16.png");
   -fx-background-position: left top, center;
@@ -107,8 +107,8 @@
 }
 
 .legend-label {
-  -fx-pref-height: 20px;
-  -fx-padding: 0 0 0 10px;
+  -fx-pref-height: 20.0px;
+  -fx-padding: 0.0 0.0 0.0 10.0px;
 }
 
 .button-primary {
@@ -118,7 +118,6 @@
 
 #content{
 		-fx-padding: 15.0 ;   
-		-fx-background-image: url("images/background.jpg");
 		-fx-background-repeat: stretch;   
 		
 		
@@ -141,8 +140,13 @@
 
 #content{
 		-fx-padding: 15.0 ;   
-		-fx-background-image: url("images/background.jpg");
 		-fx-background-repeat: stretch;   
-		
-		
 } 
+
+
+#ODD{
+	-fx-background-color: blue;
+}
+#EVEN{
+	-fx-background-color: green;
+}
