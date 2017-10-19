@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.shape.Rectangle;
 
+
 public class SeatOLD extends Rectangle {
 
 	public enum SeatType {
@@ -25,6 +26,7 @@ public class SeatOLD extends Rectangle {
 	 */
 	private BooleanProperty sold = new SimpleBooleanProperty(false);
 	
+
 	public SeatOLD(Integer seatRow, Integer seatColumn, Integer seatNumber) {
 		this.seatRow = seatRow + 1;
 		this.setSeatColumn(seatColumn + 1);

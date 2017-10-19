@@ -184,7 +184,6 @@ public class TicketZahlenController {
 			Main.cinemaProgrammService.addBooking(booking);
 			Main.startBookingConfirm(booking);	
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

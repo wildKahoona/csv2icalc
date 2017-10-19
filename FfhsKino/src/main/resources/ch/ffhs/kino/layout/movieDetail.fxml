@@ -101,9 +101,9 @@
 					</children>
 				</VBox>
 				<!-- Trailer -->
-				<VBox fx:id="trailerContainer" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3">
+				<VBox fx:id="trailerContainer" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="TOP_RIGHT">
 					<children>
-						<Label onMouseClicked="#closeTrailer" styleClass="rightOriented" text="X" />
+						<Button onMouseClicked="#closeTrailer"  alignment="TOP_RIGHT"  text="X"  />
 						<WebView fx:id="movieTrailerView" />
 					</children>
 				</VBox>
