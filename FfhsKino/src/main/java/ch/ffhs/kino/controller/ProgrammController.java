@@ -7,45 +7,36 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ch.ffhs.kino.component.ProgrammTableColumnFactory;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.table.model.ProgrammTableModel;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
-
 /**
- * TODO: Denis: Movies gruppieren
- * TODO: Denis: Richtige Zeiten anzeigen
- * FIXME: Methode implementieren die Zeiten nach Saal Movie und Sprache zurückgibt  Denis Bittante
+ * TODO: Denis: Movies gruppieren TODO: Denis: Richtige Zeiten anzeigen FIXME:
+ * Methode implementieren die Zeiten nach Saal Movie und Sprache zurückgibt
+ * Denis Bittante
  */
 public class ProgrammController {
 
-	
 	@FXML
 	TableView<ProgrammTableModel> programmtable;
 
@@ -99,8 +90,7 @@ public class ProgrammController {
 
 	private void initTable() {
 
-		TableColumn<ProgrammTableModel, ProgrammTableModel> filmCol = createFilmColumn();
-		programmtable.getColumns().add(filmCol);
+		programmtable.getColumns().add(ProgrammTableColumnFactory.createColumnCinema());
 
 		createWeekColumns();
 
@@ -179,90 +169,6 @@ public class ProgrammController {
 					});
 			programmtable.getColumns().add(column);
 		}
-	}
-
-	private TableColumn<ProgrammTableModel, ProgrammTableModel> createFilmColumn() {
-		// https://stackoverflow.com/questions/16360323/javafx-table-how-to-add-components
-		TableColumn<ProgrammTableModel, ProgrammTableModel> filmCol = new TableColumn<>("Film");
-		filmCol.setMinWidth(220);
-		filmCol.setCellValueFactory(
-				new Callback<CellDataFeatures<ProgrammTableModel, ProgrammTableModel>, ObservableValue<ProgrammTableModel>>() {
-					@Override
-					public ObservableValue<ProgrammTableModel> call(
-							CellDataFeatures<ProgrammTableModel, ProgrammTableModel> features) {
-						return new ReadOnlyObjectWrapper(features.getValue());
-					}
-				});
-
-		filmCol.setCellFactory(
-				new Callback<TableColumn<ProgrammTableModel, ProgrammTableModel>, TableCell<ProgrammTableModel, ProgrammTableModel>>() {
-					@Override
-					public TableCell<ProgrammTableModel, ProgrammTableModel> call(
-							TableColumn<ProgrammTableModel, ProgrammTableModel> btnCol) {
-						return new TableCell<ProgrammTableModel, ProgrammTableModel>() {
-
-							@Override
-							public void updateItem(final ProgrammTableModel programm, boolean empty) {
-								super.updateItem(programm, empty);
-								if (programm != null) {
-
-									final Hyperlink title = setFilmGraphics(programm);
-									title.getProperties().put("movie", programm.getMovie());
-
-									title.setOnAction(new EventHandler<ActionEvent>() {
-										@Override
-										public void handle(ActionEvent event) {
-											// nicht die beste Lösung ..
-											for (Vorstellung vorstellung : filteredVorstellungen) {
-												if (vorstellung.getShow().getMovie().getTitle()
-														.equals(((Hyperlink) event.getSource()).getText())) {
-													try {
-														Main.startMovieDetail(vorstellung.getShow().getMovie());
-													} catch (IOException e) {
-													// do nothing else
-														e.printStackTrace();
-													}
-													break;
-												}
-											}
-										}
-									});
-								} else {
-									setGraphic(null);
-								}
-							}
-
-							private Hyperlink setFilmGraphics(final ProgrammTableModel programm) {
-								final GridPane infos = new GridPane();
-
-								final Label genre = new Label();
-								genre.setText(new String(programm.getGenre()));
-
-								final Hyperlink title = new Hyperlink();
-								title.setText(new String(programm.getFilm()));
-
-								if (programm.getThreeD()) {
-									Image value = new Image(
-											getClass().getResourceAsStream("/ch/ffhs/kino/images/3d.png"));
-									final ImageView threeDImage = new ImageView(value);
-
-									threeDImage.prefHeight(30);
-									threeDImage.setFitHeight(30.0);
-									threeDImage.prefWidth(30);
-									threeDImage.setFitWidth(30);
-
-									infos.add(threeDImage, 1, 0);
-								}
-
-								infos.add(title, 0, 0);
-								infos.add(genre, 0, 1);
-								setGraphic(infos);
-								return title;
-							}
-						};
-					}
-				});
-		return filmCol;
 	}
 
 	protected void initRows() {
