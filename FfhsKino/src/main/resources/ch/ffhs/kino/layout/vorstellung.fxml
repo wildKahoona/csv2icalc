@@ -168,18 +168,7 @@
 									    styleClass="button-primary" GridPane.halignment="RIGHT" />
 						 	</HBox>
 						 	
-							<!-- Tickets -->
-							<!-- TabelView geht nicht so gut -->
-					        <TableView fx:id="ticketTable" GridPane.rowIndex="1"/>
-				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="1" style="-fx-padding: 5 0 0 15;-fx-background-color:green"
-						          alignment="TOP_LEFT"
-						          minWidth="350"
-						          prefHeight="0"
-					           	  prefWidth="900">
-					        </VBox>
-					        
-					        
-					        <HBox GridPane.rowIndex="2" minWidth="350" GridPane.halignment="RIGHT"
+					        <HBox GridPane.rowIndex="1" minWidth="350" GridPane.halignment="RIGHT"
 					        	  alignment="CENTER" style="-fx-padding: 5 0 0 15;-fx-background-color:lightblue" >
 					        	<children>
 					        	<!-- <Region hgrow="ALWAYS"/> -->
@@ -209,6 +198,16 @@
 								    </Button>
 								</children>
 			        		</HBox>	
+			        		
+			        		<!-- Tickets -->
+							<!-- TabelView geht nicht so gut -->
+					        <TableView fx:id="ticketTable" GridPane.rowIndex="2"/>
+				      		<VBox fx:id="ticketGrid" GridPane.rowIndex="2" style="-fx-padding: 5 0 0 15;-fx-background-color:green"
+						          minWidth="350"
+						          prefHeight="0"
+					           	  prefWidth="900">
+					        </VBox>
+					        
 						</children>
 					</GridPane>
 		      </VBox>
