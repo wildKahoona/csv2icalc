@@ -16,13 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 	private static Stage primaryStage; // **Declare static Stage**
-	private static final int STAGE_WIDTH = 1100;
 	private static final String CSS = "ch/ffhs/kino/layout/controlStyle.css";
 	public static final CinemaProgrammServiceMock cinemaProgrammService = new CinemaProgrammServiceMock();
 
@@ -40,17 +38,20 @@ public class Main extends Application {
 
 	}
 
-	static {
-		Font.loadFont(Main.class.getResource("/ch/ffhs/kino/layout/font/fontawesome-webfont.ttf").toExternalForm(), 10);
-	}
-
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		setPrimaryStage(primaryStage);
+
+		primaryStage.setMinWidth(480.0);
+		primaryStage.setMinHeight(600.0);
+
+		primaryStage.setHeight(800);
+		primaryStage.setWidth(1200);
+
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
-		//startKinoProgramm();
+		// startKinoProgramm();
 		startMovieShow(cinemaProgrammService.getVorstellung());
 		// startPayment(cinemaProgrammService.getBooking());
 		// startBookingConfirm(cinemaProgrammService.getBooking());
@@ -87,7 +88,6 @@ public class Main extends Application {
 		primaryStage.setTitle("Kino REX - Vorstellung");
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/movieShow.fxml"));
 		Scene scene = new Scene((GridPane) loader.load());
-		primaryStage.setMinWidth(900.0);
 		show(scene);
 
 	}
@@ -98,28 +98,16 @@ public class Main extends Application {
 		Scene scene = new Scene((Pane) loader.load());
 		show(scene);
 	}
-	
-//	public static void startVorstellung() throws IOException {
-//		primaryStage.setTitle("Kino REX - Vorstellung");
-//		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/vorstellung.fxml"));
-//		Scene scene = new Scene((GridPane) loader.load());
-//
-//		// Parameterübergabe
-//		VorstellungController controller = loader.<VorstellungController>getController();
-//		controller.setVorstellung(cinemaProgrammService.getCurrentReservation());
-//		show(scene);
-//
-//	}
-	
-	
-	
-//	public static void startTicketZahlen(Booking booking) throws IOException {
-//		primaryStage.setTitle("Kino REX - Ticket");
-//		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/payment.fxml"));
-//		Scene scene = new Scene((Pane) loader.load());
-//		PaymentController controller = loader.<PaymentController>getController();
-//		show(scene);
-//	}
+
+	// public static void startTicketZahlen(Booking booking) throws IOException
+	// {
+	// primaryStage.setTitle("Kino REX - Ticket");
+	// FXMLLoader loader = new
+	// FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/payment.fxml"));
+	// Scene scene = new Scene((Pane) loader.load());
+	// PaymentController controller = loader.<PaymentController>getController();
+	// show(scene);
+	// }
 
 	public static void startBookingConfirm(Booking booking) throws IOException {
 		primaryStage.setTitle("Kino REX - Ticket");
@@ -131,17 +119,10 @@ public class Main extends Application {
 		controller.setBooking(booking);
 		show(scene);
 	}
-	
+
 	private static void show(Scene scene) {
-		primaryStage.setWidth(STAGE_WIDTH);
 		scene.getStylesheets().add(CSS);
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(480.0);
-		primaryStage.setMinHeight(600.0);
-		primaryStage.setMaxWidth(1980.0);
-		primaryStage.setMaxHeight(900.0);
-		primaryStage.setHeight(800);
-		primaryStage.setWidth(1200);
 
 		primaryStage.show();
 	}
