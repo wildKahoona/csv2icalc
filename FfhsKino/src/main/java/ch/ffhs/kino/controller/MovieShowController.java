@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketRow;
+import ch.ffhs.kino.component.TicketTable;
 import ch.ffhs.kino.component.TimerAnimation;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
@@ -53,6 +54,9 @@ public class MovieShowController {
 	
 	@FXML
 	private VBox gridTickets;	
+	
+	@FXML
+	private VBox gridSum;
 		
 	@FXML
 	private Label lbTimer;
@@ -116,13 +120,11 @@ public class MovieShowController {
 	}
 	
 	private void setTitle() {
-		//Vorstellung event = booking.getEvent();
-		Vorstellung event = Main.cinemaProgrammService.getVorstellung();
-		String movieTitle = event.getShow().getMovie().getTitle();
-		String movieLanguage = event.getShow().getLanguage().getText();
+		String movieTitle = movieShow.getShow().getMovie().getTitle();
+		String movieLanguage = movieShow.getShow().getLanguage().getText();
 				
 		SimpleDateFormat fmt = new SimpleDateFormat("E dd MMM yyyy HH:mm");		
-		lbMovieShow.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(event.getDate()) + ", " + event.getHall().getHallName());
+		lbMovieShow.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(movieShow.getDate()) + ", " + getHall().getHallName());
 	}
 
 
@@ -178,8 +180,8 @@ public class MovieShowController {
 		        	if (newValue) {
 			        	  if(selectedSeats.size() == 0)
 			        		  timerAnimation.startTimeAnimation();
-			        	//StartTimeAnimation();
 			        	  selectedSeats.add(view);
+			        	  
 			        	  // Ticket für diesen Sitzplatz hinzufügen
 			        	  if(autoTicketOn)
 			        	  {
@@ -191,7 +193,6 @@ public class MovieShowController {
 			            this.selectedSeats.remove(view);
 			            if(selectedSeats.size() == 0)
 			            	timerAnimation.stopTimeAnimation();
-			            	//StopTimeAnimation();
 			            
 			            // Ticket aus der Liste entfernen
 			            Optional<Ticket> removeTicket = ticketData.stream().
@@ -252,37 +253,9 @@ public class MovieShowController {
 		}
 	}
 	  
-	private void renderTicketTable() {		
-		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
-
-		ticketData.addListener((ListChangeListener<Ticket>) change -> {
-			gridTickets.getChildren().clear();
-
-			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
-			tickets.sort((lhs, rhs) -> {
-		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
-		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
-		        } else {
-		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
-		        }
-		    }); 
-			
-			TicketRow sumRow = new TicketRow(ticketData);
-			sumRow.createSumView(tickets);
-			gridTickets.getChildren().add(sumRow);
-			
-			// Pro Ticket eine Zeile erstellen
-			for(Ticket ticket : tickets) {	
-				TicketRow ticketRow = new TicketRow(ticketData);
-				TicketRow.setTrashImage(trash);
-				ticketRow.setTicket(ticket);
-				ticketRow.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-				        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
-				ticketRow.createTicketView(seatView);
-				gridTickets.getChildren().add(ticketRow);	
-			}
-		});
+	private void renderTicketTable() {			
+		TicketTable table = new TicketTable(ticketData, gridTickets);
+		table.createTicketListener(seatView, gridTickets);
 	}
 	
 	@FXML

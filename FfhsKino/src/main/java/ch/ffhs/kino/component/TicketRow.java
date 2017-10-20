@@ -1,19 +1,9 @@
 package ch.ffhs.kino.component;
 
-import java.util.EnumMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-
-import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -26,72 +16,52 @@ import javafx.util.StringConverter;
 
 public class TicketRow extends HBox {
 
-	static Image imgTrash = null;
 	private Ticket ticket;
-	private ObservableList<Ticket> ticketData;
-
-    public static void setTrashImage(Image image) { 
-    	imgTrash = image; 
-    }
-    
-    public TicketRow(ObservableList<Ticket> ticketData) {
-    	this.ticketData = ticketData;
-    }
-    
-	public Ticket getTicket() {
-		return ticket;
+	private Button btnDelteTicket;
+	private ComboBox<TicketType> cbTicketType;
+  
+	public TicketRow() {
+		this.setAlignment(Pos.CENTER_LEFT);
+		//this.setMaxWidth(350.00);
+		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+		        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+		        + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 380px");
 	}
-
-	public void setTicket(Ticket ticket) {
+	
+	public TicketRow(Ticket ticket) {
 		this.ticket = ticket;
+		this.setAlignment(Pos.CENTER_LEFT);
+		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+		        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+		        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
+		this.setAlignment(Pos.CENTER_LEFT);
 	}
 	
 	@FXML
 	protected void initialize() {
 	}
 
-	public void createSumView(List<Ticket> tickets) {
-		this.setAlignment(Pos.CENTER_LEFT);
-		
-		//this.setMaxWidth(350.00);
-		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-		        + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 380px");		
-		
-		// Pro TicketType die Anzahl zählen
-		EnumMap<TicketType, Long> map = new EnumMap<>(TicketType.class);
-		tickets.forEach(t->map.merge(t.getTicketType(), 1L, Long::sum));
-		String countText = map.entrySet().stream().map(c -> c.getKey().getTitle() + " " + c.getValue()).collect(Collectors.joining(", "));			
-		Label labelCount = new Label();
-		//labelCount.setMaxWidth(200);
-		labelCount.setWrapText(true);
-		labelCount.setText(countText);
-		labelCount.setStyle("-fx-min-width: 200px;-fx-max-width: 200px");
-		this.getChildren().add(labelCount);
-		
-		// Summe der Tickets auflisten
-		Double sum = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
-		String sumPrice = String.format(Locale.ROOT, "%.2f", sum);
-		Label sumPriceLabel = new Label();
-		sumPriceLabel.setText("Total: " + sumPrice + " CHF");
-		sumPriceLabel.setStyle("-fx-min-width: 160px;-fx-font-weight: bold; -fx-font-size: 11pt;");
-		this.getChildren().add(sumPriceLabel);		
-	}
-	
-	public void createTicketView(SeatView[][] seatView) {
-		
-		this.setAlignment(Pos.CENTER_LEFT);
-
-		// Information zum Sitz (Reihe, Nummer)
+	public void addSeatInfo() {
 		Label label = new Label();
 		label.setText(ticket.getSeat().toString());
 		label.setMinWidth(120);
 		this.getChildren().add(label);
-		
-		// Auswahl für den Ticket-Typ
-		ComboBox<TicketType> cbxTicketType = new ComboBox<>();
-		cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));
-		cbxTicketType.setConverter(new StringConverter<TicketType>() {
+	}
+	
+	public void addPriceInfo() {
+		String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
+		Label labelPrice = new Label();
+		labelPrice.setText(price + " CHF");
+		labelPrice.setStyle("-fx-background-color:lightblue");
+		labelPrice.setMinWidth(100);
+		labelPrice.setAlignment(Pos.CENTER);
+		this.getChildren().add(labelPrice);
+	}
+	
+	public void addTicketTypeChoice() {
+		cbTicketType = new ComboBox<>();
+		cbTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));
+		cbTicketType.setConverter(new StringConverter<TicketType>() {
 		    @Override
 		    public String toString(TicketType object) {
 		        return object.getTitle();
@@ -102,47 +72,34 @@ public class TicketRow extends HBox {
 		        return null;
 		    }
 		});
-		cbxTicketType.getSelectionModel().select(ticket.getTicketType());
-		cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
-		    @Override
-		    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
-		        if(newValue != null){
-		        	// unschön, aber es funktioniert (vergeblich mit eigenem UserControl und fxml rumgedoktert)
-		        	ticket.setTicketType(newValue);
-		        	ticketData.remove(ticket);
-		        	ticketData.add(ticket);
-		        }
-		    }
-		});							
-		this.getChildren().add(cbxTicketType);
-		
-		// Preis
-		String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
-		Label labelPrice = new Label();
-		labelPrice.setText(price + " CHF");
-		labelPrice.setStyle("-fx-background-color:lightblue");
-		labelPrice.setMinWidth(100);
-		labelPrice.setAlignment(Pos.CENTER);
-		this.getChildren().add(labelPrice);
-		
-		// Delete Button mit Bild
-		Button deleteButton = new Button();
-		deleteButton.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");		
+		cbTicketType.getSelectionModel().select(ticket.getTicketType());
+		this.getChildren().add(cbTicketType);
+	}
+	
+	public void addDeleteButton(Image image) {
+		btnDelteTicket = new Button();
+		btnDelteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");		
 		ImageView imageView = new ImageView();
-		imageView.setImage(imgTrash);
+		imageView.setImage(image);
 		imageView.setFitWidth(23);
 		imageView.setFitHeight(23);
-		deleteButton.setGraphic(imageView);
-		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override public void handle(ActionEvent e) {
-		    	Seat seat = ticket.getSeat();
-		    	SeatView view = seatView[seat.getSeatRow()][seat.getSeatColumn()];
-		    	if(view != null) {
-		    		view.deselect();
-			    	ticketData.remove(ticket);
-		    	}
-		    }
-		});
-		this.getChildren().add(deleteButton);
+		btnDelteTicket.setGraphic(imageView);
+		this.getChildren().add(btnDelteTicket);
+	}
+	
+	public ComboBox<TicketType> getCbTicketType() {
+		return cbTicketType;
+	}
+
+	public void setCbTicketType(ComboBox<TicketType> cbTicketType) {
+		this.cbTicketType = cbTicketType;
+	}
+
+	public Button getBtnDelteTicket() {
+		return btnDelteTicket;
+	}
+
+	public void setBtnDelteTicket(Button btnDelteTicket) {
+		this.btnDelteTicket = btnDelteTicket;
 	}
 }

@@ -119,8 +119,10 @@
 			  
 			 </HBox>
 			
-			<!-- Kinosaal -->
-			<GridPane fx:id="gridHall" GridPane.rowIndex="2" style="-fx-border-width: 5; -fx-border-radius: 10; -fx-border-color: gray;"
+			<!-- Kinosaal style="-fx-min-width: 380px;-fx-border-width: 5; -fx-border-radius: 10; -fx-border-color: gray;"-->
+			<!-- TODO: hier fehlt noch die Leinwand -->
+			<GridPane fx:id="gridHall" GridPane.rowIndex="2" 
+					  style="-fx-min-width: 100px;-fx-max-width: 500px;-fx-background-color:lightgray;"
 				      alignment="TOP_CENTER"
 				      prefHeight="2000"
 				      prefWidth="2000"
@@ -185,7 +187,7 @@
 		   </HBox> 
 
 			<!-- Tickets -->
-			<VBox fx:id="gridTickets" GridPane.rowIndex="2" />
+			<VBox fx:id="gridTickets" GridPane.rowIndex="2" style="-fx-min-width: 380px;"/>
 
 	    </GridPane>
 	    
