@@ -5,7 +5,21 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.CheckBox?>
-<GridPane id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.ProgrammController">
+<GridPane  id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.ProgrammController">
+
+	<columnConstraints>
+		<ColumnConstraints hgrow="ALWAYS" />
+		<ColumnConstraints hgrow="ALWAYS" />
+		<ColumnConstraints hgrow="ALWAYS" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+	</rowConstraints>
 
 	<!-- Breadcrumb -->
 	<HBox styleClass="breadcrumb" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
@@ -40,7 +54,9 @@
 		<Button text="Suchen" onMouseClicked="#search" />
 	</HBox>
 
-
-
-	<TableView fx:id="programmtable" GridPane.rowIndex="5" GridPane.columnSpan="2" />
+	<TableView fx:id="programmtable" GridPane.rowIndex="5" GridPane.columnSpan="2" GridPane.fillWidth="true" GridPane.fillHeight="true" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+		<columnResizePolicy>
+			<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+		</columnResizePolicy>
+	</TableView>
 </GridPane>

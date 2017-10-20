@@ -55,9 +55,6 @@
 	
 }
 
-.screen {
-  -fx-padding: 30.0px 0.0 10.0px;
-}
 
 .screen-canvas {
   -fx-arc-width: 6.0px;
@@ -116,37 +113,30 @@
   -fx-text-fill: #fff;
 }
 
-#content{
-		-fx-padding: 15.0 ;   
-		-fx-background-repeat: stretch;   
-		
-		
-} 
 
 .infoLabel{
 	-fx-font-weight: bold;
+}
+
+
+
+#content{
+		-fx-padding: 15.0 ;   
+} 
+
+
+#ODD{
+	-fx-background-color: white;
+}
+#EVEN{
+	-fx-background-color: #ececec;
 }
 
 .table-row-cell:selected {
    -fx-background-color: #FFE4e1; 
 }
 
-
-
 .table-row-cell:selected .text {
        -fx-fill: #800000  ;
 
-}
-
-#content{
-		-fx-padding: 15.0 ;   
-		-fx-background-repeat: stretch;   
-} 
-
-
-#ODD{
-	-fx-background-color: blue;
-}
-#EVEN{
-	-fx-background-color: green;
 }

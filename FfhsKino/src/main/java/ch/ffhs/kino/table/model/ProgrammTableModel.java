@@ -1,7 +1,11 @@
 package ch.ffhs.kino.table.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Vorstellung;
@@ -10,12 +14,31 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class ProgrammTableModel {
 
+	public HashMap<String, List<Vorstellung>> getTimes() {
+		return times;
+	}
+
+	public void setTimes(HashMap<String, List<Vorstellung>> times) {
+		this.times = times;
+	}
+
 	private SimpleStringProperty film;
 	private SimpleStringProperty sprache;
 	private SimpleStringProperty saal;
 	private SimpleStringProperty genre;
 	private SimpleBooleanProperty threeD;
 	private Movie movie;
+	private HashMap<String, List<Vorstellung>> times = new HashMap<String, List<Vorstellung>>();
+
+	private boolean odd;
+
+	public boolean isOdd() {
+		return odd;
+	}
+
+	public void setOdd(boolean odd) {
+		this.odd = odd;
+	}
 
 	public ProgrammTableModel(String film, String sprache, String saal, String genre, Boolean threeD, Movie movie) {
 		this.film = new SimpleStringProperty(film);
@@ -24,6 +47,11 @@ public class ProgrammTableModel {
 		this.genre = new SimpleStringProperty(genre);
 		this.threeD = new SimpleBooleanProperty(threeD);
 		this.movie = movie;
+	}
+
+	public String getConcatID() {
+
+		return getMovie().getTitle() + getThreeD() + getSprache() + getSaal();
 	}
 
 	public String getFilm() {
@@ -72,6 +100,47 @@ public class ProgrammTableModel {
 
 	public void setThreeD(Boolean threeD) {
 		this.threeD.set(threeD);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj instanceof ProgrammTableModel) {
+			ProgrammTableModel obj1 = (ProgrammTableModel) obj;
+			return obj1.getConcatID().equals(this.getConcatID());
+		}
+
+		return false;
+	}
+
+	public List<Vorstellung> getVorstellungByDate(Date date) {
+
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		return times.get(fmt.format(date));
+
+	}
+
+	public void addShowTime(Vorstellung vorstellung) {
+		Set<String> keySet = times.keySet();
+
+		if (keySet.contains(vorstellung.getFormatDay())) {
+			for (String string : keySet) {
+				if (string.equals(vorstellung.getFormatDay())) {
+					List<Vorstellung> list = times.get(string);
+					if (list == null) {
+						list = new ArrayList<>();
+					}
+					list.add(vorstellung);
+				}
+			}
+		} else {
+
+			ArrayList<Vorstellung> list = new ArrayList<Vorstellung>();
+			list.add(vorstellung);
+			times.put(vorstellung.getFormatDay(), list);
+
+		}
+
 	}
 
 }

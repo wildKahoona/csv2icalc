@@ -50,6 +50,10 @@ public class SeatView extends ImageView {
 	    	// Status des Sitzes umschalten
 	    	this.toggle();
         });
+        
+        
+      
+        this.setPreserveRatio(true);
     }
 
 	public Seat getSeat() {
