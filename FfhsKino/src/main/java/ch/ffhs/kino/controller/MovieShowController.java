@@ -127,7 +127,6 @@ public class MovieShowController {
 		lbMovieShow.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(movieShow.getDate()) + ", " + getHall().getHallName());
 	}
 
-
 	private void renderSeatView() {
 		int rows = getHall().getRows();
 	    int columns = getHall().getColumns();

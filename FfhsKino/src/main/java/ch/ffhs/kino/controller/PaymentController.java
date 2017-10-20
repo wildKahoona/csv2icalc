@@ -3,12 +3,18 @@ package ch.ffhs.kino.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
+import ch.ffhs.kino.component.TicketTable;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
+import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Vorstellung;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,6 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class PaymentController {
 
@@ -65,11 +72,16 @@ public class PaymentController {
 	@FXML
 	private Button btnPay;
 	
+	@FXML
+	private VBox gridTickets;
+	
 	private Booking booking;
 	
 	private Boolean payCreditCard = true;
 	
 	private ValidationSupport validationSupport = new ValidationSupport();
+	
+	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
 	@FXML
 	public void initialize() {
@@ -125,8 +137,10 @@ public class PaymentController {
 		validationSupport.registerValidator(cbMonat, Validator.createEmptyValidator("Der Monat ist obligatorisch"));
 		validationSupport.registerValidator(cbJahr, Validator.createEmptyValidator("Das Jahr ist obligatorisch"));
 		
-		btnPay.disableProperty().bind(validationSupport.invalidProperty());
+		BooleanBinding booleanBind = (validationSupport.invalidProperty()).or(Bindings.size(ticketData).isEqualTo(0));
+		btnPay.disableProperty().bind(booleanBind);
 		
+		renderTicketTable();
 		loadData();
 		setTitle();
 	}
@@ -151,7 +165,6 @@ public class PaymentController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	private void loadData() {
@@ -159,29 +172,32 @@ public class PaymentController {
 	}
 	
 	private void setTitle() {
-		//Vorstellung event = booking.getEvent();
-		Vorstellung event = Main.cinemaProgrammService.getVorstellung();
-		String movieTitle = event.getShow().getMovie().getTitle();
-		String movieLanguage = event.getShow().getLanguage().getText();
+		if(this.booking == null) return;
+		String movieTitle = booking.getEvent().getShow().getMovie().getTitle();
+		String movieLanguage = booking.getEvent().getShow().getLanguage().getText();
 				
 		SimpleDateFormat fmt = new SimpleDateFormat("E dd MMM yyyy HH:mm");		
-		lbMovieShow.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(event.getDate()) + ", " + event.getHall().getHallName());
+		lbMovieShow.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(booking.getEvent().getDate()) + ", " + booking.getEvent().getHall().getHallName());
 	}
 
+	private void renderTicketTable() {			
+		TicketTable table = new TicketTable(ticketData, gridTickets);
+		table.createTicketListener(null, gridTickets);
+	}
+	
 	public Booking getBooking() {
 		return booking;
 	}
 
 	public void setBooking(Booking booking) {
 		this.booking = booking;
-		
-		//setTitle();
-		//initTicketControl();
-//		if(this.booking == null) return;
-//		List<Ticket> tickets = this.booking.getTickets();
-//		if(tickets == null || tickets.isEmpty()) return;
-//		for(Ticket ticket : tickets){
-//			ticketData.add(ticket);
-//		}
+		if(this.booking == null) return;
+		List<Ticket> tickets = this.booking.getTickets();
+		// Leider nein, muss die Tickets einzeln zur ObservableList hinzufügen, damit der AddListener anspringt
+		//ticketData = FXCollections.observableArrayList(tickets);
+		if(tickets == null) return;
+		for(Ticket ticket : tickets){
+			ticketData.add(ticket);
+		}
 	}
 }

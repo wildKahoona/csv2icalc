@@ -103,7 +103,7 @@
 	    
 	    <!-- Rechts: Tickets -->
 	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-color:green">
-		    <Label text="test2"/>
+			<VBox fx:id="gridTickets" GridPane.rowIndex="2" style="-fx-min-width: 380px;"/>
 	    </GridPane>
 	    
     </GridPane> 

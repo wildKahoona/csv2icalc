@@ -105,18 +105,22 @@ public class TicketTable extends GridPane {
 				
 				ticketRow.addPriceInfo();
 				
-				ticketRow.addDeleteButton(imgTrash);
+				ticketRow.addDeleteButton(imgTrash);				
 				// Add Listener for delete Ticket
 				ticketRow.getBtnDelteTicket().setOnAction(new EventHandler<ActionEvent>() {
 				    @Override public void handle(ActionEvent e) {
-				    	Seat seat = ticket.getSeat();
-				    	SeatView view = seatView[seat.getSeatRow()][seat.getSeatColumn()];
-				    	if(view != null) {
-				    		view.deselect();
-					    	ticketData.remove(ticket);
+				    	if(seatView == null) {
+				    		ticketData.remove(ticket);
+				    	}else {
+				    		Seat seat = ticket.getSeat();
+					    	SeatView view = seatView[seat.getSeatRow()][seat.getSeatColumn()];
+					    	if(view != null) {
+					    		view.deselect();
+						    	ticketData.remove(ticket);
+					    	}
 				    	}
 				    }
-				});
+				});					
 
 				gridTickets.getChildren().add(ticketRow);	
 			}
