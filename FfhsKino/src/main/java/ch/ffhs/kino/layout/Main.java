@@ -18,13 +18,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 	private static Stage primaryStage; // **Declare static Stage**
-	private static final int STAGE_WIDTH = 1100;
 	private static final String CSS = "ch/ffhs/kino/layout/controlStyle.css";
 	public static final CinemaProgrammServiceMock cinemaProgrammService = new CinemaProgrammServiceMock();
 
@@ -42,13 +40,18 @@ public class Main extends Application {
 
 	}
 
-	static {
-		Font.loadFont(Main.class.getResource("/ch/ffhs/kino/layout/font/fontawesome-webfont.ttf").toExternalForm(), 10);
-	}
-
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		setPrimaryStage(primaryStage);
+		
+		primaryStage.setMinWidth(480.0);
+		primaryStage.setMinHeight(600.0);
+		
+		primaryStage.setHeight(800);
+		primaryStage.setWidth(1200);
+		
+		
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
@@ -134,16 +137,9 @@ public class Main extends Application {
 	}
 	
 	private static void show(Scene scene) {
-		primaryStage.setWidth(STAGE_WIDTH);
 		scene.getStylesheets().add(CSS);
 		primaryStage.setScene(scene);
-		primaryStage.setMinWidth(480.0);
-		primaryStage.setMinHeight(600.0);
-		primaryStage.setMaxWidth(1980.0);
-		primaryStage.setMaxHeight(900.0);
-		primaryStage.setHeight(800);
-		primaryStage.setWidth(1200);
-
+		
 		primaryStage.show();
 	}
 

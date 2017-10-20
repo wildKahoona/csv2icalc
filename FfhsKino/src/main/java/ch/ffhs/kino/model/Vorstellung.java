@@ -1,5 +1,7 @@
 package ch.ffhs.kino.model;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class Vorstellung {
 	private Hall hall;
 	private ShowType type = ShowType.NORMAL;
 	private List<Booking> bookings;
-	//Boolean[][] soldList;
+	// Boolean[][] soldList;
 
 	public ShowType getType() {
 		return type;
@@ -47,15 +49,23 @@ public class Vorstellung {
 	}
 
 	public List<Booking> getBookings() {
+		if (bookings == null) {
+			bookings = new ArrayList<Booking>();
+		}
 		return bookings;
 	}
 
 	public void setBookings(List<Booking> bookings) {
 		this.bookings = bookings;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Event [show=" + show + ", date=" + date + ", hall=" + hall + ", type=" + type + "]\n";
+	}
+
+	public String getFormatDay() {
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		return fmt.format(getDate());
 	}
 }
