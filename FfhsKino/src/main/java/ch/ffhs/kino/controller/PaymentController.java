@@ -13,6 +13,7 @@ import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Vorstellung;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
@@ -78,6 +79,10 @@ public class PaymentController {
 	private Booking booking;
 	
 	private Boolean payCreditCard = true;
+	
+	private Timeline timeline;
+	
+	private long sessionRemainTime;
 	
 	private ValidationSupport validationSupport = new ValidationSupport();
 	
@@ -169,6 +174,7 @@ public class PaymentController {
 	
 	private void loadData() {
 		setBooking(Main.cinemaProgrammService.getCurrentReservation());
+		sessionRemainTime = Main.cinemaProgrammService.getSessionRemainTime();
 	}
 	
 	private void setTitle() {

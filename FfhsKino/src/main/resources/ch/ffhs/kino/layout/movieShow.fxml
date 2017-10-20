@@ -187,7 +187,9 @@
 		   </HBox> 
 
 			<!-- Tickets -->
-			<VBox fx:id="gridTickets" GridPane.rowIndex="2" style="-fx-min-width: 380px;"/>
+			<ScrollPane GridPane.rowIndex="2" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true"  style="-fx-min-width: 400px;">
+				<VBox fx:id="gridTickets" style="-fx-min-width: 380px;"/>
+			</ScrollPane>
 
 	    </GridPane>
 	    

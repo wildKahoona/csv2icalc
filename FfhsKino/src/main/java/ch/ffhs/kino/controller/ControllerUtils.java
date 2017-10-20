@@ -3,7 +3,9 @@ package ch.ffhs.kino.controller;
 import java.io.IOException;
 
 import ch.ffhs.kino.layout.Main;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 
 public class ControllerUtils {
 
@@ -34,6 +36,13 @@ public class ControllerUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+	}
+	
+	public static Alert getSessionTimeOverMsg() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Reservierungszeit abgelaufen");
+		alert.setHeaderText("Bitte wählen Sie neue Plätze");
+		alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
+		return alert;
 	}
 }

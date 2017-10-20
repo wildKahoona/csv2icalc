@@ -24,6 +24,12 @@ public class TimerAnimation {
 		this.selectedSeats = selectedSeats;
 	}
 	
+	// TODO: wenn der Timer abgleaufen ist, müssen
+	// - Alle ausgewählten Sitze deselektiert werden
+	// - Alle Tickets gelöscht werden
+	// - Eine Meldung an den Benutzer 
+	// - Vorhandene Reservierung gelöscht (oder aktualisiert) werden (beim PaymentController)
+	// - Die Buttons (Kaufen, Alle Tickets löschen, hinzufügen) disabled werden
 	public void initTimeline(Label lbTimer) {
 		timeline = new Timeline(
 			new KeyFrame(Duration.seconds(1), e -> {

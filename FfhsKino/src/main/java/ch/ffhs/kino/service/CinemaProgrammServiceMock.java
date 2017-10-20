@@ -29,6 +29,8 @@ import ch.ffhs.kino.model.Ticket.TicketType;
  */
 public class CinemaProgrammServiceMock {
 
+	public static final long SESSION_TIME = System.currentTimeMillis() + (600 * 1000); // 10 Minuten
+	
 	// Säle
 	private final static Hall hallRex1 = new Hall("Minisaal", CinemaPlaces.KINO_REX);
 	private final static Hall hallRex2 = new Hall("Mittelsaal", CinemaPlaces.KINO_REX);
@@ -52,6 +54,7 @@ public class CinemaProgrammServiceMock {
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
 	private List<Booking> bookings = new ArrayList<Booking>();
 	private Booking currentReservation;
+	private long sessionRemainTime;
 
 	public CinemaProgrammServiceMock() {
 
@@ -322,5 +325,13 @@ public class CinemaProgrammServiceMock {
 
 	public Movie getMovie() {
 		return movie3;
+	}
+
+	public long getSessionRemainTime() {
+		return sessionRemainTime;
+	}
+
+	public void setSessionRemainTime(long sessionRemainTime) {
+		this.sessionRemainTime = sessionRemainTime;
 	}
 }

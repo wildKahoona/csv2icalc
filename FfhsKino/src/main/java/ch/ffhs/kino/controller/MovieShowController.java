@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ffhs.kino.component.SeatView;
-import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.component.TicketTable;
-import ch.ffhs.kino.component.TimerAnimation;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
@@ -17,16 +15,20 @@ import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.model.Seat.SeatType;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -34,8 +36,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
+// TODO: Scrollbar: Summe soll nicht scrollen, sondern fix bleiben
+// 		 TimerAnimation-Problem lösen
 public class MovieShowController {
 
 	@FXML
@@ -73,21 +77,21 @@ public class MovieShowController {
 	private Vorstellung movieShow;
 	private Booking reservation;
 	private Hall hall;
-	private TimerAnimation timerAnimation;
 	private SeatView seatView[][];
 	private Boolean autoTicketOn = true;
-	
+	private Timeline timeline;
+	private long sessionRemainTime;
+
 	@FXML
 	public void initialize() {		
 		loadData();
 		setTitle();
-		renderTicketTable();
-		
-		timerAnimation = new TimerAnimation(selectedSeats);
-		timerAnimation.initTimeline(lbTimer);
+		renderTicketTable();	
+		initTimerAnimation();
 		
 		btnDeleteTickets.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
-		btnAddTicket.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
+		//btnAddTicket.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
+		btnBuy.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		GridPane.setHalignment(btnBuy, HPos.RIGHT);
 		GridPane.setHgrow(btnBuy, Priority.ALWAYS);
 	}
@@ -130,6 +134,7 @@ public class MovieShowController {
 	private void renderSeatView() {
 		int rows = getHall().getRows();
 	    int columns = getHall().getColumns();
+	    seatView = new SeatView[rows][];
 	    SeatType[][] seatPlan = hall.getSeatPlan();
 
 	    ReadOnlyDoubleProperty gridWidth = gridHall.widthProperty();
@@ -138,8 +143,6 @@ public class MovieShowController {
 	    NumberBinding size = new When(gridWidth.divide(columns).lessThan(gridHeight.divide(rows)))
 	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
 	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
-	    
-	    seatView = new SeatView[rows][];
 	    
 	    // Bilder der Sitzplätze laden
 	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
@@ -178,7 +181,7 @@ public class MovieShowController {
             	view.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
 			        	  if(selectedSeats.size() == 0)
-			        		  timerAnimation.startTimeAnimation();
+			        		  timeline.play();
 			        	  selectedSeats.add(view);
 			        	  
 			        	  // Ticket für diesen Sitzplatz hinzufügen
@@ -191,7 +194,7 @@ public class MovieShowController {
 			          else {
 			            this.selectedSeats.remove(view);
 			            if(selectedSeats.size() == 0)
-			            	timerAnimation.stopTimeAnimation();
+			            	timeline.stop();
 			            
 			            // Ticket aus der Liste entfernen
 			            Optional<Ticket> removeTicket = ticketData.stream().
@@ -264,12 +267,27 @@ public class MovieShowController {
 	
 	@FXML
 	protected void addTicket(ActionEvent event) {
-		SeatView seat = getBestSeat();
+		SeatView lastSeat = null;
+		
+		if(selectedSeats.size() > 1)
+			lastSeat = selectedSeats.get(selectedSeats.size() - 1);
+		
+		SeatView bestSeat = getBestSeat(lastSeat);
+	    Boolean ok = false;
+	    while(!ok) {
+	    	bestSeat = getBestSeat(lastSeat);
+		    if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+		    	ok = true;
+		    }
+	    }
+	    bestSeat.select();
 	}	
 	
 	@FXML
 	protected void buyTickets(ActionEvent event) {
-    	// Booking erstellen und weiter zu zahlen
+		Main.cinemaProgrammService.setSessionRemainTime(sessionRemainTime);
+		timeline.stop();
+		// Booking erstellen und weiter zu zahlen
     	Booking booking = new Booking();
     	booking.setEvent(getMovieShow());
     	booking.setTickets(ticketData);    	
@@ -283,16 +301,139 @@ public class MovieShowController {
 		}
 	}
 	
-	private SeatView getBestSeat() {
+	private SeatView getBestSeat(SeatView view) {
 		// TODO Auto-generated method stub
-		return null;
+		int maxRows = getHall().getRows();
+		int maxCols = getHall().getColumns();
+		int middleRow = maxRows / 2;
+		int middleCol = maxCols / 2;
+		if(view == null)
+			return seatView[middleRow][middleCol];
+		
+		int row = view.getSeat().getSeatRow();
+		int col = view.getSeat().getSeatColumn();
+		Boolean checkLeft = true;
+		Boolean checkRight = true;
+		Boolean checkFront = true;
+		Boolean checkBack = true;
+		Boolean firstLeft = true;
+		
+		
+		
+		if(col < middleCol)
+			firstLeft = false;
+		
+		if(row == 0)
+			checkFront = false;
+		
+		if(col == 0)
+			checkLeft = false;
+		
+		if(row == (maxRows - 1))
+			checkBack = false;
+		
+		if(col == (maxCols-1))
+			checkRight = false;
+		
+		// Rechts oder Links?
+		SeatView bestSeat;
+
+		if(firstLeft)
+		{
+			if(checkLeft) {
+				// Links
+				bestSeat = seatView[row][col-1];
+				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+					return bestSeat;
+				}			
+			}
+			
+			if(checkRight) {
+				// Rechts
+				bestSeat = seatView[row][col+1];
+				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+					return bestSeat;
+				}		
+			}
+		}else {
+			if(checkRight) {
+				// Rechts
+				bestSeat = seatView[row][col+1];
+				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+					return bestSeat;
+				}		
+			}
+			
+			if(checkLeft) {
+				// Links
+				bestSeat = seatView[row][col-1];
+				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+					return bestSeat;
+				}			
+			}
+		}
+		
+		if(checkBack) {
+			// Hinten
+			bestSeat = seatView[row+1][col];
+			if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+				return bestSeat;
+			}			
+		}
+			
+		if(checkFront) {
+			// Vorne
+			bestSeat = seatView[row-1][col];
+			if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
+				return bestSeat;
+			}			
+		}
+		
+		// Alles rundherum besetzt - DEADLOCK nächsten Sitz nehmen (oder besser Zufallssitz)
+		return seatView[row][col-1];
 	}
 
+	public void initTimerAnimation() {
+		long sessionTime = Main.cinemaProgrammService.SESSION_TIME;	
+		timeline = new Timeline(
+				new KeyFrame(Duration.seconds(1), e -> {
+					sessionRemainTime = sessionTime - System.currentTimeMillis();
+			    	if(sessionRemainTime <= (long)0) {
+			    		timeline.stop();
+			    		Platform.runLater(new Runnable() {
+			    		      @Override public void run() {
+			    		    	  // TODO: wenn der Timer abgeleaufen ist, müssen
+			    		    	  // - Alle ausgewählten Sitze deselektiert werden
+			    		  		  // - Alle Tickets gelöscht werden
+			    		  		  // - Eine Meldung an den Benutzer 
+			    		  		  // - Vorhandene Reservierung gelöscht (oder aktualisiert) werden (beim PaymentController)
+			    		  		  // - Die Buttons (Kaufen, Alle Tickets löschen, hinzufügen) disabled werden
+			    		  		
+			    		    	  
+			    		    	  // Ausgewählte Sitze freigeben (Tickets werden automatisch entfern)
+			    		    	  clearSelectedSeats();
+			    		    	  
+			    		    	  // Reservierung löschen
+			    		    	  Main.cinemaProgrammService.setCurrentReservation(null);
+			    		    	  
+			    		    	  // Meldung an den Benutzer
+			    		    	  Alert alert = ControllerUtils.getSessionTimeOverMsg();
+			    		    	  alert.showAndWait();
+			    		      }
+			    		});			    					    		
+			    	}else {
+			    		SimpleDateFormat fmt = new SimpleDateFormat("mm:ss");
+			    		lbTimer.setText(fmt.format(sessionRemainTime));
+			    	} 
+			    })
+			);
+			timeline.setCycleCount( Animation.INDEFINITE );		
+	}
+	
 	public Vorstellung getMovieShow() {
 		return movieShow;
 	}
 	
-
 	public void setMovieShow(Vorstellung movieShow) {
 		this.movieShow = movieShow;
 	}
