@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.PaymentController">
+	<columnConstraints>
+		<ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
+	</columnConstraints>
+	
+    <!-- Breadcrumb -->
+	<HBox styleClass="breadcrumb" GridPane.rowIndex="0">
+		<children>
+			<!-- <Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " /> -->
+			<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
+			<Label id="bc_sitzplatz" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
+			<Label id="bc_bezahlen" disable="false" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+			<Label disable="true" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
+		</children>
+	</HBox>
+	
+	<!-- Title -->
+	<GridPane hgap="30.0" GridPane.rowIndex="1">
+		<children>
+			<Label text="Vorstellung" styleClass="h1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+			<Label fx:id="lbMovieShow" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+		</children>    
+	</GridPane>
+	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+	
+	<!-- Information -->
+	<VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
+		<Label wrapText="true" text="Stimmt Ihr Wunsch mit Ihrem Ticket überein? Dann können Sie mit der Zahlung fortfahren." styleClass="h2"/>
+		<Label wrapText="true" text="Die Zustellung Ihrer Kinotickets erfolgt per E-Mail. Bitte geben Sie Ihre korrekte E-Mail-Adresse an, um Ihnen die Kinotickets zustellen zu können." styleClass="h2"/>
+		<Label wrapText="true" text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
+	</VBox>
+    
+    <!-- Inhalt -->
+     <GridPane GridPane.rowIndex="4" style="-fx-background-color:lightblue">
+	    <columnConstraints>
+	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0" prefWidth="50.0" />
+	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0" prefWidth="50.0" />
+	    </columnConstraints>
+      
+    	<!-- Links: Kreditkarte -->
+	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-background-color:lightblue">
+		    
+		    <HBox GridPane.rowIndex="0" spacing="10" alignment="TOP_LEFT" >
+				<Label text="E-Mail*:" />
+				<TextField fx:id="inputEmail" promptText="E-Mail-Adresse eingeben" styleClass="long" />
+			</HBox>
+			
+			<GridPane GridPane.rowIndex="1" alignment="CENTER_LEFT" styleClass="solidblackborder">
+				<Label text="Ihre Zahlungsart:" GridPane.rowIndex="0" styleClass="h2" />
+				
+				<RadioButton fx:id="rbCreditCard" GridPane.rowIndex="1" GridPane.columnIndex="0"
+							 onAction="#creditSelected" mnemonicParsing="false" text="Kreditkarte" >	 
+					<toggleGroup>
+						<ToggleGroup fx:id="zahlungsart" />
+					</toggleGroup>
+				</RadioButton>
+				<RadioButton fx:id="rbPayPal" GridPane.rowIndex="2" GridPane.columnIndex="0"
+							 onAction="#paypalSelected" mnemonicParsing="false" 
+							 text="Paypal" toggleGroup="$zahlungsart" />
+				
+				<GridPane GridPane.rowIndex="3" vgap="5.0">
+						 
+					<GridPane fx:id="gridZahlung" vgap="5.0">
+						<Label text="Mit Kreditkarte bezahlen" GridPane.rowIndex="1" GridPane.columnSpan="2" styleClass="h2" />
+						
+						<Label text="Kreditkartennummer*:" GridPane.rowIndex="2" GridPane.columnSpan="2" HBox.hgrow="ALWAYS"/>
+						<TextField fx:id="inputKreditkartenNr" GridPane.rowIndex="3" promptText="Kreditkartennummer eingeben" styleClass="long" 
+								   GridPane.columnSpan="2"/>
+									
+						<Label text="Karteninhaber*:" GridPane.rowIndex="4" GridPane.columnSpan="2" />			
+						<TextField fx:id="inputKarteninhaber" GridPane.rowIndex="5" GridPane.columnSpan="2" promptText="Karteninhaber eingeben" styleClass="long"/>			
+						
+						<Label text="Gültig bis*:" GridPane.rowIndex="6" />		
+						<ComboBox fx:id="cbMonat" GridPane.rowIndex="7" GridPane.columnIndex="0" promptText="Monat" styleClass="medium" HBox.hgrow="ALWAYS"/>
+						<ComboBox fx:id="cbJahr" GridPane.rowIndex="7" GridPane.columnIndex="1" promptText="Jahr" styleClass="medium" HBox.hgrow="ALWAYS"/>
+						
+						<Label text="CVV*:" GridPane.rowIndex="6" GridPane.columnIndex="2" />
+						<TextField fx:id="inputCvv" GridPane.rowIndex="7" GridPane.columnIndex="2" promptText="CVV" styleClass="small"/>
+					</GridPane>	
+				
+					<Button fx:id="btnPay" GridPane.rowIndex="4" text="Bezahlen" 
+							onAction="#pay" styleClass="medium" GridPane.halignment="RIGHT"/>
+								
+				</GridPane>					 
+			</GridPane>
+			
+	    </GridPane>
+	    
+	    <!-- Rechts: Tickets -->
+	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-color:green">
+		    <Label text="test2"/>
+	    </GridPane>
+	    
+    </GridPane> 
+    
+</GridPane>

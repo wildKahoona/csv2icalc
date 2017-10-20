@@ -5,8 +5,6 @@ import java.io.IOException;
 import ch.ffhs.kino.controller.BookingConfirmController;
 import ch.ffhs.kino.controller.MovieDetailController;
 import ch.ffhs.kino.controller.ProgrammController;
-import ch.ffhs.kino.controller.TicketZahlenController;
-import ch.ffhs.kino.controller.VorstellungController;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Vorstellung;
@@ -52,9 +50,9 @@ public class Main extends Application {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
-		 startKinoProgramm();
-		//startVorstellung(cinemaProgrammService.getVorstellung());
-		// startTicketZahlen(cinemaProgrammService.getBooking());
+		//startKinoProgramm();
+		startMovieShow(cinemaProgrammService.getVorstellung());
+		// startPayment(cinemaProgrammService.getBooking());
 		// startBookingConfirm(cinemaProgrammService.getBooking());
 	}
 
@@ -85,42 +83,43 @@ public class Main extends Application {
 
 	}
 
-	public static void startVorstellung(Vorstellung vorstellung) throws IOException {
+	public static void startMovieShow(Vorstellung vorstellung) throws IOException {
 		primaryStage.setTitle("Kino REX - Vorstellung");
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/vorstellung.fxml"));
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/movieShow.fxml"));
 		Scene scene = new Scene((GridPane) loader.load());
 		primaryStage.setMinWidth(900.0);
-
-		// Parameterübergabe
-		VorstellungController controller = loader.<VorstellungController>getController();
-		controller.setVorstellung(vorstellung);
 		show(scene);
 
 	}
 
-	public static void startVorstellung() throws IOException {
-		primaryStage.setTitle("Kino REX - Vorstellung");
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/vorstellung.fxml"));
-		Scene scene = new Scene((GridPane) loader.load());
-
-		// Parameterübergabe
-		VorstellungController controller = loader.<VorstellungController>getController();
-		controller.setVorstellung(cinemaProgrammService.getCurrentReservation());
+	public static void startPayment(Booking booking) throws IOException {
+		primaryStage.setTitle("Kino REX - Ticket");
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/payment.fxml"));
+		Scene scene = new Scene((Pane) loader.load());
 		show(scene);
-
 	}
 	
-	public static void startTicketZahlen(Booking booking) throws IOException {
-		primaryStage.setTitle("Kino REX - Ticket");
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/ticketsZahlen.fxml"));
-		Scene scene = new Scene((GridPane) loader.load());
-
-		// Parameterübergabe
-		TicketZahlenController controller = loader.<TicketZahlenController>getController();
-		controller.setBooking(booking);
-		show(scene);
-
-	}
+//	public static void startVorstellung() throws IOException {
+//		primaryStage.setTitle("Kino REX - Vorstellung");
+//		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/vorstellung.fxml"));
+//		Scene scene = new Scene((GridPane) loader.load());
+//
+//		// Parameterübergabe
+//		VorstellungController controller = loader.<VorstellungController>getController();
+//		controller.setVorstellung(cinemaProgrammService.getCurrentReservation());
+//		show(scene);
+//
+//	}
+	
+	
+	
+//	public static void startTicketZahlen(Booking booking) throws IOException {
+//		primaryStage.setTitle("Kino REX - Ticket");
+//		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/payment.fxml"));
+//		Scene scene = new Scene((Pane) loader.load());
+//		PaymentController controller = loader.<PaymentController>getController();
+//		show(scene);
+//	}
 
 	public static void startBookingConfirm(Booking booking) throws IOException {
 		primaryStage.setTitle("Kino REX - Ticket");

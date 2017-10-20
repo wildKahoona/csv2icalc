@@ -59,11 +59,16 @@
 		</VBox>
 			
 		<!-- Inhalt (Zeile 3) -->
-		<HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" spacing="10">
+		<GridPane GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" hgap="10.0" vgap="20.0" minWidth="600.0" >
+			<columnConstraints>
+		      <ColumnConstraints />
+		      <ColumnConstraints />
+		      <ColumnConstraints />
+		   </columnConstraints>
+	    	<children>
 		
-			
 			<!-- Zahlungsmaske -->
-			<GridPane >
+			<GridPane GridPane.rowIndex="0" GridPane.columnIndex="0">
 				<HBox GridPane.rowIndex="0" GridPane.columnIndex="0" spacing="10" alignment="TOP_LEFT" >
 					<Label text="E-Mail*:" />
 					<TextField fx:id="email" promptText="E-Mail-Adresse eingeben" styleClass="long"/>
@@ -107,7 +112,7 @@
 			</GridPane>
 			
 			<!-- Buchungsinformation -->
-			<VBox GridPane.rowIndex="3" GridPane.columnIndex="1" spacing="10" alignment="TOP_RIGHT" >
+			<VBox GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="10" alignment="TOP_RIGHT" >
 					<!-- Tickets -->
 		      		<VBox fx:id="ticketGrid" style="-fx-padding: 5 0 0 15;"
 				          prefHeight="9999"
@@ -119,8 +124,8 @@
 				</HBox>
 				<Label text="Erwachsene:2, Kinder:1 Total:50.00 CHF" /> -->
 			</VBox>
-	
-		</HBox>
+			</children>
+	</GridPane>
 		
 		
 	

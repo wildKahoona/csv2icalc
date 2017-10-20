@@ -143,7 +143,7 @@ public class ProgrammController {
 
 																Vorstellung v = (Vorstellung) hl.getProperties()
 																		.get("vorstellung");
-																Main.startVorstellung(v);
+																Main.startMovieShow(v);
 															} catch (IOException e) {
 																e.printStackTrace();
 															}

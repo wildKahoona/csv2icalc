@@ -19,6 +19,7 @@ import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
 import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketRow;
+import ch.ffhs.kino.component.TimerAnimation;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.table.model.TicketTableModel;
@@ -67,6 +68,8 @@ public class VorstellungController {
 	 * Birgit
 	 *  TODO: Fertigstellen
 	 */
+	private TimerAnimation timerAnimation;
+	
 	private Vorstellung vorstellung;
 	
 	private SeatView views[][];
@@ -162,8 +165,10 @@ public class VorstellungController {
 	@FXML
 	protected void initialize() {	
 		
-		initTimeline();
-	
+		//initTimeline();
+		timerAnimation = new TimerAnimation(this.selectedSeats);
+		timerAnimation.initTimeline(timeLabel);
+		
 		initTicketControl();
 		
 		buyButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
@@ -175,27 +180,6 @@ public class VorstellungController {
 		
 		addTicketButton.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		addTicketButton.setOnAction(commandAddTicketHandler);
-		
-		// TableView ist soooo scheisse:
-		// kein Update auf Preis, ein Gebastel für die ButtonCell, nicht direkt im Edit-Mode !!!
-		TableColumn<TicketTableModel, TicketType> colType = new TableColumn<>("ticketType");
-		colType.setCellValueFactory(new PropertyValueFactory<>("ticketType"));
-		colType.setCellFactory(ComboBoxTableCell.<TicketTableModel, TicketType>forTableColumn(TicketType.values()));
-//		colType.setOnEditCommit((CellEditEvent<TicketTableModel, TicketType> t) -> {
-//			t.getTableView().getItems().get(t.getTablePosition().getRow()).price.set("xxx");
-//		        });
-		ticketTable.getColumns().add(colType);
-		
-	    TableColumn<TicketTableModel, SimpleStringProperty> colPrice = new TableColumn<TicketTableModel, SimpleStringProperty>();
-	    colPrice.setCellValueFactory(new PropertyValueFactory<TicketTableModel, SimpleStringProperty>("price"));
-	    ticketTable.getColumns().add(colPrice);
-	
-	    ticketTable.setItems(ticketTableData);
-	    ticketTable.setEditable(true);
-	    
-	    TicketTableModel t1 = new TicketTableModel();
-	    t1.setTicketType(TicketType.KIND);
-	    ticketTableData.add(t1);
 	}
 	
 	public Vorstellung getVorstellung() {
@@ -229,6 +213,7 @@ public class VorstellungController {
 		// Diese Lösung ist aber auch gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM)
 		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
 		boxTimer.setVisible(false);
+		
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			ticketGrid.getChildren().clear();
 			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
@@ -361,36 +346,6 @@ public class VorstellungController {
 		});
 	}
 
-	private void initTimeline() {
-			timeline = new Timeline(
-				new KeyFrame(Duration.seconds(1), e -> {
-			    	long diff = endTime - System.currentTimeMillis();
-			    	if(diff <= (long)0) {
-			    		timeline.stop();
-			    		Platform.runLater(new Runnable() {
-			    		      @Override public void run() {
-			    		    	  // Ausgewählte Sitze freigeben
-			    		    	  clearSelectedSeats();
-			    		    	  // Reservierung löschen
-			    		    	  Main.cinemaProgrammService.setCurrentReservation(null);
-			    		    	  
-			    		    	  // Meldung an den Benutzer
-				  	    		  Alert alert = new Alert(AlertType.WARNING);
-				  	    		  alert.setTitle("Reservierungszeit abgelaufen");
-				  	    		  alert.setHeaderText("Bitte wählen Sie neue Plätze");
-				  	    		  alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
-				  	    		  alert.showAndWait();
-			    		      }
-			    		});			    					    		
-			    	}else {
-			    		SimpleDateFormat fmt = new SimpleDateFormat("mm:ss");
-				        timeLabel.setText(fmt.format(diff));
-			    	} 
-			    })
-			);
-			timeline.setCycleCount( Animation.INDEFINITE );
-	}
-
 	private void clearSelectedSeats() {
 		// ACHTUNG: NICHT THREAD-SICHER (hat mich viele Stunden gekostet)!!!
 //		selectedSeats.forEach((seat) -> { 
@@ -405,16 +360,6 @@ public class VorstellungController {
 			seats.remove();
 			seat.deselect();
 		}
-	}
-	  
-	public void StartTimeAnimation(){
-		endTime = System.currentTimeMillis() + (600 * 1000); // 10 Minuten
-		//endTime = System.currentTimeMillis() + (6 * 1000);
-		timeline.play();
-	}
-	
-	public void StopTimeAnimation(){
-		timeline.stop();
 	}
 	  
 	/**
@@ -472,7 +417,8 @@ public class VorstellungController {
             	seatView.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
 			        	  if(selectedSeats.size() == 0)
-			        		  StartTimeAnimation();	        	  
+			        		  timerAnimation.startTimeAnimation();
+			        	//StartTimeAnimation();
 			        	  selectedSeats.add(seatView);
 			        	  // Ticket für diesen Sitzplatz hinzufügen
 			        	  if(addTicketOn)
@@ -484,7 +430,8 @@ public class VorstellungController {
 			          else {
 			            this.selectedSeats.remove(seatView);
 			            if(selectedSeats.size() == 0)
-			            	StopTimeAnimation();
+			            	timerAnimation.stopTimeAnimation();
+			            	//StopTimeAnimation();
 			            
 			            // Ticket aus der Liste entfernen
 			            Optional<Ticket> removeTicket = ticketData.stream().
@@ -839,7 +786,7 @@ public class VorstellungController {
     	// Aktuelle Reservierung setzten
     	Main.cinemaProgrammService.setCurrentReservation(booking);
     	try {
-			Main.startTicketZahlen(booking);
+			Main.startPayment(booking);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

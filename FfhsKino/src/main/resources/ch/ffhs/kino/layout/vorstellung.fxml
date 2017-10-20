@@ -164,10 +164,11 @@
 							      	<Image url="/ch/ffhs/kino/images/timer.png"/>
 							      </image>
 							 	</ImageView>
-							 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
-									    styleClass="button-primary" GridPane.halignment="RIGHT" />
 						 	</HBox>
 						 	
+						 	<Button fx:id="buyButton" mnemonicParsing="false" text="Kaufen" 
+									    styleClass="button-primary" GridPane.halignment="RIGHT" />
+									    
 					        <HBox GridPane.rowIndex="1" minWidth="350" GridPane.halignment="RIGHT"
 					        	  alignment="CENTER" style="-fx-padding: 5 0 0 15;-fx-background-color:lightblue" >
 					        	<children>

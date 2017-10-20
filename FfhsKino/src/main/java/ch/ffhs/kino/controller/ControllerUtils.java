@@ -19,11 +19,11 @@ public class ControllerUtils {
 					if (id.equals("bc_programm")) {
 						Main.startKinoProgramm();
 					} else if (id.equals("bc_vorstellung")) {
-						Main.startVorstellung(null);
+						Main.startMovieShow(null);
 					} else if (id.equals("bc_bezahlen")) {
-						Main.startTicketZahlen(null);
+						Main.startPayment(null);
 					} else if (id.equals("bc_sitzplatz")) {
-						Main.startVorstellung();
+						Main.startMovieShow(null);
 
 					}
 
