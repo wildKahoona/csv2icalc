@@ -38,8 +38,8 @@
 	</GridPane>
 	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 	
-	<!-- Inhalt -->
-	<GridPane GridPane.rowIndex="3" style="-fx-background-color:lightblue">
+	<!-- Inhalt style="-fx-background-color:lightblue"-->
+	<GridPane GridPane.rowIndex="3">
 	    <columnConstraints>
 	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0" prefWidth="50.0" />
 	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0" prefWidth="50.0" />
@@ -131,7 +131,7 @@
 		</GridPane>     
 		    
 		<!-- Rechts: Tickets -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-color:green">
+	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" >
 		    
 		    <!-- Buchungstimer -->
 		    <GridPane fx:id="gridTimer" GridPane.rowIndex="0">
@@ -172,6 +172,10 @@
 			      	</graphic>
 			    </Button>
 		   </HBox> 
+
+			<!-- Tickets -->
+			<VBox fx:id="gridTickets" GridPane.rowIndex="2" />
+
 	    </GridPane>
 	    
 	</GridPane>   

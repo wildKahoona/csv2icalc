@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ffhs.kino.component.SeatView;
+import ch.ffhs.kino.component.TicketRow;
 import ch.ffhs.kino.component.TimerAnimation;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
@@ -19,6 +20,7 @@ import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +29,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 public class MovieShowController {
 
@@ -44,6 +48,9 @@ public class MovieShowController {
 	@FXML
 	private GridPane gridTimer;
 	
+	@FXML
+	private VBox gridTickets;	
+		
 	@FXML
 	private Label lbTimer;
 	
@@ -64,15 +71,13 @@ public class MovieShowController {
 	public void initialize() {		
 		loadData();
 		setTitle();
+		renderTicketTable();
 		
 		timerAnimation = new TimerAnimation(selectedSeats);
 		timerAnimation.initTimeline(lbTimer);
 		
 		btnDeleteTickets.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
-		//btnDeleteTickets.setOnAction(deleteTickets);
-		
-		//btnAddTicket.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
-		//btnAddTicket.setOnAction(addTicket);
+		btnAddTicket.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 	}
 
 	/**
@@ -239,6 +244,37 @@ public class MovieShowController {
 		}
 	}
 	  
+	private void renderTicketTable() {		
+		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
+		
+		ticketData.addListener((ListChangeListener<Ticket>) change -> {
+			gridTickets.getChildren().clear();
+			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
+			tickets.sort((lhs, rhs) -> {
+		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
+		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
+		        } else {
+		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
+		        }
+		    }); 
+			
+			
+			// Pro Ticket eine Zeile erstellen
+			for(Ticket ticket : tickets) {	
+				TicketRow ticketRow = new TicketRow(ticketData);
+				TicketRow.setTrashImage(trash);
+				ticketRow.setTicket(ticket);
+				ticketRow.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+				        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
+				ticketRow.addTicket(seatView);
+				
+				
+
+				gridTickets.getChildren().add(ticketRow);	
+			}
+		});
+	}
 	
 	@FXML
 	protected void deleteTickets(ActionEvent event) {

@@ -211,83 +211,83 @@ public class TicketZahlenController {
 	}
 	
 	private void initTicketControl() {
-		// TODO: echt gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM, habe ich aber nicht hingekriegt)
-		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
-		ticketData.addListener((ListChangeListener<Ticket>) change -> {
-			ticketGrid.getChildren().clear();
-			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
-			//tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
-			tickets.sort((lhs, rhs) -> {
-		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
-		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
-		        } else {
-		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
-		        }
-		    }); 
-			for(Ticket ticket : tickets) {			
-				// Erstelle das Control für die Anzeige eines Tickets
-				// TODO: Styles auslagern ins css
-				TicketRow row = new TicketRow();
-				row.setMaxWidth(320.00);
-				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-				        + "-fx-border-color: gray;");
-				row.setTicket(ticket);
-				
-				// Information zum Sitz (Reihe, Nummer)
-				Label label = new Label();
-				label.setText(ticket.getSeat().toString());
-				label.setStyle("-fx-padding: 3;-fx-min-width: 100px");
-				label.setTextAlignment(TextAlignment.CENTER);	
-				row.getChildren().add(label);
-				
-				// Auswahl für den Ticket-Typ
-				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
-				cbxTicketType.setStyle("-fx-padding: 0,5;-fx-min-width: 120px;");
-				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));					
-				cbxTicketType.getSelectionModel().select(ticket.getTicketType());
-				cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
-				    @Override
-				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
-				        if(newValue != null){
-				        	// unschön, aber es funktioniert (vergeblich mit eigenem UserControl und fxml rumgedoktert)
-				        	ticket.setTicketType(newValue);
-				        	ticketData.remove(ticket);
-				        	ticketData.add(ticket);
-				        }
-				    }
-				});					
-				row.getChildren().add(cbxTicketType);
-
-				// Preis
-				String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
-				Label labelPrice = new Label();
-				labelPrice.setText(price + " CHF");
-				labelPrice.setStyle("-fx-padding: 3;-fx-min-width: 60px");
-				labelPrice.setTextAlignment(TextAlignment.CENTER);					
-				row.getChildren().add(labelPrice);
-				
-				// Delete Button mit Bild
-				Button deleteButton = new Button();
-				deleteButton.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");
-				
-				ImageView imageView = new ImageView();
-				imageView.setImage(trash);
-				imageView.setFitWidth(23);
-				imageView.setFitHeight(23);
-				deleteButton.setGraphic(imageView);
-				row.getChildren().add(deleteButton);
-				
-				deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-				    @Override public void handle(ActionEvent e) {
-				    	 ticketData.remove(ticket);
-				    }
-				});
-				
-				// Zeile zum Grid hinzufügen
-				ticketGrid.getChildren().add(row);				
-			}
-		});
+//		// TODO: echt gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM, habe ich aber nicht hingekriegt)
+//		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
+//		ticketData.addListener((ListChangeListener<Ticket>) change -> {
+//			ticketGrid.getChildren().clear();
+//			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
+//			//tickets.sort((t1, t2) -> t1.getSeat().getSeatNumber().compareTo(t2.getSeat().getSeatNumber()));
+//			tickets.sort((lhs, rhs) -> {
+//		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
+//		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
+//		        } else {
+//		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
+//		        }
+//		    }); 
+//			for(Ticket ticket : tickets) {			
+//				// Erstelle das Control für die Anzeige eines Tickets
+//				// TODO: Styles auslagern ins css
+//				TicketRow row = new TicketRow();
+//				row.setMaxWidth(320.00);
+//				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+//				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+//				        + "-fx-border-color: gray;");
+//				row.setTicket(ticket);
+//				
+//				// Information zum Sitz (Reihe, Nummer)
+//				Label label = new Label();
+//				label.setText(ticket.getSeat().toString());
+//				label.setStyle("-fx-padding: 3;-fx-min-width: 100px");
+//				label.setTextAlignment(TextAlignment.CENTER);	
+//				row.getChildren().add(label);
+//				
+//				// Auswahl für den Ticket-Typ
+//				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
+//				cbxTicketType.setStyle("-fx-padding: 0,5;-fx-min-width: 120px;");
+//				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));					
+//				cbxTicketType.getSelectionModel().select(ticket.getTicketType());
+//				cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
+//				    @Override
+//				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
+//				        if(newValue != null){
+//				        	// unschön, aber es funktioniert (vergeblich mit eigenem UserControl und fxml rumgedoktert)
+//				        	ticket.setTicketType(newValue);
+//				        	ticketData.remove(ticket);
+//				        	ticketData.add(ticket);
+//				        }
+//				    }
+//				});					
+//				row.getChildren().add(cbxTicketType);
+//
+//				// Preis
+//				String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
+//				Label labelPrice = new Label();
+//				labelPrice.setText(price + " CHF");
+//				labelPrice.setStyle("-fx-padding: 3;-fx-min-width: 60px");
+//				labelPrice.setTextAlignment(TextAlignment.CENTER);					
+//				row.getChildren().add(labelPrice);
+//				
+//				// Delete Button mit Bild
+//				Button deleteButton = new Button();
+//				deleteButton.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");
+//				
+//				ImageView imageView = new ImageView();
+//				imageView.setImage(trash);
+//				imageView.setFitWidth(23);
+//				imageView.setFitHeight(23);
+//				deleteButton.setGraphic(imageView);
+//				row.getChildren().add(deleteButton);
+//				
+//				deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+//				    @Override public void handle(ActionEvent e) {
+//				    	 ticketData.remove(ticket);
+//				    }
+//				});
+//				
+//				// Zeile zum Grid hinzufügen
+//				ticketGrid.getChildren().add(row);				
+//			}
+//		});
 	}
 
 

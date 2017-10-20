@@ -209,141 +209,141 @@ public class VorstellungController {
 	}
 	
 	private void initTicketControl() {
-		// TODO: TabelView unbrauchbar, daher hier das Ganze zusammenbasteln!!!
-		// Diese Lösung ist aber auch gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM)
-		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
-		boxTimer.setVisible(false);
-		
-		ticketData.addListener((ListChangeListener<Ticket>) change -> {
-			ticketGrid.getChildren().clear();
-			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
-			
-			labelNoTickets.setVisible(false);
-			boxTimer.setVisible(true);
-			
-			if (tickets.isEmpty()) {
-				labelNoTickets.setVisible(true);
-				boxTimer.setVisible(false);
-				//return;
-			}
-
-			tickets.sort((lhs, rhs) -> {
-		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
-		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
-		        } else {
-		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
-		        }
-		    }); 
-			
-			TicketRow rowSumme = new TicketRow();
-			rowSumme.setMaxWidth(350.00);
-			rowSumme.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-			        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-			        + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 350px");		
-			
-			// Pro TicketType die Anzahl zählen
-			EnumMap<TicketType, Long> map = new EnumMap<>(TicketType.class);
-			tickets.forEach(t->map.merge(t.getTicketType(), 1L, Long::sum));
-			String countText = map.entrySet().stream().map(c -> c.getKey().getTitle() + " " + c.getValue()).collect(Collectors.joining(", "));			
-			Label labelCount = new Label();
-			//labelCount.setMaxWidth(200);
-			labelCount.setWrapText(true);
-			labelCount.setText(countText);
-			labelCount.setStyle("-fx-padding: 3;-fx-min-width: 240px;-fx-max-width: 240px");
-			labelCount.setTextAlignment(TextAlignment.CENTER);	
-			rowSumme.getChildren().add(labelCount);
-			
-			// Summe der Tickets auflisten
-			Double sum = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
-			String sumPrice = String.format(Locale.ROOT, "%.2f", sum);
-			Label sumPriceLabel = new Label();
-			sumPriceLabel.setText("Total: " + sumPrice + " CHF");
-			sumPriceLabel.setStyle("-fx-padding: 3;-fx-max-width: 80px;-fx-font-weight: bold; -fx-font-size: 11pt;");
-			rowSumme.getChildren().add(sumPriceLabel);
-			
-			ticketGrid.getChildren().add(rowSumme);
-			
-			// Einzelne Tickets auflisten
-			for(Ticket ticket : tickets) {			
-				// Erstelle das Control für die Anzeige eines Tickets
-				// TODO: Styles auslagern ins css
-				TicketRow row = new TicketRow();
-				row.setMaxWidth(350.00);
-				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-				        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
-				row.setTicket(ticket);
-				
-				// Information zum Sitz (Reihe, Nummer)
-				Label label = new Label();
-				label.setText(ticket.getSeat().toString());
-				label.setStyle("-fx-padding: 3;-fx-min-width: 120px");
-				label.setTextAlignment(TextAlignment.CENTER);	
-				row.getChildren().add(label);
-				
-				// Auswahl für den Ticket-Typ
-				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
-				cbxTicketType.setStyle("-fx-padding: 0,5; -fx-min-width: 100px;");
-				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));
-				cbxTicketType.setConverter(new StringConverter<TicketType>() {
-				    @Override
-				    public String toString(TicketType object) {
-				        return object.getTitle();
-				    }
-
-				    @Override
-				    public TicketType fromString(String string) {
-				        return null;
-				    }
-				});
-				cbxTicketType.getSelectionModel().select(ticket.getTicketType());
-				cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
-				    @Override
-				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
-				        if(newValue != null){
-				        	// unschön, aber es funktioniert (vergeblich mit eigenem UserControl und fxml rumgedoktert)
-				        	ticket.setTicketType(newValue);
-				        	ticketData.remove(ticket);
-				        	ticketData.add(ticket);
-				        }
-				    }
-				});					
-				row.getChildren().add(cbxTicketType);
-
-				// Preis
-				String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
-				Label labelPrice = new Label();
-				labelPrice.setText(price + " CHF");
-				labelPrice.setStyle("-fx-padding: 3;-fx-min-width: 60px");
-				labelPrice.setTextAlignment(TextAlignment.CENTER);					
-				row.getChildren().add(labelPrice);
-				
-				// Delete Button mit Bild
-				Button deleteButton = new Button();
-				deleteButton.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");
-				
-				ImageView imageView = new ImageView();
-				imageView.setImage(trash);
-				imageView.setFitWidth(23);
-				imageView.setFitHeight(23);
-				deleteButton.setGraphic(imageView);
-				row.getChildren().add(deleteButton);
-				
-				deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-				    @Override public void handle(ActionEvent e) {
-				    	Seat seat = ticket.getSeat();
-				    	SeatView seatView = views[seat.getSeatRow()][seat.getSeatColumn()];
-				    	if(seatView != null) {
-				    		seatView.deselect();
-					    	 ticketData.remove(ticket);
-				    	}
-				    }
-				});
-				
-				// Zeile zum Grid hinzufügen
-				ticketGrid.getChildren().add(row);				
-			}
-		});
+//		// TODO: TabelView unbrauchbar, daher hier das Ganze zusammenbasteln!!!
+//		// Diese Lösung ist aber auch gruusig! (sollte doch ein wiederverwendbares Control sein à la MVVM)
+//		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
+//		boxTimer.setVisible(false);
+//		
+//		ticketData.addListener((ListChangeListener<Ticket>) change -> {
+//			ticketGrid.getChildren().clear();
+//			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
+//			
+//			labelNoTickets.setVisible(false);
+//			boxTimer.setVisible(true);
+//			
+//			if (tickets.isEmpty()) {
+//				labelNoTickets.setVisible(true);
+//				boxTimer.setVisible(false);
+//				//return;
+//			}
+//
+//			tickets.sort((lhs, rhs) -> {
+//		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
+//		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
+//		        } else {
+//		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
+//		        }
+//		    }); 
+//			
+//			TicketRow rowSumme = new TicketRow();
+//			rowSumme.setMaxWidth(350.00);
+//			rowSumme.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+//			        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+//			        + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 350px");		
+//			
+//			// Pro TicketType die Anzahl zählen
+//			EnumMap<TicketType, Long> map = new EnumMap<>(TicketType.class);
+//			tickets.forEach(t->map.merge(t.getTicketType(), 1L, Long::sum));
+//			String countText = map.entrySet().stream().map(c -> c.getKey().getTitle() + " " + c.getValue()).collect(Collectors.joining(", "));			
+//			Label labelCount = new Label();
+//			//labelCount.setMaxWidth(200);
+//			labelCount.setWrapText(true);
+//			labelCount.setText(countText);
+//			labelCount.setStyle("-fx-padding: 3;-fx-min-width: 240px;-fx-max-width: 240px");
+//			labelCount.setTextAlignment(TextAlignment.CENTER);	
+//			rowSumme.getChildren().add(labelCount);
+//			
+//			// Summe der Tickets auflisten
+//			Double sum = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
+//			String sumPrice = String.format(Locale.ROOT, "%.2f", sum);
+//			Label sumPriceLabel = new Label();
+//			sumPriceLabel.setText("Total: " + sumPrice + " CHF");
+//			sumPriceLabel.setStyle("-fx-padding: 3;-fx-max-width: 80px;-fx-font-weight: bold; -fx-font-size: 11pt;");
+//			rowSumme.getChildren().add(sumPriceLabel);
+//			
+//			ticketGrid.getChildren().add(rowSumme);
+//			
+//			// Einzelne Tickets auflisten
+//			for(Ticket ticket : tickets) {			
+//				// Erstelle das Control für die Anzeige eines Tickets
+//				// TODO: Styles auslagern ins css
+//				TicketRow row = new TicketRow();
+//				row.setMaxWidth(350.00);
+//				row.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+//				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+//				        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
+//				row.setTicket(ticket);
+//				
+//				// Information zum Sitz (Reihe, Nummer)
+//				Label label = new Label();
+//				label.setText(ticket.getSeat().toString());
+//				label.setStyle("-fx-padding: 3;-fx-min-width: 120px");
+//				label.setTextAlignment(TextAlignment.CENTER);	
+//				row.getChildren().add(label);
+//				
+//				// Auswahl für den Ticket-Typ
+//				ComboBox<TicketType> cbxTicketType = new ComboBox<>();
+//				cbxTicketType.setStyle("-fx-padding: 0,5; -fx-min-width: 100px;");
+//				cbxTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));
+//				cbxTicketType.setConverter(new StringConverter<TicketType>() {
+//				    @Override
+//				    public String toString(TicketType object) {
+//				        return object.getTitle();
+//				    }
+//
+//				    @Override
+//				    public TicketType fromString(String string) {
+//				        return null;
+//				    }
+//				});
+//				cbxTicketType.getSelectionModel().select(ticket.getTicketType());
+//				cbxTicketType.valueProperty().addListener(new ChangeListener<TicketType>() {
+//				    @Override
+//				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
+//				        if(newValue != null){
+//				        	// unschön, aber es funktioniert (vergeblich mit eigenem UserControl und fxml rumgedoktert)
+//				        	ticket.setTicketType(newValue);
+//				        	ticketData.remove(ticket);
+//				        	ticketData.add(ticket);
+//				        }
+//				    }
+//				});					
+//				row.getChildren().add(cbxTicketType);
+//
+//				// Preis
+//				String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
+//				Label labelPrice = new Label();
+//				labelPrice.setText(price + " CHF");
+//				labelPrice.setStyle("-fx-padding: 3;-fx-min-width: 60px");
+//				labelPrice.setTextAlignment(TextAlignment.CENTER);					
+//				row.getChildren().add(labelPrice);
+//				
+//				// Delete Button mit Bild
+//				Button deleteButton = new Button();
+//				deleteButton.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");
+//				
+//				ImageView imageView = new ImageView();
+//				imageView.setImage(trash);
+//				imageView.setFitWidth(23);
+//				imageView.setFitHeight(23);
+//				deleteButton.setGraphic(imageView);
+//				row.getChildren().add(deleteButton);
+//				
+//				deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+//				    @Override public void handle(ActionEvent e) {
+//				    	Seat seat = ticket.getSeat();
+//				    	SeatView seatView = views[seat.getSeatRow()][seat.getSeatColumn()];
+//				    	if(seatView != null) {
+//				    		seatView.deselect();
+//					    	 ticketData.remove(ticket);
+//				    	}
+//				    }
+//				});
+//				
+//				// Zeile zum Grid hinzufügen
+//				ticketGrid.getChildren().add(row);				
+//			}
+//		});
 	}
 
 	private void clearSelectedSeats() {
