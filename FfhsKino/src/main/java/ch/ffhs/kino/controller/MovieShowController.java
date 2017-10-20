@@ -31,6 +31,7 @@ import javafx.geometry.HPos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -181,7 +182,7 @@ public class MovieShowController {
             	view.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
 			        	  if(selectedSeats.size() == 0)
-			        		  timeline.play();
+		        		  timeline.play();
 			        	  selectedSeats.add(view);
 			        	  
 			        	  // Ticket für diesen Sitzplatz hinzufügen
@@ -266,21 +267,53 @@ public class MovieShowController {
 	}
 	
 	@FXML
-	protected void addTicket(ActionEvent event) {
-		SeatView lastSeat = null;
+	protected void addTicket(ActionEvent event) throws IOException {
+		int maxRows = getHall().getRows();
+		int maxCols = getHall().getColumns();
 		
-		if(selectedSeats.size() > 1)
-			lastSeat = selectedSeats.get(selectedSeats.size() - 1);
-		
-		SeatView bestSeat = getBestSeat(lastSeat);
-	    Boolean ok = false;
-	    while(!ok) {
-	    	bestSeat = getBestSeat(lastSeat);
-		    if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
-		    	ok = true;
-		    }
+		SeatView bestSeat = null;
+		if(selectedSeats.size() >= 1)
+			bestSeat = selectedSeats.get(selectedSeats.size() - 1);
+	
+	    Boolean foundIt = false;
+	    int countSearch = 0;
+	    while(!foundIt) {	    	   	
+	    	bestSeat = getBestSeat(bestSeat, maxRows, maxCols);
+	    	if(bestSeat.getSeat().getSeatRow() == 13 && bestSeat.getSeat().getSeatColumn() == 13)
+	    	{
+	    		int i = 1;
+	    	}
+	    	if(isAvailable(bestSeat)) {
+	    		foundIt = true;
+	    		System.out.println("Reihe " + bestSeat.getSeat().getSeatRow() + "Platz " + bestSeat.getSeat().getSeatColumn());
+	    	}
+	    		
+//	    	if(bestSeat == null)
+//	    		break; // Sicherheitsausstieg
+//	    	if(countSearch == 1000)
+//	    		break; // Sicherheitsausstieg
 	    }
-	    bestSeat.select();
+	    
+	    if(foundIt) {
+	    	bestSeat.select();
+	    } else {
+	    	
+//	    	int maxScope = maxRows + maxCols;
+//	    	
+//	    	List<Booking> bookings = getMovieShow().getBookings();
+//	    	int countBookedTickets = 0;
+//	    	for (Booking booking : bookings)
+//		    	for(Ticket ticket : booking.getTickets())
+//		    		countBookedTickets++;
+	    	
+	    	
+	    	
+	    	Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Hinweis");
+			alert.setHeaderText("Es wurde kein Platz mehr gefunden.");
+			alert.setContentText("Bitte wählen Sie einen Platz manuell aus.");
+			alert.showAndWait();
+	    }
 	}	
 	
 	@FXML
@@ -301,10 +334,8 @@ public class MovieShowController {
 		}
 	}
 	
-	private SeatView getBestSeat(SeatView view) {
+	private SeatView getBestSeat(SeatView view, int maxRows, int maxCols) {
 		// TODO Auto-generated method stub
-		int maxRows = getHall().getRows();
-		int maxCols = getHall().getColumns();
 		int middleRow = maxRows / 2;
 		int middleCol = maxCols / 2;
 		if(view == null)
@@ -316,81 +347,124 @@ public class MovieShowController {
 		Boolean checkRight = true;
 		Boolean checkFront = true;
 		Boolean checkBack = true;
-		Boolean firstLeft = true;
+		Boolean firstLeft = true;  // Links bevorzugen
+		Boolean firstFront = true; // Vorne bevorzugen
 		
-		
-		
-		if(col < middleCol)
+		if(col < middleCol) 	// Rechts bevorzugen
 			firstLeft = false;
 		
-		if(row == 0)
-			checkFront = false;
-		
-		if(col == 0)
+		if(col == 0)			// Links nicht suchen (kein Sitz vorhanden)
 			checkLeft = false;
 		
-		if(row == (maxRows - 1))
-			checkBack = false;
-		
-		if(col == (maxCols-1))
+		if(col == (maxCols-1)) 	// Rechts nicht suchen (kein Sitz vorhanden)
 			checkRight = false;
 		
-		// Rechts oder Links?
-		SeatView bestSeat;
+		if(col < middleRow) 	// Hinten bevorzugen
+			firstFront = false;
+		
+		if(row == 0) 			// Vorne nicht suchen (kein Sitz vorhanden)
+			checkFront = false;
 
+		if(row == (maxRows - 1)) // Hinten nicht suchen (kein Sitz vorhanden)
+			checkBack = false;
+		
+
+		SeatView bestSeat;
+		// Rechts oder Links?
 		if(firstLeft)
 		{
 			if(checkLeft) {
 				// Links
 				bestSeat = seatView[row][col-1];
-				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
-					return bestSeat;
-				}			
+				if(checkRight || checkFront || checkBack){
+					if(isAvailable(bestSeat))
+						return bestSeat;
+				} else {
+					return bestSeat; // Kein besseren Sitz mehr möglich
+				}		
 			}
 			
 			if(checkRight) {
 				// Rechts
-				bestSeat = seatView[row][col+1];
-				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
-					return bestSeat;
-				}		
+				bestSeat = seatView[row][col+1];						
+				if(checkFront || checkBack) {
+					if(isAvailable(bestSeat))
+						return bestSeat;
+				} else {
+					return bestSeat; // Kein besseren Platz mehr möglich
+				}
+											
 			}
-		}else {
+		} else {
 			if(checkRight) {
 				// Rechts
 				bestSeat = seatView[row][col+1];
-				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
-					return bestSeat;
-				}		
+				if(checkLeft || checkFront || checkBack){
+					if(isAvailable(bestSeat))
+						return bestSeat;
+				} else {
+					return bestSeat; // Kein besseren Platz mehr möglich
+				}	
 			}
 			
 			if(checkLeft) {
 				// Links
 				bestSeat = seatView[row][col-1];
-				if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
-					return bestSeat;
+				if(checkFront || checkBack) {
+					if(isAvailable(bestSeat))
+						return bestSeat;	
+				} else {
+					return bestSeat; // Kein besseren Sitz mehr möglich
 				}			
 			}
 		}
 		
-		if(checkBack) {
-			// Hinten
-			bestSeat = seatView[row+1][col];
-			if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
-				return bestSeat;
-			}			
-		}
+		// Vorne oder Hinten?
+		if(firstFront)
+		{
+			if(checkFront) {
+				// Vorne
+				bestSeat = seatView[row-1][col];
+				if(checkBack) {
+					if(isAvailable(bestSeat))
+						return bestSeat;	
+				} else {
+					return bestSeat; // Kein besseren Sitz mehr möglich
+				}				
+			}
 			
-		if(checkFront) {
-			// Vorne
-			bestSeat = seatView[row-1][col];
-			if(!bestSeat.isDisable() && !bestSeat.getSold() && ! bestSeat.getIsSelected()) {
-				return bestSeat;
-			}			
+			if(checkBack) {
+				// Hinten
+				bestSeat = seatView[row+1][col];
+				return bestSeat; // Kein besseren Sitz mehr möglich
+			}
+			
+		} else {
+			if(checkBack) {
+				// Hinten
+				bestSeat = seatView[row+1][col];
+				if(checkFront) {
+					if(isAvailable(bestSeat)) {
+						return bestSeat;
+					}	
+				} else {
+					return bestSeat; // Kein besseren Sitz mehr möglich
+				}		
+			}
+				
+			if(checkFront) {
+				// Vorne
+				bestSeat = seatView[row-1][col];				
+				return bestSeat;		
+			}
 		}
-		
-		// Alles rundherum besetzt - DEADLOCK nächsten Sitz nehmen (oder besser Zufallssitz)
-		return seatView[row][col-1];
+
+		// Hier sollte das Programm nie hinkommen
+		return null;
+	}
+	
+	public Boolean isAvailable(SeatView seatView) {
+		return (!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected());		
 	}
 
 	public void initTimerAnimation() {
