@@ -157,7 +157,7 @@ public class ProgrammTableColumnFactory {
 										Hyperlink hl = (Hyperlink) event.getSource();
 
 										Vorstellung v = (Vorstellung) hl.getProperties().get("vorstellung");
-										Main.startVorstellung(v);
+										Main.startMovieShow(v);
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
