@@ -1,5 +1,6 @@
 package ch.ffhs.kino.controller;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import org.controlsfx.validation.ValidationSupport;
@@ -144,12 +145,12 @@ public class PaymentController {
 
 	@FXML
 	protected void pay(ActionEvent event) {
-//		try {			
-//			Main.cinemaProgrammService.addBooking(booking);
-//			Main.startBookingConfirm(booking);	
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {			
+			Main.cinemaProgrammService.addBooking(booking);
+			Main.startBookingConfirm(booking);	
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 	

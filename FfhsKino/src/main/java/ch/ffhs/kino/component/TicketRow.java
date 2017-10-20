@@ -1,6 +1,9 @@
 package ch.ffhs.kino.component;
 
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Ticket;
@@ -19,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 
 public class TicketRow extends HBox {
@@ -46,10 +48,37 @@ public class TicketRow extends HBox {
 	
 	@FXML
 	protected void initialize() {
-		//this.setAlignment(Pos.CENTER_LEFT);
 	}
 
-	public void addTicket(SeatView[][] seatView) {
+	public void createSumView(List<Ticket> tickets) {
+		this.setAlignment(Pos.CENTER_LEFT);
+		
+		//this.setMaxWidth(350.00);
+		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
+		        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
+		        + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 380px");		
+		
+		// Pro TicketType die Anzahl zählen
+		EnumMap<TicketType, Long> map = new EnumMap<>(TicketType.class);
+		tickets.forEach(t->map.merge(t.getTicketType(), 1L, Long::sum));
+		String countText = map.entrySet().stream().map(c -> c.getKey().getTitle() + " " + c.getValue()).collect(Collectors.joining(", "));			
+		Label labelCount = new Label();
+		//labelCount.setMaxWidth(200);
+		labelCount.setWrapText(true);
+		labelCount.setText(countText);
+		labelCount.setStyle("-fx-min-width: 200px;-fx-max-width: 200px");
+		this.getChildren().add(labelCount);
+		
+		// Summe der Tickets auflisten
+		Double sum = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
+		String sumPrice = String.format(Locale.ROOT, "%.2f", sum);
+		Label sumPriceLabel = new Label();
+		sumPriceLabel.setText("Total: " + sumPrice + " CHF");
+		sumPriceLabel.setStyle("-fx-min-width: 160px;-fx-font-weight: bold; -fx-font-size: 11pt;");
+		this.getChildren().add(sumPriceLabel);		
+	}
+	
+	public void createTicketView(SeatView[][] seatView) {
 		
 		this.setAlignment(Pos.CENTER_LEFT);
 
@@ -57,7 +86,6 @@ public class TicketRow extends HBox {
 		Label label = new Label();
 		label.setText(ticket.getSeat().toString());
 		label.setMinWidth(120);
-		//label.setTextAlignment(TextAlignment.CENTER);	
 		this.getChildren().add(label);
 		
 		// Auswahl für den Ticket-Typ

@@ -131,21 +131,32 @@
 		</GridPane>     
 		    
 		<!-- Rechts: Tickets -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" >
+	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-padding: 0 0 0 15;">
 		    
 		    <!-- Buchungstimer -->
-		    <GridPane fx:id="gridTimer" GridPane.rowIndex="0">
-		    	<Label text="Buchungsvorgang läuft ab in " GridPane.columnIndex="0" styleClass="h2" style="-fx-padding: 15 5 15 15;"/>
-				<Label fx:id="lbTimer" GridPane.columnIndex="1" styleClass="h2" style="-fx-padding: 15 0 15 0;-fx-min-width: 50px;"/>
+		    <GridPane fx:id="gridTimer" GridPane.rowIndex="0" style="-fx-padding: 15 5 5 0;-fx-min-width: 380px">
+		    	<Label text="Buchungsvorgang läuft ab in " GridPane.columnIndex="0" styleClass="h2" style="-fx-padding: 0;"/>
+				<Label fx:id="lbTimer" GridPane.columnIndex="1" styleClass="h2" style="-fx-padding: 0;-fx-min-width: 50px;"/>
 				<ImageView GridPane.columnIndex="2"  fitHeight="20.0" fitWidth="20.0">
 			      <image>
 			      	<Image url="/ch/ffhs/kino/images/timer.png"/>
 			      </image>
 			 	</ImageView>
+			 	
+			 	<Button fx:id="btnBuy" GridPane.columnIndex="3" text="Kaufen" 
+						onAction="#buyTickets" mnemonicParsing="false">
+					<graphic>
+				        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+				          <image>
+				            <Image url="/ch/ffhs/kino/images/coins.png" />
+				          </image>
+				        </ImageView>
+				      </graphic>
+				</Button>
 		    </GridPane>
 		    
-		    
-		    <HBox GridPane.rowIndex="1" >
+		    <HBox GridPane.rowIndex="1" style="-fx-padding: 0 0 5 0;">
+		    	<Pane HBox.hgrow="ALWAYS" />
 			    <Button fx:id="btnDeleteTickets"
 			    		onAction="#deleteTickets" alignment="CENTER_RIGHT"
 			    		mnemonicParsing="false" text="Alle Tickets entfernen"

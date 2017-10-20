@@ -1,5 +1,6 @@
 package ch.ffhs.kino.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
@@ -24,11 +25,13 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
@@ -60,6 +63,9 @@ public class MovieShowController {
 	@FXML
 	private Button btnAddTicket;
 	
+	@FXML
+	private Button btnBuy;
+	
 	private Vorstellung movieShow;
 	private Booking reservation;
 	private Hall hall;
@@ -78,6 +84,8 @@ public class MovieShowController {
 		
 		btnDeleteTickets.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		btnAddTicket.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
+		GridPane.setHalignment(btnBuy, HPos.RIGHT);
+		GridPane.setHgrow(btnBuy, Priority.ALWAYS);
 	}
 
 	/**
@@ -246,9 +254,10 @@ public class MovieShowController {
 	  
 	private void renderTicketTable() {		
 		Image trash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
-		
+
 		ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			gridTickets.getChildren().clear();
+
 			List<Ticket> tickets = FXCollections.observableArrayList(ticketData);
 			tickets.sort((lhs, rhs) -> {
 		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
@@ -258,6 +267,9 @@ public class MovieShowController {
 		        }
 		    }); 
 			
+			TicketRow sumRow = new TicketRow(ticketData);
+			sumRow.createSumView(tickets);
+			gridTickets.getChildren().add(sumRow);
 			
 			// Pro Ticket eine Zeile erstellen
 			for(Ticket ticket : tickets) {	
@@ -267,10 +279,7 @@ public class MovieShowController {
 				ticketRow.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
 				        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
 				        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
-				ticketRow.addTicket(seatView);
-				
-				
-
+				ticketRow.createTicketView(seatView);
 				gridTickets.getChildren().add(ticketRow);	
 			}
 		});
@@ -285,6 +294,22 @@ public class MovieShowController {
 	protected void addTicket(ActionEvent event) {
 		SeatView seat = getBestSeat();
 	}	
+	
+	@FXML
+	protected void buyTickets(ActionEvent event) {
+    	// Booking erstellen und weiter zu zahlen
+    	Booking booking = new Booking();
+    	booking.setEvent(getMovieShow());
+    	booking.setTickets(ticketData);    	
+    	// Aktuelle Reservierung setzen
+    	Main.cinemaProgrammService.setCurrentReservation(booking);
+    	try {
+			Main.startPayment(booking);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	private SeatView getBestSeat() {
 		// TODO Auto-generated method stub
