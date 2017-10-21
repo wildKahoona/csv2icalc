@@ -3,6 +3,7 @@ package ch.ffhs.kino.controller;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 
 import org.controlsfx.validation.ValidationSupport;
@@ -10,11 +11,11 @@ import org.controlsfx.validation.Validator;
 
 import ch.ffhs.kino.component.TicketTable;
 import ch.ffhs.kino.component.TicketTableHeader;
+import ch.ffhs.kino.component.TimerAnimation;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Ticket;
-import ch.ffhs.kino.model.Vorstellung;
-import javafx.animation.Timeline;
+import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
@@ -23,11 +24,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -37,12 +40,23 @@ import javafx.scene.layout.VBox;
 public class PaymentController {
 
 	@FXML
-	public void breadcrumbAction(MouseEvent event) {
-		Main.cinemaProgrammService.setSessionRemainTime(sessionRemainTime);
+	public void breadcrumbAction(MouseEvent event) throws IOException {
+		
+		timer.stopTimeAnimation();
 		getBooking().setTickets(ticketData);
-    	Main.cinemaProgrammService.setCurrentReservation(booking);
-    	
-		ControllerUtils.breadcrumbAction(event.getSource());
+		getBooking().setSessionRemainTime(timer.getRemainTime());
+		
+		if (event.getSource() instanceof Label) {
+			Label label = (Label) event.getSource();
+			if (!label.isDisable()) {
+				String id = label.getId();
+				if (id.equals("bc_sitzplatz")) {
+					Main.startMovieShow(getBooking());
+				}
+			}
+		} else {
+			ControllerUtils.breadcrumbAction(event.getSource());
+		}
 	}
 	
 	@FXML
@@ -79,21 +93,19 @@ public class PaymentController {
 	private Button btnPay;
 	
 	@FXML
+	private Label lbTimer;
+	
+	@FXML
 	private VBox gridTickets;
 	
 	@FXML
 	private	VBox gridSumTickets;
 	
-	private Booking booking;
-	
-	private Boolean payCreditCard = true;
-	
-	private Timeline timeline;
-	
-	private long sessionRemainTime;
-	
-	private ValidationSupport validationSupport = new ValidationSupport();
-	
+	private Booking booking;	
+	private Boolean payCreditCard = true;	
+	private TimerAnimation timer = new TimerAnimation();
+	private SimpleDateFormat remainTimeFormat = new SimpleDateFormat("mm:ss");	
+	private ValidationSupport validationSupport = new ValidationSupport();	
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
 	@FXML
@@ -154,8 +166,31 @@ public class PaymentController {
 		btnPay.disableProperty().bind(booleanBind);
 		
 		renderTicketTable();
-		loadData();
-		setTitle();
+		
+		timer = new TimerAnimation();
+		timer.remainTimeProperty().addListener((ChangeListener<? super Number>) (o, oldVal, newVal) -> {
+			lbTimer.setText(remainTimeFormat.format(timer.getRemainTime()));
+        });
+		timer.timeElapsedProperty().addListener((ChangeListener<? super Boolean>) (o, oldVal, newVal) -> {
+			if(newVal) {
+				// Alle Tickets entfernen
+				Iterator<Ticket> tickets = ticketData.iterator();
+				while (tickets.hasNext()) {
+					tickets.next();
+					tickets.remove();
+				}
+				
+				// Reset Buchungszeit
+				getBooking().setSessionRemainTime(CinemaProgrammServiceMock.SESSION_TIME);
+				
+				// Meldung an den Benutzer
+				Alert alert = new Alert(AlertType.WARNING);
+			    alert.setTitle("Reservierungszeit abgelaufen");
+			    alert.setHeaderText("Bitte wählen Sie neue Plätze");
+			    alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
+			    alert.showAndWait();
+			}
+		});
 	}
 
 	@FXML
@@ -172,17 +207,11 @@ public class PaymentController {
 
 	@FXML
 	protected void pay(ActionEvent event) {
-		try {			
-			Main.cinemaProgrammService.addBooking(booking);
+		try {					
 			Main.startBookingConfirm(booking);	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void loadData() {
-		setBooking(Main.cinemaProgrammService.getCurrentReservation());
-		sessionRemainTime = Main.cinemaProgrammService.getSessionRemainTime();
 	}
 	
 	private void setTitle() {
@@ -210,9 +239,10 @@ public class PaymentController {
 	public void setBooking(Booking booking) {
 		this.booking = booking;
 		if(this.booking == null) return;
+		setTitle();
+		
+		timer.startTimeAnimation(booking.getSessionRemainTime());
 		List<Ticket> tickets = this.booking.getTickets();
-		// Leider nein, muss die Tickets einzeln zur ObservableList hinzufügen, damit der AddListener anspringt
-		//ticketData = FXCollections.observableArrayList(tickets);
 		if(tickets == null) return;
 		for(Ticket ticket : tickets){
 			ticketData.add(ticket);

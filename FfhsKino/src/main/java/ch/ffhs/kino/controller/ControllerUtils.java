@@ -20,13 +20,12 @@ public class ControllerUtils {
 					String id = label.getId();
 					if (id.equals("bc_programm")) {
 						Main.startKinoProgramm();
-					} else if (id.equals("bc_vorstellung")) {
-						Main.startMovieShow(null);
+//					} else if (id.equals("bc_vorstellung")) {
+//						Main.startMovieShow(null);
 					} else if (id.equals("bc_bezahlen")) {
 						Main.startPayment(null);
-					} else if (id.equals("bc_sitzplatz")) {
-						Main.startMovieShow(null);
-
+//					} else if (id.equals("bc_sitzplatz")) {
+//						Main.startMovieShow(null);
 					}
 
 				}

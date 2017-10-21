@@ -67,7 +67,7 @@ public class TicketTable extends GridPane {
 				
 				ticketRow.addDeleteButton(imgTrash);				
 				// Add Listener for delete Ticket
-				ticketRow.getBtnDelteTicket().setOnAction(new EventHandler<ActionEvent>() {
+				ticketRow.getBtnDeleteTicket().setOnAction(new EventHandler<ActionEvent>() {
 				    @Override public void handle(ActionEvent e) {
 				    	if(seatView == null) {
 				    		ticketData.remove(ticket);

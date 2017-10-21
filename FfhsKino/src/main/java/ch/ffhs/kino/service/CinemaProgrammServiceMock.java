@@ -2,7 +2,6 @@
 package ch.ffhs.kino.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -29,7 +28,7 @@ import ch.ffhs.kino.model.Ticket.TicketType;
  */
 public class CinemaProgrammServiceMock {
 
-	public static final long SESSION_TIME = System.currentTimeMillis() + (600 * 1000); // 10 Minuten
+	public static final long SESSION_TIME = 50 * 1000; // 600 * 1000; // 10 Minuten
 	
 	// Säle
 	private final static Hall hallRex1 = new Hall("Minisaal", CinemaPlaces.KINO_REX);
@@ -53,8 +52,7 @@ public class CinemaProgrammServiceMock {
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
 	private List<Booking> bookings = new ArrayList<Booking>();
-	private Booking currentReservation;
-	private long sessionRemainTime;
+	//private Booking currentReservation;
 
 	public CinemaProgrammServiceMock() {
 
@@ -89,13 +87,13 @@ public class CinemaProgrammServiceMock {
 		return booking;
 	}
 
-	public Booking getCurrentReservation() {
-		return currentReservation;
-	}
-
-	public void setCurrentReservation(Booking currentReservation) {
-		this.currentReservation = currentReservation;
-	}
+//	public Booking getCurrentReservation() {
+//		return currentReservation;
+//	}
+//
+//	public void setCurrentReservation(Booking currentReservation) {
+//		this.currentReservation = currentReservation;
+//	}
 
 	public List<Booking> getBookings() {
 		return bookings;
@@ -108,7 +106,7 @@ public class CinemaProgrammServiceMock {
 	public void addBooking(Booking booking) {
 		List<Booking> bookings = getBookings();
 		bookings.add(booking);
-		setCurrentReservation(null);
+		//setCurrentReservation(null);
 	}
 
 	private void init() {
@@ -296,8 +294,9 @@ public class CinemaProgrammServiceMock {
 		hallRex1.setSeatType(8, 7, SeatType.PREMIUM);
 		hallRex1.setSeatType(8, 8, SeatType.PREMIUM);
 
-		hallRex2.configureSeatPlan(15, 8);
-		hallRex3.configureSeatPlan(25, 15);
+		hallRex2.configureSeatPlan(15, 12);
+		hallRex3.configureSeatPlan(12, 15);
+		hallRex4.configureSeatPlan(10, 15);
 	}
 
 	private void initBookings() {
@@ -327,11 +326,11 @@ public class CinemaProgrammServiceMock {
 		return movie3;
 	}
 
-	public long getSessionRemainTime() {
-		return sessionRemainTime;
-	}
-
-	public void setSessionRemainTime(long sessionRemainTime) {
-		this.sessionRemainTime = sessionRemainTime;
-	}
+//	public long getSessionRemainTime() {
+//		return sessionRemainTime;
+//	}
+//
+//	public void setSessionRemainTime(long sessionRemainTime) {
+//		this.sessionRemainTime = sessionRemainTime;
+//	}
 }

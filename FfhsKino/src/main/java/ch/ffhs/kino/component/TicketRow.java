@@ -17,7 +17,7 @@ import javafx.util.StringConverter;
 public class TicketRow extends HBox {
 
 	private Ticket ticket;
-	private Button btnDelteTicket;
+	private Button btnDeleteTicket;
 	private ComboBox<TicketType> cbTicketType;
   
 	public TicketRow() {
@@ -77,14 +77,14 @@ public class TicketRow extends HBox {
 	}
 	
 	public void addDeleteButton(Image image) {
-		btnDelteTicket = new Button();
-		btnDelteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");		
+		btnDeleteTicket = new Button();
+		btnDeleteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");		
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
 		imageView.setFitWidth(23);
 		imageView.setFitHeight(23);
-		btnDelteTicket.setGraphic(imageView);
-		this.getChildren().add(btnDelteTicket);
+		btnDeleteTicket.setGraphic(imageView);
+		this.getChildren().add(btnDeleteTicket);
 	}
 	
 	public ComboBox<TicketType> getCbTicketType() {
@@ -95,11 +95,11 @@ public class TicketRow extends HBox {
 		this.cbTicketType = cbTicketType;
 	}
 
-	public Button getBtnDelteTicket() {
-		return btnDelteTicket;
+	public Button getBtnDeleteTicket() {
+		return btnDeleteTicket;
 	}
 
-	public void setBtnDelteTicket(Button btnDelteTicket) {
-		this.btnDelteTicket = btnDelteTicket;
+	public void setBtnDeleteTicket(Button btnDeleteTicket) {
+		this.btnDeleteTicket = btnDeleteTicket;
 	}
 }

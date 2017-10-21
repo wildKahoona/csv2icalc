@@ -166,8 +166,8 @@ public class VorstellungController {
 	protected void initialize() {	
 		
 		//initTimeline();
-		timerAnimation = new TimerAnimation(this.selectedSeats);
-		timerAnimation.initTimeline(timeLabel);
+//		timerAnimation = new TimerAnimation(this.selectedSeats);
+//		timerAnimation.initTimeline(timeLabel);
 		
 		initTicketControl();
 		
@@ -416,8 +416,8 @@ public class VorstellungController {
             	  	           	
             	seatView.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
-			        	  if(selectedSeats.size() == 0)
-			        		  timerAnimation.startTimeAnimation();
+//			        	  if(selectedSeats.size() == 0)
+//			        		  timerAnimation.startTimeAnimation();
 			        	//StartTimeAnimation();
 			        	  selectedSeats.add(seatView);
 			        	  // Ticket für diesen Sitzplatz hinzufügen
@@ -784,7 +784,7 @@ public class VorstellungController {
     	booking.setEvent(vorstellung);
     	booking.setTickets(ticketData);    	
     	// Aktuelle Reservierung setzten
-    	Main.cinemaProgrammService.setCurrentReservation(booking);
+    	//Main.cinemaProgrammService.setCurrentReservation(booking);
     	try {
 			Main.startPayment(booking);
 		} catch (IOException e) {

@@ -9,6 +9,7 @@ import java.util.Optional;
 import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketTable;
 import ch.ffhs.kino.component.TicketTableHeader;
+import ch.ffhs.kino.component.TimerAnimation;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
@@ -16,14 +17,12 @@ import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.model.Seat.SeatType;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
+import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,14 +37,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
-// TODO: Scrollbar: Summe soll nicht scrollen, sondern fix bleiben
-// 		 TimerAnimation-Problem lösen
+// TODO: TicketTable besser, GridPane scale besser
 public class MovieShowController {
 
 	@FXML
 	public void breadcrumbAction(MouseEvent event) {
+		timer.stopTimeAnimation();
 		ControllerUtils.breadcrumbAction(event.getSource());
 	}
 	
@@ -77,33 +75,49 @@ public class MovieShowController {
 	private Button btnAddTicket;
 	
 	@FXML
-	private Button btnBuy;
+	private Button btnBuy;	
 	
 	private Vorstellung movieShow;
 	private Booking reservation;
 	private Hall hall;
 	private SeatView seatView[][];
-	private Timeline timeline;
-	private long sessionRemainTime;
+	private TicketTableHeader ticketHeader;
+	private TicketTable ticketTable;
+	
+	private TimerAnimation timer = new TimerAnimation();
+	private SimpleDateFormat remainTimeFormat = new SimpleDateFormat("mm:ss");
 
 	@FXML
 	public void initialize() {		
-		
-		TicketTableHeader ticketHeader = new TicketTableHeader(ticketData, gridSumTickets);
-		ticketHeader.createTicketListener();
-		
-		TicketTable table = new TicketTable(ticketData, gridTickets);
-		table.createTicketListener(seatView);
-		
-		initTimerAnimation();
+
+		ticketHeader = new TicketTableHeader(ticketData, gridSumTickets);
+		ticketTable = new TicketTable(ticketData, gridTickets);	
 		
 		btnDeleteTickets.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
-		//btnAddTicket.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		btnBuy.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		GridPane.setHalignment(btnBuy, HPos.RIGHT);
 		GridPane.setHgrow(btnBuy, Priority.ALWAYS);
 		
-		loadData();
+		timer = new TimerAnimation();
+		timer.remainTimeProperty().addListener((ChangeListener<? super Number>) (o, oldVal, newVal) -> {
+			lbTimer.setText(remainTimeFormat.format(timer.getRemainTime()));
+        });
+		timer.timeElapsedProperty().addListener((ChangeListener<? super Boolean>) (o, oldVal, newVal) -> {
+			if(newVal) {
+				// Ausgewählte Sitze freigeben
+				clearSelectedSeats();
+				
+				// Reset Buchungszeit
+				getReservation().setSessionRemainTime(CinemaProgrammServiceMock.SESSION_TIME);
+				
+				// Meldung an den Benutzer
+				Alert alert = new Alert(AlertType.WARNING);
+			    alert.setTitle("Reservierungszeit abgelaufen");
+			    alert.setHeaderText("Bitte wählen Sie neue Plätze");
+			    alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
+			    alert.showAndWait();
+			}
+		});
 	}
 
 	/**
@@ -116,23 +130,6 @@ public class MovieShowController {
      */
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
-	private void loadData() {
-		Booking reservation = Main.cinemaProgrammService.getCurrentReservation();
-		setReservation(reservation);
-			
-		Vorstellung movieShow;		
-		if(reservation != null)
-			movieShow = this.reservation.getEvent();
-		else
-			movieShow = Main.cinemaProgrammService.getVorstellung();
-		
-		setMovieShow(movieShow);
-		setHall(movieShow.getHall());
-		setTitle();
-		renderSeatView();
-		renderReservedSeats();
-		renderBookedSeats();
-	}
 	
 	private void setTitle() {
 		String movieTitle = movieShow.getShow().getMovie().getTitle();
@@ -191,16 +188,16 @@ public class MovieShowController {
             	  	           	
             	view.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
-//			        	  if(selectedSeats.size() == 0)
-//			        		  timeline.play();
+			        	  if(selectedSeats.size() == 0)
+			        		  timer.startTimeAnimation(getReservation().getSessionRemainTime());
 			        	  selectedSeats.add(view);
 			        	  
 			        	// Ticket für diesen Sitzplatz hinzufügen
 			        	ticketData.add(new Ticket(seat));
 			          } else {
 			            this.selectedSeats.remove(view);
-//			            if(selectedSeats.size() == 0)
-//			            	timeline.stop();
+			            if(selectedSeats.size() == 0)
+			            	timer.stopTimeAnimation();
 			            
 			            // Ticket aus der Liste entfernen
 			            Optional<Ticket> removeTicket = ticketData.stream().
@@ -243,13 +240,6 @@ public class MovieShowController {
 	}
 	
 	private void clearSelectedSeats() {
-		// ACHTUNG: NICHT THREAD-SICHER (hat mich viele Stunden gekostet)!!!
-//		selectedSeats.forEach((seat) -> { 
-//			seat.deselect();
-//		});
-//		selectedSeats.clear();
-		
-		// THREAD-SICHER
 		Iterator<SeatView> seats = this.selectedSeats.iterator();
 		while (seats.hasNext()) {
 			SeatView seat = seats.next();
@@ -308,19 +298,13 @@ public class MovieShowController {
 	    }
 	}	
 	
-	
 	@FXML	
 	protected void buyTickets(ActionEvent event) {
-		Main.cinemaProgrammService.setSessionRemainTime(sessionRemainTime);
-		timeline.stop();
-		// Booking erstellen und weiter zu zahlen
-    	Booking booking = new Booking();
-    	booking.setEvent(getMovieShow());
-    	booking.setTickets(ticketData);    	
-    	// Aktuelle Reservierung setzen
-    	Main.cinemaProgrammService.setCurrentReservation(booking);
+		timer.stopTimeAnimation();
+		getReservation().setTickets(ticketData);
+		getReservation().setSessionRemainTime(timer.getRemainTime());
     	try {
-			Main.startPayment(booking);
+			Main.startPayment(getReservation());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -459,43 +443,6 @@ public class MovieShowController {
 	public Boolean isAvailable(SeatView seatView) {
 		return (!seatView.isDisable() && !seatView.getSold() && ! seatView.getIsSelected());		
 	}
-
-	public void initTimerAnimation() {
-		long sessionTime = Main.cinemaProgrammService.SESSION_TIME;	
-		timeline = new Timeline(
-				new KeyFrame(Duration.seconds(1), e -> {
-					sessionRemainTime = sessionTime - System.currentTimeMillis();
-			    	if(sessionRemainTime <= (long)0) {
-			    		timeline.stop();
-			    		Platform.runLater(new Runnable() {
-			    		      @Override public void run() {
-			    		    	  // TODO: wenn der Timer abgeleaufen ist, müssen
-			    		    	  // - Alle ausgewählten Sitze deselektiert werden
-			    		  		  // - Alle Tickets gelöscht werden
-			    		  		  // - Eine Meldung an den Benutzer 
-			    		  		  // - Vorhandene Reservierung gelöscht (oder aktualisiert) werden (beim PaymentController)
-			    		  		  // - Die Buttons (Kaufen, Alle Tickets löschen, hinzufügen) disabled werden
-			    		  		
-			    		    	  
-			    		    	  // Ausgewählte Sitze freigeben (Tickets werden automatisch entfern)
-			    		    	  clearSelectedSeats();
-			    		    	  
-			    		    	  // Reservierung löschen
-			    		    	  Main.cinemaProgrammService.setCurrentReservation(null);
-			    		    	  
-			    		    	  // Meldung an den Benutzer
-			    		    	  Alert alert = ControllerUtils.getSessionTimeOverMsg();
-			    		    	  alert.showAndWait();
-			    		      }
-			    		});			    					    		
-			    	}else {
-			    		SimpleDateFormat fmt = new SimpleDateFormat("mm:ss");
-			    		lbTimer.setText(fmt.format(sessionRemainTime));
-			    	} 
-			    })
-			);
-			timeline.setCycleCount( Animation.INDEFINITE );		
-	}
 	
 	// Getter and Setter
 	public Vorstellung getMovieShow() {
@@ -512,6 +459,20 @@ public class MovieShowController {
 
 	public void setReservation(Booking reservation) {
 		this.reservation = reservation;
+			
+		setMovieShow(this.reservation.getEvent());
+		setHall(this.reservation.getEvent().getHall());
+		setTitle();
+		renderSeatView();
+		renderReservedSeats();
+		renderBookedSeats();
+		
+		ticketHeader.createTicketListener();
+		ticketTable.createTicketListener(seatView);
+		
+		// TODO Timer starten
+		if(reservation.getTickets().size() > 0)
+			timer.startTimeAnimation(reservation.getSessionRemainTime());
 	}
 
 	public Hall getHall() {

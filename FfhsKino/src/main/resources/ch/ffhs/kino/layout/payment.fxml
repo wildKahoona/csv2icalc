@@ -103,6 +103,7 @@
 	    
 	    <!-- Rechts: Tickets -->
 	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-color:green">
+			<Label fx:id="lbTimer" GridPane.columnIndex="1" styleClass="h2" style="-fx-padding: 0;-fx-min-width: 50px;"/>
 			<VBox GridPane.rowIndex="2" fx:id="gridSumTickets" style="-fx-min-width: 380px;"/>
 			<ScrollPane GridPane.rowIndex="3" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true"  style="-fx-min-width: 400px;">
 				<VBox fx:id="gridTickets" style="-fx-min-width: 380px;"/>

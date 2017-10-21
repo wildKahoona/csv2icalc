@@ -46,7 +46,8 @@
 	    </columnConstraints>
 	    
 	    <!-- Links: Kinosaal -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER" style="-fx-background-color:lightblue">
+	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER" 
+	    style="-fx-background-color:lightblue">
 			
 			<Label GridPane.rowIndex="0" text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" styleClass="h2"/>
 		
