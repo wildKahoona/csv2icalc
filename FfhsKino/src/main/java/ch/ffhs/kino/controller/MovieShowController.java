@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import ch.ffhs.kino.component.SeatView;
 import ch.ffhs.kino.component.TicketTable;
+import ch.ffhs.kino.component.TicketTableHeader;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
@@ -59,6 +60,9 @@ public class MovieShowController {
 	
 	@FXML
 	private VBox gridTickets;	
+
+	@FXML
+	private VBox gridSumTickets;	
 	
 	@FXML
 	private VBox gridSum;
@@ -79,15 +83,18 @@ public class MovieShowController {
 	private Booking reservation;
 	private Hall hall;
 	private SeatView seatView[][];
-	private Boolean autoTicketOn = true;
 	private Timeline timeline;
 	private long sessionRemainTime;
 
 	@FXML
 	public void initialize() {		
-		loadData();
-		setTitle();
-		renderTicketTable();	
+		
+		TicketTableHeader ticketHeader = new TicketTableHeader(ticketData, gridSumTickets);
+		ticketHeader.createTicketListener();
+		
+		TicketTable table = new TicketTable(ticketData, gridTickets);
+		table.createTicketListener(seatView);
+		
 		initTimerAnimation();
 		
 		btnDeleteTickets.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
@@ -95,6 +102,8 @@ public class MovieShowController {
 		btnBuy.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		GridPane.setHalignment(btnBuy, HPos.RIGHT);
 		GridPane.setHgrow(btnBuy, Priority.ALWAYS);
+		
+		loadData();
 	}
 
 	/**
@@ -110,7 +119,7 @@ public class MovieShowController {
 	private void loadData() {
 		Booking reservation = Main.cinemaProgrammService.getCurrentReservation();
 		setReservation(reservation);
-		
+			
 		Vorstellung movieShow;		
 		if(reservation != null)
 			movieShow = this.reservation.getEvent();
@@ -119,6 +128,7 @@ public class MovieShowController {
 		
 		setMovieShow(movieShow);
 		setHall(movieShow.getHall());
+		setTitle();
 		renderSeatView();
 		renderReservedSeats();
 		renderBookedSeats();
@@ -181,21 +191,16 @@ public class MovieShowController {
             	  	           	
             	view.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
-			        	  if(selectedSeats.size() == 0)
-		        		  timeline.play();
+//			        	  if(selectedSeats.size() == 0)
+//			        		  timeline.play();
 			        	  selectedSeats.add(view);
 			        	  
-			        	  // Ticket für diesen Sitzplatz hinzufügen
-			        	  if(autoTicketOn)
-			        	  {
-			        		  Ticket ticket = new Ticket(seat);
-			        		  ticketData.add(ticket);
-			        	  }
-			          }
-			          else {
+			        	// Ticket für diesen Sitzplatz hinzufügen
+			        	ticketData.add(new Ticket(seat));
+			          } else {
 			            this.selectedSeats.remove(view);
-			            if(selectedSeats.size() == 0)
-			            	timeline.stop();
+//			            if(selectedSeats.size() == 0)
+//			            	timeline.stop();
 			            
 			            // Ticket aus der Liste entfernen
 			            Optional<Ticket> removeTicket = ticketData.stream().
@@ -211,17 +216,14 @@ public class MovieShowController {
 	}
 	
 	private void renderReservedSeats() {
-		autoTicketOn = false;
 	    if(this.reservation != null) {
 	    	for(Ticket ticket : reservation.getTickets()) {
-	    		ticketData.add(ticket);
 	    		Seat seat = ticket.getSeat();
 	    		SeatView view = seatView[seat.getSeatRow()][seat.getSeatColumn()];
 	    		if (view != null)
 	    			view.select();
 	    	}
 	    }
-	    autoTicketOn = true;
 	}
 	  
 	private void renderBookedSeats() {
@@ -255,12 +257,7 @@ public class MovieShowController {
 			seat.deselect();
 		}
 	}
-	  
-	private void renderTicketTable() {			
-		TicketTable table = new TicketTable(ticketData, gridTickets);
-		table.createTicketListener(seatView, gridTickets);
-	}
-	
+
 	@FXML
 	protected void deleteTickets(ActionEvent event) {
 		clearSelectedSeats();
@@ -287,11 +284,6 @@ public class MovieShowController {
 	    		foundIt = true;
 	    		System.out.println("Reihe " + bestSeat.getSeat().getSeatRow() + "Platz " + bestSeat.getSeat().getSeatColumn());
 	    	}
-	    		
-//	    	if(bestSeat == null)
-//	    		break; // Sicherheitsausstieg
-//	    	if(countSearch == 1000)
-//	    		break; // Sicherheitsausstieg
 	    }
 	    
 	    if(foundIt) {
@@ -316,7 +308,8 @@ public class MovieShowController {
 	    }
 	}	
 	
-	@FXML
+	
+	@FXML	
 	protected void buyTickets(ActionEvent event) {
 		Main.cinemaProgrammService.setSessionRemainTime(sessionRemainTime);
 		timeline.stop();
@@ -504,6 +497,7 @@ public class MovieShowController {
 			timeline.setCycleCount( Animation.INDEFINITE );		
 	}
 	
+	// Getter and Setter
 	public Vorstellung getMovieShow() {
 		return movieShow;
 	}

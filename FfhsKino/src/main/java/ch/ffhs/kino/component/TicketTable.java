@@ -1,9 +1,6 @@
 package ch.ffhs.kino.component;
 
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Seat;
@@ -13,7 +10,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -22,68 +18,33 @@ import ch.ffhs.kino.model.Ticket.TicketType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-
 public class TicketTable extends GridPane {
 
+	private VBox gridTable;
 	private Image imgTrash = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/trash.png"));
-	private Label labelCount;
-	private Label labelSumPrice;
-	private EnumMap<TicketType, Long> ticketTypeMap = new EnumMap<>(TicketType.class);
 	
 	private ObservableList<Ticket> ticketData;
 	
-	public TicketTable(ObservableList<Ticket> ticketData, VBox gridTickets) {
+	public TicketTable(ObservableList<Ticket> ticketData, VBox gridTable) {
 		this.ticketData = ticketData;
-		
-		TicketRow rowSum = new TicketRow();
-
-		labelCount = new Label();
-		labelCount.setWrapText(true);
-		labelCount.setText("Keine Tickets ausgewählt");
-		labelCount.setStyle("-fx-min-width: 200px;-fx-max-width: 200px");
-		rowSum.getChildren().add(labelCount);
-		
-		labelSumPrice = new Label();
-		labelSumPrice.setText("Total: 0.00 CHF");
-		labelSumPrice.setStyle("-fx-min-width: 160px;-fx-font-weight: bold; -fx-font-size: 11pt;");
-		rowSum.getChildren().add(labelSumPrice);
-		
-		gridTickets.getChildren().add(rowSum);	
+		this.gridTable = gridTable;
 	}
 
-	public void createTicketListener(SeatView[][] seatView, VBox gridTickets) {
+	public void createTicketListener(SeatView[][] seatView) {
 		this.ticketData.addListener((ListChangeListener<Ticket>) change -> {
-			gridTickets.getChildren().clear();
+			gridTable.getChildren().clear();
 
+			// Liste sortieren: zuerst Reihe dann Sitznummer
 			List<Ticket> tickets = FXCollections.observableArrayList(this.ticketData);
-			tickets.sort((lhs, rhs) -> {
-		        if (lhs.getSeat().getSeatRow().equals(rhs.getSeat().getSeatRow())) {
-		            return lhs.getSeat().getSeatColumn() - rhs.getSeat().getSeatColumn();
+			tickets.sort((x, y) -> {
+		        if (x.getSeat().getSeatRow().equals(y.getSeat().getSeatRow())) {
+		            return x.getSeat().getSeatColumn() - y.getSeat().getSeatColumn();
 		        } else {
-		            return lhs.getSeat().getSeatRow().compareTo(rhs.getSeat().getSeatRow());
+		            return x.getSeat().getSeatRow().compareTo(y.getSeat().getSeatRow());
 		        }
 		    }); 
 			
-			// HeaderRow: Summe der Ticket-Typen und des Preises
-			String countText = "Keine Tickets ausgewählt";
-			Double sum = 0.00;
-			if (!tickets.isEmpty()) {
-				tickets.forEach(t->ticketTypeMap.merge(t.getTicketType(), 1L, Long::sum));
-				countText = ticketTypeMap.entrySet().stream().map(c -> c.getKey().getTitle() + " " + c.getValue()).collect(Collectors.joining(", "));							
-				sum = tickets.stream().mapToDouble(o -> o.getTicketType().getCost()).sum();
-			}
-			
-			TicketRow rowSum = new TicketRow();
-			
-			labelCount.setText(countText);
-			rowSum.getChildren().add(labelCount);
-			
-			labelSumPrice.setText("Total: " + String.format(Locale.ROOT, "%.2f", sum) + " CHF");
-			rowSum.getChildren().add(labelSumPrice);				
-			
-			gridTickets.getChildren().add(rowSum);	
-			
-			// ChildRow: pro Ticket eine Zeile erstellen
+			// Pro Ticket eine Zeile erstellen
 			for(Ticket ticket : tickets) {	
 				TicketRow ticketRow = new TicketRow(ticket);
 				
@@ -95,7 +56,6 @@ public class TicketTable extends GridPane {
 				    @Override
 				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
 				        if(newValue != null){
-				        	// unschön, aber es funktioniert (vergeblich mit eigenem UserControl und fxml rumgedoktert)
 				        	ticket.setTicketType(newValue);
 				        	ticketData.remove(ticket);
 				        	ticketData.add(ticket);
@@ -122,7 +82,7 @@ public class TicketTable extends GridPane {
 				    }
 				});					
 
-				gridTickets.getChildren().add(ticketRow);	
+				gridTable.getChildren().add(ticketRow);	
 			}
 		});		
 	}

@@ -9,6 +9,7 @@ import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
 import ch.ffhs.kino.component.TicketTable;
+import ch.ffhs.kino.component.TicketTableHeader;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Ticket;
@@ -37,6 +38,10 @@ public class PaymentController {
 
 	@FXML
 	public void breadcrumbAction(MouseEvent event) {
+		Main.cinemaProgrammService.setSessionRemainTime(sessionRemainTime);
+		getBooking().setTickets(ticketData);
+    	Main.cinemaProgrammService.setCurrentReservation(booking);
+    	
 		ControllerUtils.breadcrumbAction(event.getSource());
 	}
 	
@@ -75,6 +80,9 @@ public class PaymentController {
 	
 	@FXML
 	private VBox gridTickets;
+	
+	@FXML
+	private	VBox gridSumTickets;
 	
 	private Booking booking;
 	
@@ -187,8 +195,12 @@ public class PaymentController {
 	}
 
 	private void renderTicketTable() {			
+//		TicketTable table = new TicketTable(ticketData, gridTickets);
+//		table.createTicketListener(null, gridTickets);
+		TicketTableHeader ticketHeader = new TicketTableHeader(ticketData, gridSumTickets);
+		ticketHeader.createTicketListener();
 		TicketTable table = new TicketTable(ticketData, gridTickets);
-		table.createTicketListener(null, gridTickets);
+		table.createTicketListener(null);
 	}
 	
 	public Booking getBooking() {

@@ -24,7 +24,7 @@
 			<!-- <Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " /> -->
 			<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
 			<Label id="bc_sitzplatz" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
-			<Label id="bc_bezahlen" disable="false" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+			<Label id="bc_bezahlen" disable="true" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
 			<Label disable="true" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
 		</children>
 	</HBox>
@@ -186,8 +186,9 @@
 			    </Button>
 		   </HBox> 
 
-			<!-- Tickets -->
-			<ScrollPane GridPane.rowIndex="2" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true"  style="-fx-min-width: 400px;">
+			<!-- Tickets -->			
+			<VBox GridPane.rowIndex="2" fx:id="gridSumTickets" style="-fx-min-width: 380px;"/>
+			<ScrollPane GridPane.rowIndex="3" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true"  style="-fx-min-width: 400px;">
 				<VBox fx:id="gridTickets" style="-fx-min-width: 380px;"/>
 			</ScrollPane>
 
