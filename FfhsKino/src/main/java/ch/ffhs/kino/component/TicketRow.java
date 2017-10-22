@@ -78,7 +78,7 @@ public class TicketRow extends HBox {
 	
 	public void addDeleteButton(Image image) {
 		btnDeleteTicket = new Button();
-		btnDeleteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-color: lightgray;-fx-background-radius: 100;");		
+		btnDeleteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-radius: 100;");		
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
 		imageView.setFitWidth(23);

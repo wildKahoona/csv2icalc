@@ -28,7 +28,8 @@ import ch.ffhs.kino.model.Ticket.TicketType;
  */
 public class CinemaProgrammServiceMock {
 
-	public static final long SESSION_TIME = 50 * 1000; // 600 * 1000; // 10 Minuten
+	//public static final long SESSION_TIME = 50 * 1000; // 600 * 1000; // 10 Minuten
+	public static final long SESSION_TIME = 600 * 1000; // 10 Minuten
 	
 	// Säle
 	private final static Hall hallRex1 = new Hall("Minisaal", CinemaPlaces.KINO_REX);

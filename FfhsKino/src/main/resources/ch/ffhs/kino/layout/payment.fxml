@@ -32,28 +32,29 @@
 	<!-- Title -->
 	<GridPane hgap="30.0" GridPane.rowIndex="1">
 		<children>
-			<Label text="Vorstellung" styleClass="h1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-			<Label fx:id="lbMovieShow" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+			<Label text="Vorstellung" styleClass="titleBig" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+			<Label fx:id="lbMovieShow" styleClass="titleSmall" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 		</children>    
 	</GridPane>
 	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 	
 	<!-- Information -->
 	<VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
-		<Label wrapText="true" text="Stimmt Ihr Wunsch mit Ihrem Ticket überein? Dann können Sie mit der Zahlung fortfahren." styleClass="h2"/>
-		<Label wrapText="true" text="Die Zustellung Ihrer Kinotickets erfolgt per E-Mail. Bitte geben Sie Ihre korrekte E-Mail-Adresse an, um Ihnen die Kinotickets zustellen zu können." styleClass="h2"/>
+		<Label wrapText="true" text="Stimmt Ihr Wunsch mit Ihrem Ticket überein? Dann können Sie mit der Zahlung fortfahren." styleClass="paymentInfo"/>
+		<Label wrapText="true" text="Die Zustellung Ihrer Kinotickets erfolgt per E-Mail." styleClass="paymentInfo"/>
+		<Label wrapText="true" text="Bitte geben Sie Ihre korrekte E-Mail-Adresse an, um Ihnen die Kinotickets zustellen zu können." styleClass="paymentInfo"/>
 		<Label wrapText="true" text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
 	</VBox>
     
     <!-- Inhalt -->
      <GridPane GridPane.rowIndex="4" style="-fx-background-color:lightblue">
 	    <columnConstraints>
-	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0" prefWidth="50.0" />
-	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0" prefWidth="50.0" />
+	    	<ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
+	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
 	    </columnConstraints>
       
     	<!-- Links: Kreditkarte -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-background-color:lightblue">
+	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER" style="-fx-background-color:lightblue">
 		    
 		    <HBox GridPane.rowIndex="0" spacing="10" alignment="TOP_LEFT" >
 				<Label text="E-Mail*:" />
@@ -74,8 +75,12 @@
 							 text="Paypal" toggleGroup="$zahlungsart" />
 				
 				<GridPane GridPane.rowIndex="3" vgap="5.0">
-						 
+						
 					<GridPane fx:id="gridZahlung" vgap="5.0">
+						<!-- <columnConstraints>
+			        		<ColumnConstraints hgrow="SOMETIMES" halignment="RIGHT" minWidth="10.0"/>
+			        		<ColumnConstraints hgrow="SOMETIMES" halignment="LEFT" minWidth="10.0"/>
+			    		</columnConstraints> -->
 						<Label text="Mit Kreditkarte bezahlen" GridPane.rowIndex="1" GridPane.columnSpan="2" styleClass="h2" />
 						
 						<Label text="Kreditkartennummer*:" GridPane.rowIndex="2" GridPane.columnSpan="2" HBox.hgrow="ALWAYS"/>
@@ -92,6 +97,24 @@
 						<Label text="CVV*:" GridPane.rowIndex="6" GridPane.columnIndex="2" />
 						<TextField fx:id="inputCvv" GridPane.rowIndex="7" GridPane.columnIndex="2" promptText="CVV" styleClass="small"/>
 					</GridPane>	
+					 
+			<!-- 		<GridPane fx:id="gridZahlung" vgap="5.0">
+						<Label text="Mit Kreditkarte bezahlen" GridPane.rowIndex="1" GridPane.columnSpan="2" styleClass="h2" />
+						
+						<Label text="Kreditkartennummer*:" GridPane.rowIndex="2" GridPane.columnSpan="2" HBox.hgrow="ALWAYS"/>
+						<TextField fx:id="inputKreditkartenNr" GridPane.rowIndex="3" promptText="Kreditkartennummer eingeben" styleClass="long" 
+								   GridPane.columnSpan="2"/>
+									
+						<Label text="Karteninhaber*:" GridPane.rowIndex="4" GridPane.columnSpan="2" />			
+						<TextField fx:id="inputKarteninhaber" GridPane.rowIndex="5" GridPane.columnSpan="2" promptText="Karteninhaber eingeben" styleClass="long"/>			
+						
+						<Label text="Gültig bis*:" GridPane.rowIndex="6" />		
+						<ComboBox fx:id="cbMonat" GridPane.rowIndex="7" GridPane.columnIndex="0" promptText="Monat" styleClass="medium" HBox.hgrow="ALWAYS"/>
+						<ComboBox fx:id="cbJahr" GridPane.rowIndex="7" GridPane.columnIndex="1" promptText="Jahr" styleClass="medium" HBox.hgrow="ALWAYS"/>
+						
+						<Label text="CVV*:" GridPane.rowIndex="6" GridPane.columnIndex="2" />
+						<TextField fx:id="inputCvv" GridPane.rowIndex="7" GridPane.columnIndex="2" promptText="CVV" styleClass="small"/>
+					</GridPane>	 -->
 				
 					<Button fx:id="btnPay" GridPane.rowIndex="4" text="Bezahlen" 
 							onAction="#pay" styleClass="medium" GridPane.halignment="RIGHT"/>
@@ -102,12 +125,25 @@
 	    </GridPane>
 	    
 	    <!-- Rechts: Tickets -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-color:green">
-			<Label fx:id="lbTimer" GridPane.columnIndex="1" styleClass="h2" style="-fx-padding: 0;-fx-min-width: 50px;"/>
-			<VBox GridPane.rowIndex="2" fx:id="gridSumTickets" style="-fx-min-width: 380px;"/>
-			<ScrollPane GridPane.rowIndex="3" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true"  style="-fx-min-width: 400px;">
-				<VBox fx:id="gridTickets" style="-fx-min-width: 380px;"/>
+	    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-padding: 0 0 0 15;" >
+		    
+		    <!-- Buchungstimer -->
+		    <GridPane fx:id="gridTimer" style="-fx-padding: 15 5 5 0;-fx-min-width: 380px" GridPane.rowIndex="0">
+		    	<Label style="-fx-padding: 0;" styleClass="h2" text="Reservierung läuft ab in " GridPane.columnIndex="0" />
+				<Label fx:id="lbTimer" style="-fx-padding: 0;-fx-min-width: 50px;" styleClass="h2" GridPane.columnIndex="1" />
+				<ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2">
+			      <image>
+			      	<Image url="/ch/ffhs/kino/images/timer.png" />
+			      </image>
+			 	</ImageView>		 	
+		    </GridPane>
+
+			<!-- Tickets -->			
+			<VBox fx:id="gridSumTickets" style="-fx-min-width: 380px;" GridPane.rowIndex="2" />
+			<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-min-width: 400px;" GridPane.rowIndex="3">
+				<VBox fx:id="gridTickets" style="-fx-min-width: 380px;" />
 			</ScrollPane>
+
 	    </GridPane>
 	    
     </GridPane> 

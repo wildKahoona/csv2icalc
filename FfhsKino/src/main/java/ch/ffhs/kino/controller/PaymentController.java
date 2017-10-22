@@ -93,6 +93,9 @@ public class PaymentController {
 	private Button btnPay;
 	
 	@FXML
+	private GridPane gridTimer;
+	
+	@FXML
 	private Label lbTimer;
 	
 	@FXML
@@ -168,6 +171,7 @@ public class PaymentController {
 		renderTicketTable();
 		
 		timer = new TimerAnimation();
+		gridTimer.visibleProperty().bind(timer.timeElapsedProperty().not());
 		timer.remainTimeProperty().addListener((ChangeListener<? super Number>) (o, oldVal, newVal) -> {
 			lbTimer.setText(remainTimeFormat.format(timer.getRemainTime()));
         });
@@ -189,6 +193,8 @@ public class PaymentController {
 			    alert.setHeaderText("Bitte wählen Sie neue Plätze");
 			    alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
 			    alert.showAndWait();
+			    
+			    //gridTimer.
 			}
 		});
 	}

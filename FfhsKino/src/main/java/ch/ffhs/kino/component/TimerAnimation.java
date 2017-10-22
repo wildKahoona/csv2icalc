@@ -48,8 +48,6 @@ public class TimerAnimation {
 		    		    	  setTimeElapsed(true);
 		    		      }
 		    		});			    					    		
-//		    	}else {
-//		    		setRemainTime(remainTime);
 		    	} 
 		    })
 		);

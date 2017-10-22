@@ -31,6 +31,14 @@
 	-fx-padding: 15.0 ;
 }
 
+.titleBig{
+	-fx-font: NORMAL 20.0 "Tahoma";
+}
+
+.titleSmall{
+	-fx-font: NORMAL 15.0 "Tahoma";
+}
+
 .text-field {
     -fx-padding: 5.0px;
   
@@ -41,20 +49,15 @@
 .small{-fx-pref-width:50.0px; -fx-width:180.0px; }
 .solidblackborder{ -fx-border-color: black; -fx-padding: 15.0 ;}
 
-
-
 .breadcrumb{
 	/*-fx-cursor:hand;*/
 	-fx-spacing:12.0px;
 	-fx-font: 12.0pt "Cambria Bold";
-
 }
 
 .borderSolid{
 		-fx-border-style:	solid ;
-	
 }
-
 
 .screen-canvas {
   -fx-arc-width: 6.0px;
@@ -63,49 +66,10 @@
   -fx-stroke: #553982;
 }
 
-.seat {
-  -fx-arc-width: 4.0px;
-  -fx-arc-height: 4.0px;
-  -fx-fill: #a5a5a5;
-  -fx-stroke: #8b8b8b;
-}
-.seat:hover {
-  -fx-effect: dropshadow(gaussian, #54acd2, 1.0, 1.0, 0.0, 0.0);
-}
-
-.seat-selected {
-  -fx-fill: #61bd6d;
-  -fx-stroke: #41a85f;
-}
-
-.seat-reserved {
-  -fx-fill: #2c82c9;
-  -fx-stroke: #2969b0;
-}
-
-.seat-reserved:hover {
-  -fx-effect: none;
-}
-
-.seat-sold {
-  /*-fx-fill: #d14841;*/
-  /*-fx-stroke: #B8312F;*/	
-  /*-fx-background-color: skyblue, derive(skyblue, 25%);*/	
-  -fx-background-insets: -20.0, -10.0;
-  /*-fx-background-image: url("/ch/ffhs/kino/images/FSK_ab_16.png");*/	
-  -fx-background-image: url("/images/FSK_ab_16.png");
-  -fx-background-position: left top, center;
-  -fx-background-repeat: no-repeat;
-  -fx-background-size: cover, auto;
-}
-
-.seat-sold:hover {
-  -fx-effect: none;
-}
 
 .legend-label {
   -fx-pref-height: 20.0px;
-  -fx-padding: 0.0 0.0 0.0 10.0px;
+  -fx-padding: 0 0 0 10;
 }
 
 .button-primary {
@@ -113,21 +77,23 @@
   -fx-text-fill: #fff;
 }
 
-
 .infoLabel{
 	-fx-font-weight: bold;
 }
 
-
+.paymentInfo{
+	-fx-font: NORMAL 15.0 "Tahoma";
+	 -fx-padding: 0 0 5 10;
+}
 
 #content{
-		-fx-padding: 15.0 ;   
+	-fx-padding: 15.0 ;   
 } 
-
 
 #ODD{
 	-fx-background-color: white;
 }
+
 #EVEN{
 	-fx-background-color: #ececec;
 }

@@ -19,15 +19,22 @@ import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.model.Seat.SeatType;
 import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,6 +42,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -57,6 +65,9 @@ public class MovieShowController {
 	private GridPane gridTimer;
 	
 	@FXML
+	private GridPane gridMovieShow;
+	
+	@FXML
 	private VBox gridTickets;	
 
 	@FXML
@@ -77,13 +88,15 @@ public class MovieShowController {
 	@FXML
 	private Button btnBuy;	
 	
+//	@FXML
+//	private HBox hbbtnBuy;
+	
 	private Vorstellung movieShow;
 	private Booking reservation;
 	private Hall hall;
 	private SeatView seatView[][];
 	private TicketTableHeader ticketHeader;
 	private TicketTable ticketTable;
-	
 	private TimerAnimation timer = new TimerAnimation();
 	private SimpleDateFormat remainTimeFormat = new SimpleDateFormat("mm:ss");
 
@@ -98,7 +111,8 @@ public class MovieShowController {
 		GridPane.setHalignment(btnBuy, HPos.RIGHT);
 		GridPane.setHgrow(btnBuy, Priority.ALWAYS);
 		
-		timer = new TimerAnimation();
+		timer = new TimerAnimation();	
+		gridTimer.visibleProperty().bind(Bindings.size(ticketData).isEqualTo(0).not());
 		timer.remainTimeProperty().addListener((ChangeListener<? super Number>) (o, oldVal, newVal) -> {
 			lbTimer.setText(remainTimeFormat.format(timer.getRemainTime()));
         });
@@ -117,6 +131,12 @@ public class MovieShowController {
 			    alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
 			    alert.showAndWait();
 			}
+		});
+		
+		gridMovieShow.widthProperty().addListener(new ChangeListener<Number>() {
+		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+		        System.out.println("Width: " + newSceneWidth);
+		    }
 		});
 	}
 
@@ -152,6 +172,17 @@ public class MovieShowController {
 	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
 	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
 	    
+
+	    
+//	    gridWidth.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
+//	        System.out.println(newValue);
+//	        int w = 600;
+//	        double w1 = w * newValue.doubleValue();
+//	        double w2 = w - w1;
+//	        image1.setFitWidth(w1);
+//	        image2.setFitWidth(w2);
+//	    });
+	    
 	    // Bilder der Sitzplätze laden
 	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
 	    Image normalSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));
@@ -183,9 +214,11 @@ public class MovieShowController {
 
             	// ImageViews are not resizeable, but you could use a parent that is resizeable and bind the fitWidth and fitHeight properties 
             	// to the size of the parent using expression binding          	    	
-            	view.fitWidthProperty().bind(size);
-            	view.fitHeightProperty().bind(size);
-            	  	           	
+//            	view.fitWidthProperty().bind(size);
+//            	view.fitHeightProperty().bind(size);
+            	  	      
+            	
+            	
             	view.getState().addListener((e, oldValue, newValue) -> {
 		        	if (newValue) {
 			        	  if(selectedSeats.size() == 0)
@@ -206,7 +239,33 @@ public class MovieShowController {
 			            	ticketData.remove(removeTicket.get());
 			          }		        		
     	        });
-            	              
+            	  
+        	    gridHall.widthProperty().addListener(new ChangeListener<Number>() {
+        			@Override
+        			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        				ReadOnlyDoubleProperty gridWidth = gridHall.widthProperty();
+        			    ReadOnlyDoubleProperty gridHeight = gridHall.heightProperty();
+        				
+        			    System.out.println("W: " + gridWidth.get() + " H: " + gridHeight.get());
+        			    
+        			    DoubleBinding w = gridWidth.divide(columns);
+        			    DoubleBinding h = gridHeight.divide(rows);			    
+        			    System.out.println("w: " + w.get() + " h: " + h.get());
+        					
+        			    BooleanBinding less = gridWidth.divide(columns).lessThan(gridHeight.divide(rows));
+        			    System.out.println("w < h: " + less.get());
+        			    
+        			    DoubleBinding a = gridWidth.subtract(20);
+        			    DoubleBinding b = gridWidth.subtract(20).divide(columns);
+        			    DoubleBinding c = gridWidth.subtract(20).divide(columns).subtract(2);
+        			    System.out.println("a = " + a.get() + " b = " + b.get() + " c = " + c.get());
+        			    
+        			    view.fitWidthProperty().bind(size);
+        			    view.fitHeightProperty().bind(size);
+        			    
+        			}
+        	    }); 
+        	    
             	gridHall.add(seatView[r][c], c, r);
             }
         }
