@@ -101,7 +101,7 @@ public class SeatView extends ImageView {
 	 */
 	public void deselect() {
 		this.selected.set(false);
-		//setIsSelected(false);
+		setIsSelected(false);
 		setImage(imageSeat);
 	}
 	

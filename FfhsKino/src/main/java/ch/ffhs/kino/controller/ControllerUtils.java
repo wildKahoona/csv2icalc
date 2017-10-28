@@ -6,6 +6,7 @@ import ch.ffhs.kino.layout.Main;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 
 public class ControllerUtils {
 
@@ -13,9 +14,7 @@ public class ControllerUtils {
 
 		try {
 			if (source instanceof Label) {
-
 				Label label = (Label) source;
-
 				if (!label.isDisable()) {
 					String id = label.getId();
 					if (id.equals("bc_programm")) {
@@ -27,9 +26,9 @@ public class ControllerUtils {
 //					} else if (id.equals("bc_sitzplatz")) {
 //						Main.startMovieShow(null);
 					}
-
 				}
-
+			} else if (source instanceof Button) {
+				Main.startKinoProgramm();
 			}
 
 		} catch (IOException e) {

@@ -20,7 +20,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -68,7 +67,7 @@ public class Main extends Application {
 		launch(args);
 
 	}
-
+	
 	public static void startKinoProgramm() throws IOException {
 		primaryStage.setTitle("Kino REX - Programm");
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/programm.fxml"));

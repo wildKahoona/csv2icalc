@@ -19,22 +19,16 @@ import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.model.Seat.SeatType;
 import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.VPos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,11 +36,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-// TODO: TicketTable besser, GridPane scale besser
 public class MovieShowController {
 
 	@FXML
@@ -89,7 +81,10 @@ public class MovieShowController {
 	private Button btnBuy;	
 	
 //	@FXML
-//	private HBox hbbtnBuy;
+//	private Button btnHome;
+	
+	@FXML
+	private GridPane gridContent;
 	
 	private Vorstellung movieShow;
 	private Booking reservation;
@@ -110,6 +105,8 @@ public class MovieShowController {
 		btnBuy.disableProperty().bind(Bindings.size(ticketData).isEqualTo(0));
 		GridPane.setHalignment(btnBuy, HPos.RIGHT);
 		GridPane.setHgrow(btnBuy, Priority.ALWAYS);
+		
+		btnAddTicket.disableProperty().bind(Bindings.size(ticketData).isEqualTo(10));
 		
 		timer = new TimerAnimation();	
 		gridTimer.visibleProperty().bind(Bindings.size(ticketData).isEqualTo(0).not());
@@ -133,11 +130,11 @@ public class MovieShowController {
 			}
 		});
 		
-		gridMovieShow.widthProperty().addListener(new ChangeListener<Number>() {
-		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-		        System.out.println("Width: " + newSceneWidth);
-		    }
-		});
+//		gridMovieShow.widthProperty().addListener(new ChangeListener<Number>() {
+//		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+//		        //System.out.println("Width: " + newSceneWidth);
+//		    }
+//		});
 	}
 
 	/**
@@ -150,7 +147,6 @@ public class MovieShowController {
      */
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
-	
 	private void setTitle() {
 		String movieTitle = movieShow.getShow().getMovie().getTitle();
 		String movieLanguage = movieShow.getShow().getLanguage().getText();
@@ -158,7 +154,8 @@ public class MovieShowController {
 		SimpleDateFormat fmt = new SimpleDateFormat("E dd MMM yyyy HH:mm");		
 		lbMovieShow.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(movieShow.getDate()) + ", " + getHall().getHallName());
 	}
-
+	
+	
 	private void renderSeatView() {
 		int rows = getHall().getRows();
 	    int columns = getHall().getColumns();
@@ -171,18 +168,7 @@ public class MovieShowController {
 	    NumberBinding size = new When(gridWidth.divide(columns).lessThan(gridHeight.divide(rows)))
 	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
 	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
-	    
 
-	    
-//	    gridWidth.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
-//	        System.out.println(newValue);
-//	        int w = 600;
-//	        double w1 = w * newValue.doubleValue();
-//	        double w2 = w - w1;
-//	        image1.setFitWidth(w1);
-//	        image2.setFitWidth(w2);
-//	    });
-	    
 	    // Bilder der Sitzplätze laden
 	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
 	    Image normalSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));
@@ -214,58 +200,37 @@ public class MovieShowController {
 
             	// ImageViews are not resizeable, but you could use a parent that is resizeable and bind the fitWidth and fitHeight properties 
             	// to the size of the parent using expression binding          	    	
-//            	view.fitWidthProperty().bind(size);
-//            	view.fitHeightProperty().bind(size);
-            	  	      
+            	view.fitWidthProperty().bind(size);
+			    view.fitHeightProperty().bind(size);
             	
-            	
-            	view.getState().addListener((e, oldValue, newValue) -> {
-		        	if (newValue) {
-			        	  if(selectedSeats.size() == 0)
-			        		  timer.startTimeAnimation(getReservation().getSessionRemainTime());
-			        	  selectedSeats.add(view);
-			        	  
-			        	// Ticket für diesen Sitzplatz hinzufügen
+			    // Wenn der Sitz ausgewählt wird, ein Ticket hinzufügen
+            	view.getState().addListener((e, oldValue, newValue) -> {          		
+            		if (newValue) {
+            			// Ticket für diesen Sitzplatz hinzufügen
+            			System.out.println( view.getIsSelected());
+			        	selectedSeats.add(view);
 			        	ticketData.add(new Ticket(seat));
-			          } else {
-			            this.selectedSeats.remove(view);
-			            if(selectedSeats.size() == 0)
-			            	timer.stopTimeAnimation();
-			            
-			            // Ticket aus der Liste entfernen
-			            Optional<Ticket> removeTicket = ticketData.stream().
-			            		filter(x -> x.getSeat().equals(seat)).findFirst();  			            
-			            if(removeTicket.isPresent())
-			            	ticketData.remove(removeTicket.get());
-			          }		        		
+			        	if(ticketData.size() == 1)
+			        		  timer.startTimeAnimation(getReservation().getSessionRemainTime());
+			        	 if(ticketData.size() > 10) {
+		            		System.out.println( view.getIsSelected());
+			        	 }
+			        	
+            		} else {
+            			System.out.println( view.getIsSelected());
+            			view.setIsSelected(false);
+            			this.selectedSeats.remove(view);
+            			if(ticketData.size() == 0)
+            				timer.stopTimeAnimation();
+		            
+            			// Ticket aus der Liste entfernen
+            			Optional<Ticket> removeTicket = ticketData.stream().
+		            		filter(x -> x.getSeat().equals(seat)).findFirst();  			            
+            			if(removeTicket.isPresent())
+            				ticketData.remove(removeTicket.get());
+            		}
     	        });
-            	  
-        	    gridHall.widthProperty().addListener(new ChangeListener<Number>() {
-        			@Override
-        			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        				ReadOnlyDoubleProperty gridWidth = gridHall.widthProperty();
-        			    ReadOnlyDoubleProperty gridHeight = gridHall.heightProperty();
-        				
-        			    System.out.println("W: " + gridWidth.get() + " H: " + gridHeight.get());
-        			    
-        			    DoubleBinding w = gridWidth.divide(columns);
-        			    DoubleBinding h = gridHeight.divide(rows);			    
-        			    System.out.println("w: " + w.get() + " h: " + h.get());
-        					
-        			    BooleanBinding less = gridWidth.divide(columns).lessThan(gridHeight.divide(rows));
-        			    System.out.println("w < h: " + less.get());
-        			    
-        			    DoubleBinding a = gridWidth.subtract(20);
-        			    DoubleBinding b = gridWidth.subtract(20).divide(columns);
-        			    DoubleBinding c = gridWidth.subtract(20).divide(columns).subtract(2);
-        			    System.out.println("a = " + a.get() + " b = " + b.get() + " c = " + c.get());
-        			    
-        			    view.fitWidthProperty().bind(size);
-        			    view.fitHeightProperty().bind(size);
-        			    
-        			}
-        	    }); 
-        	    
+
             	gridHall.add(seatView[r][c], c, r);
             }
         }
@@ -365,7 +330,6 @@ public class MovieShowController {
     	try {
 			Main.startPayment(getReservation());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -522,14 +486,17 @@ public class MovieShowController {
 		setMovieShow(this.reservation.getEvent());
 		setHall(this.reservation.getEvent().getHall());
 		setTitle();
-		renderSeatView();
-		renderReservedSeats();
-		renderBookedSeats();
 		
 		ticketHeader.createTicketListener();
 		ticketTable.createTicketListener(seatView);
 		
-		// TODO Timer starten
+		renderSeatView();
+		renderReservedSeats();
+		renderBookedSeats();
+
+		ticketHeader.createTicketListener();
+		ticketTable.createTicketListener(seatView);
+		
 		if(reservation.getTickets().size() > 0)
 			timer.startTimeAnimation(reservation.getSessionRemainTime());
 	}

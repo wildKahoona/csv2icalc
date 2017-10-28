@@ -13,18 +13,31 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.PaymentController">
+<GridPane id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.PaymentController">
+	<rowConstraints>
+		<RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+		<RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+		<RowConstraints minHeight="2.0" prefHeight="2.0" vgrow="NEVER" />
+	</rowConstraints>
 	<columnConstraints>
 		<ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
 	</columnConstraints>
 	
     <!-- Breadcrumb -->
-	<HBox styleClass="breadcrumb" GridPane.rowIndex="0">
+	<HBox styleClass="breadcrumb" GridPane.rowIndex="0" alignment="CENTER_LEFT">
 		<children>
-			<!-- <Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " /> -->
+			<Button id="bc_home" disable="false" onMouseClicked="#breadcrumbAction" mnemonicParsing="false" styleClass="homeButton">
+				<graphic>
+			        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+			          <image>
+			            <Image url="/ch/ffhs/kino/images/home.png" />
+			          </image>
+			        </ImageView>
+			      </graphic>
+			</Button>
 			<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
 			<Label id="bc_sitzplatz" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
-			<Label id="bc_bezahlen" disable="false" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+			<Label id="bc_bezahlen" disable="false" styleClass="breadcrumbAcitve" text="3. Bezahlen &gt; " />
 			<Label disable="true" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
 		</children>
 	</HBox>
@@ -32,39 +45,50 @@
 	<!-- Title -->
 	<GridPane hgap="30.0" GridPane.rowIndex="1">
 		<children>
-			<Label text="Vorstellung" styleClass="titleBig" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-			<Label fx:id="lbMovieShow" styleClass="titleSmall" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+			<Label text="Vorstellung" styleClass="title-big" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+			<Label fx:id="lbMovieShow" styleClass="title-small" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 		</children>    
 	</GridPane>
 	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 	
 	<!-- Information -->
 	<VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
-		<Label wrapText="true" text="Stimmt Ihr Wunsch mit Ihrem Ticket überein? Dann können Sie mit der Zahlung fortfahren." styleClass="paymentInfo"/>
-		<Label wrapText="true" text="Die Zustellung Ihrer Kinotickets erfolgt per E-Mail." styleClass="paymentInfo"/>
-		<Label wrapText="true" text="Bitte geben Sie Ihre korrekte E-Mail-Adresse an, um Ihnen die Kinotickets zustellen zu können." styleClass="paymentInfo"/>
-		<Label wrapText="true" text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
+		<Label wrapText="true" styleClass="payment_hinweis_1" text="Ihre Tickets werden Ihnen nach der Kaufbestätigung per E-Mail zugesendet."/>
+		<Label wrapText="true" styleClass="payment_hinweis_2" text="Bitte prüfen Sie die ausgewählten Angaben zu Film, Datum, Vorführungszeit und Platzwahl."/>
+		<Label wrapText="true" styleClass="payment_hinweis_2" text="Achten Sie bitte darauf, Ihre E-Mail-Adresse korrekt einzugeben."/>		
 	</VBox>
     
     <!-- Inhalt -->
-     <GridPane GridPane.rowIndex="4" style="-fx-background-color:lightblue">
+     <GridPane GridPane.rowIndex="4">
 	    <columnConstraints>
 	    	<ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
 	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
 	    </columnConstraints>
       
     	<!-- Links: Kreditkarte -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER" style="-fx-background-color:lightblue">
-		    
-		    <HBox GridPane.rowIndex="0" spacing="10" alignment="TOP_LEFT" >
+	    
+		<GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT">
+			<rowConstraints>
+				<RowConstraints minHeight="30.0" prefHeight="35.0" vgrow="NEVER" />
+				<RowConstraints minHeight="30.0" prefHeight="40.0" vgrow="NEVER" />
+			</rowConstraints>
+		
+			<Label GridPane.rowIndex="0" styleClass="payment_hinweis_4" wrapText="true" text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
+			
+			<HBox GridPane.rowIndex="1" spacing="10" alignment="CENTER_LEFT" >
 				<Label text="E-Mail*:" />
 				<TextField fx:id="inputEmail" promptText="E-Mail-Adresse eingeben" styleClass="long" />
 			</HBox>
 			
-			<GridPane GridPane.rowIndex="1" alignment="CENTER_LEFT" styleClass="solidblackborder">
-				<Label text="Ihre Zahlungsart:" GridPane.rowIndex="0" styleClass="h2" />
+			<GridPane GridPane.rowIndex="2" alignment="CENTER_LEFT" styleClass="solidblackborder">
+				<rowConstraints>
+					<RowConstraints minHeight="30.0" prefHeight="35.0"/>
+					<RowConstraints minHeight="30.0" prefHeight="35.0"/>
+				</rowConstraints>
+			
+				<Label text="Ihre Zahlungsart:" GridPane.rowIndex="0" styleClass="creditTitle"/>
 				
-				<RadioButton fx:id="rbCreditCard" GridPane.rowIndex="1" GridPane.columnIndex="0"
+				<RadioButton fx:id="rbCreditCard" GridPane.rowIndex="1" GridPane.columnIndex="0" 
 							 onAction="#creditSelected" mnemonicParsing="false" text="Kreditkarte" >	 
 					<toggleGroup>
 						<ToggleGroup fx:id="zahlungsart" />
@@ -74,58 +98,54 @@
 							 onAction="#paypalSelected" mnemonicParsing="false" 
 							 text="Paypal" toggleGroup="$zahlungsart" />
 				
-				<GridPane GridPane.rowIndex="3" vgap="5.0">
-						
-					<GridPane fx:id="gridZahlung" vgap="5.0">
-						<!-- <columnConstraints>
-			        		<ColumnConstraints hgrow="SOMETIMES" halignment="RIGHT" minWidth="10.0"/>
-			        		<ColumnConstraints hgrow="SOMETIMES" halignment="LEFT" minWidth="10.0"/>
-			    		</columnConstraints> -->
-						<Label text="Mit Kreditkarte bezahlen" GridPane.rowIndex="1" GridPane.columnSpan="2" styleClass="h2" />
-						
-						<Label text="Kreditkartennummer*:" GridPane.rowIndex="2" GridPane.columnSpan="2" HBox.hgrow="ALWAYS"/>
-						<TextField fx:id="inputKreditkartenNr" GridPane.rowIndex="3" promptText="Kreditkartennummer eingeben" styleClass="long" 
-								   GridPane.columnSpan="2"/>
-									
-						<Label text="Karteninhaber*:" GridPane.rowIndex="4" GridPane.columnSpan="2" />			
-						<TextField fx:id="inputKarteninhaber" GridPane.rowIndex="5" GridPane.columnSpan="2" promptText="Karteninhaber eingeben" styleClass="long"/>			
-						
-						<Label text="Gültig bis*:" GridPane.rowIndex="6" />		
-						<ComboBox fx:id="cbMonat" GridPane.rowIndex="7" GridPane.columnIndex="0" promptText="Monat" styleClass="medium" HBox.hgrow="ALWAYS"/>
-						<ComboBox fx:id="cbJahr" GridPane.rowIndex="7" GridPane.columnIndex="1" promptText="Jahr" styleClass="medium" HBox.hgrow="ALWAYS"/>
-						
-						<Label text="CVV*:" GridPane.rowIndex="6" GridPane.columnIndex="2" />
-						<TextField fx:id="inputCvv" GridPane.rowIndex="7" GridPane.columnIndex="2" promptText="CVV" styleClass="small"/>
-					</GridPane>	
+				<GridPane fx:id="gridPayPal" GridPane.rowIndex="3" hgap="5.0">
+					<rowConstraints>
+						<RowConstraints minHeight="30.0" prefHeight="50.0"/>
+					</rowConstraints>
+						<Button fx:id="btnPay" text="Bezahlen" 
+								onAction="#pay" styleClass="medium" GridPane.halignment="RIGHT"/>	
+				</GridPane>		
 					 
-			<!-- 		<GridPane fx:id="gridZahlung" vgap="5.0">
-						<Label text="Mit Kreditkarte bezahlen" GridPane.rowIndex="1" GridPane.columnSpan="2" styleClass="h2" />
-						
-						<Label text="Kreditkartennummer*:" GridPane.rowIndex="2" GridPane.columnSpan="2" HBox.hgrow="ALWAYS"/>
-						<TextField fx:id="inputKreditkartenNr" GridPane.rowIndex="3" promptText="Kreditkartennummer eingeben" styleClass="long" 
-								   GridPane.columnSpan="2"/>
-									
-						<Label text="Karteninhaber*:" GridPane.rowIndex="4" GridPane.columnSpan="2" />			
-						<TextField fx:id="inputKarteninhaber" GridPane.rowIndex="5" GridPane.columnSpan="2" promptText="Karteninhaber eingeben" styleClass="long"/>			
-						
-						<Label text="Gültig bis*:" GridPane.rowIndex="6" />		
-						<ComboBox fx:id="cbMonat" GridPane.rowIndex="7" GridPane.columnIndex="0" promptText="Monat" styleClass="medium" HBox.hgrow="ALWAYS"/>
-						<ComboBox fx:id="cbJahr" GridPane.rowIndex="7" GridPane.columnIndex="1" promptText="Jahr" styleClass="medium" HBox.hgrow="ALWAYS"/>
-						
-						<Label text="CVV*:" GridPane.rowIndex="6" GridPane.columnIndex="2" />
-						<TextField fx:id="inputCvv" GridPane.rowIndex="7" GridPane.columnIndex="2" promptText="CVV" styleClass="small"/>
-					</GridPane>	 -->
+				<GridPane fx:id="gridZahlung" GridPane.rowIndex="3" hgap="5.0">					
+					<rowConstraints>
+						<RowConstraints minHeight="30.0" prefHeight="50.0"/>
+						<RowConstraints minHeight="30.0" prefHeight="35.0"/>
+						<RowConstraints minHeight="30.0" prefHeight="35.0"/>
+						<RowConstraints minHeight="30.0" prefHeight="35.0"/>
+						<RowConstraints minHeight="30.0" prefHeight="35.0"/>
+					</rowConstraints>
 				
-					<Button fx:id="btnPay" GridPane.rowIndex="4" text="Bezahlen" 
-							onAction="#pay" styleClass="medium" GridPane.halignment="RIGHT"/>
+					<Label text="Mit Kreditkarte bezahlen" GridPane.rowIndex="0" GridPane.columnSpan="3" styleClass="creditTitle" />
+					
+					<Label text="Kreditkartennummer*:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+					<TextField fx:id="inputKreditkartenNr" GridPane.columnIndex="1" GridPane.columnSpan="3"
+							GridPane.rowIndex="1" promptText="Kreditkartennummer eingeben" styleClass="long" />
 								
-				</GridPane>					 
+					<Label text="Karteninhaber*:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>			
+					<TextField fx:id="inputKarteninhaber" GridPane.columnIndex="1" GridPane.columnSpan="3"
+							   GridPane.rowIndex="2" promptText="Karteninhaber eingeben" styleClass="long"/>			
+					
+					
+					<Label text="Gültig bis*:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+					
+					<HBox GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3">	
+						<ComboBox fx:id="cbMonat"  promptText="Monat" styleClass="medium"/>
+						<ComboBox fx:id="cbJahr" promptText="Jahr" styleClass="medium"/>
+					</HBox>
+					
+					<Label text="CVV*:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+					<TextField fx:id="inputCvv" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="CVV" styleClass="small"/>
+					<Button fx:id="btnPay" text="Bezahlen" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.columnSpan="2"
+							onAction="#pay" styleClass="medium" GridPane.halignment="RIGHT"/>
+					
+				</GridPane>			 
 			</GridPane>
-			
-	    </GridPane>
+		</GridPane>
+		
+
 	    
 	    <!-- Rechts: Tickets -->
-	    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-padding: 0 0 0 15;" >
+	    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-padding: 0 0 0 15;-fx-background-color:lightblue">
 		    
 		    <!-- Buchungstimer -->
 		    <GridPane fx:id="gridTimer" style="-fx-padding: 15 5 5 0;-fx-min-width: 380px" GridPane.rowIndex="0">

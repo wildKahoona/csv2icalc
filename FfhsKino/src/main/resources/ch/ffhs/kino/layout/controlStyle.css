@@ -10,9 +10,7 @@
 .button  {
     -fx-border-radius: 20.0;
     -fx-background-radius: 20.0;
-  
 }
-
 
 /*Table ohne Überschrift */
 .noheader .column-header-background {
@@ -31,11 +29,11 @@
 	-fx-padding: 15.0 ;
 }
 
-.titleBig{
+.title-big{
 	-fx-font: NORMAL 20.0 "Tahoma";
 }
 
-.titleSmall{
+.title-small{
 	-fx-font: NORMAL 15.0 "Tahoma";
 }
 
@@ -55,17 +53,23 @@
 	-fx-font: 12.0pt "Cambria Bold";
 }
 
+.breadcrumbAcitve{
+	-fx-background-color: #a0df8d;
+}
+
 .borderSolid{
 		-fx-border-style:	solid ;
 }
 
-.screen-canvas {
-  -fx-arc-width: 6.0px;
-  -fx-arc-height: 6.0px;
-  -fx-fill: #9365B8;
-  -fx-stroke: #553982;
+
+.screen-pane {
+  -fx-padding: 2px;
+  -fx-background-color:#b7b7b7;
 }
 
+.screen-label {
+  -fx-font-weight: bold;
+}
 
 .legend-label {
   -fx-pref-height: 20.0px;
@@ -77,13 +81,29 @@
   -fx-text-fill: #fff;
 }
 
-.infoLabel{
-	-fx-font-weight: bold;
+.payment_hinweis_1{
+	-fx-font: NORMAL 15.0 "Tahoma";
+	-fx-padding: 0 0 5 10;
 }
 
-.paymentInfo{
+.payment_hinweis_2{
+	-fx-font: NORMAL 13.0 "Tahoma";
+	-fx-padding: 0 0 5 10;
+}
+
+.payment_hinweis_3{
+	-fx-font: NORMAL 13.0 "Tahoma";
+	-fx-padding: 0 0 5 10;
+}
+
+.payment_hinweis_4{
+	-fx-font: NORMAL 11.0 "Tahoma";
+	-fx-padding: 0 0 5 0;
+}
+
+.creditTitle{
 	-fx-font: NORMAL 15.0 "Tahoma";
-	 -fx-padding: 0 0 5 10;
+	 -fx-padding: 0 0 10 0;
 }
 
 #content{
@@ -104,5 +124,9 @@
 
 .table-row-cell:selected .text {
        -fx-fill: #800000  ;
+}
 
+.homeButton  {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
 }

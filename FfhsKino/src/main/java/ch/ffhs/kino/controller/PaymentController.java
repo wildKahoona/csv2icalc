@@ -43,20 +43,24 @@ public class PaymentController {
 	public void breadcrumbAction(MouseEvent event) throws IOException {
 		
 		timer.stopTimeAnimation();
+		
 		getBooking().setTickets(ticketData);
 		getBooking().setSessionRemainTime(timer.getRemainTime());
 		
+		boolean toSitzplatz = false;
 		if (event.getSource() instanceof Label) {
 			Label label = (Label) event.getSource();
 			if (!label.isDisable()) {
 				String id = label.getId();
-				if (id.equals("bc_sitzplatz")) {
-					Main.startMovieShow(getBooking());
-				}
+				if (id.equals("bc_sitzplatz"))
+					toSitzplatz = true;
 			}
-		} else {
-			ControllerUtils.breadcrumbAction(event.getSource());
 		}
+		
+		if(toSitzplatz)
+			Main.startMovieShow(getBooking());
+		else
+			ControllerUtils.breadcrumbAction(event.getSource());
 	}
 	
 	@FXML
@@ -70,6 +74,9 @@ public class PaymentController {
 	
 	@FXML
 	private RadioButton rbPayPal;
+	
+	@FXML
+	private GridPane gridPayPal;
 	
 	@FXML
 	private GridPane gridZahlung;
@@ -126,6 +133,7 @@ public class PaymentController {
 		imgViewPayPal.setFitHeight(25.00);
 		rbPayPal.setGraphic(imgViewPayPal);
 		rbPayPal.setSelected(!payCreditCard);
+		gridPayPal.setVisible(false);
 		
 		// Kreditkarten-Felder
 		ObservableList<String> options = FXCollections.observableArrayList();
@@ -193,8 +201,6 @@ public class PaymentController {
 			    alert.setHeaderText("Bitte wählen Sie neue Plätze");
 			    alert.setContentText("Die Reservierungszeit ist abgelaufen, daher wurden Ihre Plätze freigegeben.");
 			    alert.showAndWait();
-			    
-			    //gridTimer.
 			}
 		});
 	}
@@ -202,6 +208,7 @@ public class PaymentController {
 	@FXML
 	protected void creditSelected(ActionEvent event) {
 		payCreditCard = true;
+		gridPayPal.setVisible(false);
 		gridZahlung.setVisible(true);
 	}
 	
@@ -209,6 +216,7 @@ public class PaymentController {
 	protected void paypalSelected(ActionEvent event) {
 		payCreditCard = false;
 		gridZahlung.setVisible(false);
+		gridPayPal.setVisible(true);
 	}
 
 	@FXML

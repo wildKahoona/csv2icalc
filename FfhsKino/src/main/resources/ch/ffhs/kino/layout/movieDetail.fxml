@@ -12,16 +12,33 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 
 <GridPane id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.MovieDetailController">
+	<rowConstraints>
+		<RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+		<RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
+		<RowConstraints minHeight="2.0" prefHeight="2.0" vgrow="NEVER" />
+	</rowConstraints>
 	<children>
 		<!-- Breadcrumb -->
-		<HBox styleClass="breadcrumb" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
+		<HBox styleClass="breadcrumb" alignment="CENTER_LEFT" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
 			<children>
-				<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " />
-				<Label id="bc_vorstellung" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
+				<Button id="bc_home" disable="false" onMouseClicked="#breadcrumbAction" mnemonicParsing="false" styleClass="homeButton">
+					<graphic>
+				        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+				          <image>
+				            <Image url="/ch/ffhs/kino/images/home.png" />
+				          </image>
+				        </ImageView>
+				      </graphic>
+				</Button>
+				<Label id="bc_vorstellung" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumbAcitve" text="1. Vorstellung wählen &gt; " />
 				<Label id="bc_sitzplatz" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
 				<Label id="bc_bezahlen" disable="true" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
+				<Label disable="true" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
 			</children>
 		</HBox>
 		<!-- Title -->

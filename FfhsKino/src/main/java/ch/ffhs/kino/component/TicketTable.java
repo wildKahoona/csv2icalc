@@ -71,7 +71,7 @@ public class TicketTable extends GridPane {
 				    @Override public void handle(ActionEvent e) {
 				    	if(seatView == null) {
 				    		ticketData.remove(ticket);
-				    	}else {
+				    	} else {
 				    		Seat seat = ticket.getSeat();
 					    	SeatView view = seatView[seat.getSeatRow()][seat.getSeatColumn()];
 					    	if(view != null) {

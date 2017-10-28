@@ -52,7 +52,7 @@ public class TicketRow extends HBox {
 		String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
 		Label labelPrice = new Label();
 		labelPrice.setText(price + " CHF");
-		labelPrice.setStyle("-fx-background-color:lightblue");
+//		labelPrice.setStyle("-fx-background-color:lightblue");
 		labelPrice.setMinWidth(100);
 		labelPrice.setAlignment(Pos.CENTER);
 		this.getChildren().add(labelPrice);
