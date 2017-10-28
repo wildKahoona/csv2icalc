@@ -102,7 +102,7 @@
 					<rowConstraints>
 						<RowConstraints minHeight="30.0" prefHeight="50.0"/>
 					</rowConstraints>
-						<Button fx:id="btnPay" text="Bezahlen" 
+						<Button fx:id="btnPayPal" text="Bezahlen" 
 								onAction="#pay" styleClass="medium" GridPane.halignment="RIGHT"/>	
 				</GridPane>		
 					 

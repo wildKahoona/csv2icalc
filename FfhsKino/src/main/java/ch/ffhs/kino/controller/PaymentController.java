@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationResult;
@@ -105,6 +104,9 @@ public class PaymentController {
 	private Button btnPay;
 	
 	@FXML
+	private Button btnPayPal;
+	
+	@FXML
 	private GridPane gridTimer;
 	
 	@FXML
@@ -120,7 +122,8 @@ public class PaymentController {
 	private Boolean payCreditCard = true;	
 	private TimerAnimation timer = new TimerAnimation();
 	private SimpleDateFormat remainTimeFormat = new SimpleDateFormat("mm:ss");	
-	private ValidationSupport validationSupport = new ValidationSupport();	
+	private ValidationSupport validationSupportEmail = new ValidationSupport();
+	private ValidationSupport validationSupportCredit = new ValidationSupport();	
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
 	@FXML
@@ -171,12 +174,12 @@ public class PaymentController {
 		      }
 		});		
 
-		validationSupport.registerValidator(inputEmail, Validator.createEmptyValidator("Die E-Mail-Adresse ist obligatorisch."));
-		validationSupport.registerValidator(inputKreditkartenNr, Validator.createEmptyValidator("Die Kreditkartennummer ist obligatorisch."));
-		validationSupport.registerValidator(inputCvv, Validator.createEmptyValidator("Die CVV-Nummer ist obligatorisch."));
-		validationSupport.registerValidator(inputKarteninhaber, Validator.createEmptyValidator("Der Name des Karteninhabers ist obligatorisch."));
-		validationSupport.registerValidator(cbMonat, Validator.createEmptyValidator("Der Monat ist obligatorisch"));
-		validationSupport.registerValidator(cbJahr, Validator.createEmptyValidator("Das Jahr ist obligatorisch"));
+		validationSupportEmail.registerValidator(inputEmail, Validator.createEmptyValidator("Die E-Mail-Adresse ist obligatorisch."));
+		validationSupportCredit.registerValidator(inputKreditkartenNr, Validator.createEmptyValidator("Die Kreditkartennummer ist obligatorisch."));
+		validationSupportCredit.registerValidator(inputCvv, Validator.createEmptyValidator("Die CVV-Nummer ist obligatorisch."));
+		validationSupportCredit.registerValidator(inputKarteninhaber, Validator.createEmptyValidator("Der Name des Karteninhabers ist obligatorisch."));
+		validationSupportCredit.registerValidator(cbMonat, Validator.createEmptyValidator("Der Monat ist obligatorisch"));
+		validationSupportCredit.registerValidator(cbJahr, Validator.createEmptyValidator("Das Jahr ist obligatorisch"));
   
         Validator<String> validator = new Validator<String>()
         {
@@ -190,7 +193,8 @@ public class PaymentController {
 				return ValidationResult.fromMessageIf(inputEmail, "keine gültige Email", Severity.ERROR, condition );
 			}        	
         };		
-        validationSupport.registerValidator(inputEmail, true, validator );
+        validationSupportEmail.registerValidator(inputEmail, true, validator );
+       
 				
 		inputCvv.lengthProperty().addListener(new ChangeListener<Number>(){
 			@Override
@@ -204,8 +208,13 @@ public class PaymentController {
 			}
 		});
 		
-		BooleanBinding booleanBind = (validationSupport.invalidProperty()).or(Bindings.size(ticketData).isEqualTo(0));
-		btnPay.disableProperty().bind(booleanBind);
+		BooleanBinding validPayPal = (validationSupportEmail.invalidProperty()).or(Bindings.size(ticketData).isEqualTo(0));
+		btnPayPal.disableProperty().bind(validPayPal);
+		
+		BooleanBinding validCredit = (validationSupportCredit.invalidProperty()).or(validationSupportEmail.invalidProperty()).or(Bindings.size(ticketData).isEqualTo(0));
+		btnPay.disableProperty().bind(validCredit);
+		
+		
 		
 		renderTicketTable();
 		
