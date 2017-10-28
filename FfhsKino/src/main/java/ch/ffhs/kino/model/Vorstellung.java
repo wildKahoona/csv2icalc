@@ -9,6 +9,7 @@ import ch.ffhs.kino.model.Show.ShowType;
 
 public class Vorstellung {
 
+	private int id;
 	private Show show;
 	private Date date;
 	private Hall hall;
@@ -16,6 +17,14 @@ public class Vorstellung {
 	private List<Booking> bookings;
 	// Boolean[][] soldList;
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public ShowType getType() {
 		return type;
 	}

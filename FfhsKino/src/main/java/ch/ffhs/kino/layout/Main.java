@@ -57,8 +57,8 @@ public class Main extends Application {
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
-		// startKinoProgramm();
-		startMovieShow(cinemaProgrammService.getVorstellung());
+		startKinoProgramm();
+		// startMovieShow(cinemaProgrammService.getVorstellung());
 		// startPayment(cinemaProgrammService.getBooking());
 		// startBookingConfirm(cinemaProgrammService.getBooking());		
 	}

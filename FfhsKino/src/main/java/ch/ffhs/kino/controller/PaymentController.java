@@ -191,8 +191,7 @@ public class PaymentController {
 			}        	
         };		
         validationSupport.registerValidator(inputEmail, true, validator );
-		
-		
+				
 		inputCvv.lengthProperty().addListener(new ChangeListener<Number>(){
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -253,7 +252,8 @@ public class PaymentController {
 
 	@FXML
 	protected void pay(ActionEvent event) {
-		try {					
+		try {
+			Main.cinemaProgrammService.addBooking(booking);
 			Main.startBookingConfirm(booking);	
 		} catch (IOException e) {
 			e.printStackTrace();

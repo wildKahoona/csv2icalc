@@ -83,17 +83,17 @@
 
 .payment_hinweis_1{
 	-fx-font: NORMAL 15.0 "Tahoma";
-	-fx-padding: 0 0 5 10;
+	-fx-padding: 0 0 5 0;
 }
 
 .payment_hinweis_2{
 	-fx-font: NORMAL 13.0 "Tahoma";
-	-fx-padding: 0 0 5 10;
+	-fx-padding: 0 0 5 0;
 }
 
 .payment_hinweis_3{
 	-fx-font: NORMAL 13.0 "Tahoma";
-	-fx-padding: 0 0 5 10;
+	-fx-padding: 0 0 5 0;
 }
 
 .payment_hinweis_4{

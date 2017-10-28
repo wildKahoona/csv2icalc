@@ -51,36 +51,36 @@
 	</GridPane>
 	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 	
-	<!-- Information -->
-	<VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
-		<Label wrapText="true" styleClass="payment_hinweis_1" text="Ihre Tickets werden Ihnen nach der Kaufbestätigung per E-Mail zugesendet."/>
-		<Label wrapText="true" styleClass="payment_hinweis_2" text="Bitte prüfen Sie die ausgewählten Angaben zu Film, Datum, Vorführungszeit und Platzwahl."/>
-		<Label wrapText="true" styleClass="payment_hinweis_2" text="Achten Sie bitte darauf, Ihre E-Mail-Adresse korrekt einzugeben."/>		
-	</VBox>
-    
     <!-- Inhalt -->
-    <GridPane GridPane.rowIndex="4">
+    <GridPane GridPane.rowIndex="3">
 	    <columnConstraints>
 	    	<ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
 	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
 	    </columnConstraints>
       
-    	<!-- Links: Kreditkarte -->
-	    
-		<GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER_LEFT">
+    	<!-- Links: Kreditkarte -->    
+		<GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
 			<rowConstraints>
+				<RowConstraints minHeight="60.0" prefHeight="60.0" vgrow="NEVER" />
 				<RowConstraints minHeight="30.0" prefHeight="35.0" vgrow="NEVER" />
 				<RowConstraints minHeight="30.0" prefHeight="40.0" vgrow="NEVER" />
 			</rowConstraints>
-		
-			<Label GridPane.rowIndex="0" styleClass="payment_hinweis_4" wrapText="true" text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
+
+			<!-- Information -->
+			<VBox GridPane.rowIndex="0">
+				<Label wrapText="true" styleClass="payment_hinweis_1" text="Ihre Tickets werden Ihnen nach der Kaufbestätigung per E-Mail zugesendet."/>
+				<Label wrapText="true" styleClass="payment_hinweis_2" text="Bitte prüfen Sie die ausgewählten Angaben zu Film, Datum, Vorführungszeit und Platzwahl."/>
+				<Label wrapText="true" styleClass="payment_hinweis_2" text="Achten Sie bitte darauf, Ihre E-Mail-Adresse korrekt einzugeben."/>		
+			</VBox>
 			
-			<HBox GridPane.rowIndex="1" spacing="10" alignment="CENTER_LEFT" >
+			<Label GridPane.rowIndex="1" styleClass="payment_hinweis_4" wrapText="true" text="Die mit einem (*) markierten Felder müssen ausgefüllt werden."/>
+			
+			<HBox GridPane.rowIndex="2" spacing="10" alignment="CENTER_LEFT" >
 				<Label text="E-Mail*:" />
 				<TextField fx:id="inputEmail" promptText="E-Mail-Adresse eingeben" styleClass="long" />
 			</HBox>
 			
-			<GridPane GridPane.rowIndex="2" alignment="CENTER_LEFT" styleClass="solidblackborder">
+			<GridPane GridPane.rowIndex="3" alignment="CENTER" styleClass="solidblackborder">
 				<rowConstraints>
 					<RowConstraints minHeight="30.0" prefHeight="35.0"/>
 					<RowConstraints minHeight="30.0" prefHeight="35.0"/>
@@ -142,13 +142,13 @@
 			</GridPane>
 		</GridPane>
 		
-
-	    
 	    <!-- Rechts: Tickets -->
-	    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-padding: 0 0 0 15;-fx-background-color:lightblue">
-		    
+	    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-padding: 0 0 0 15;">
+			<rowConstraints>
+				<RowConstraints minHeight="110.0" prefHeight="110.0" vgrow="NEVER" />
+			</rowConstraints>		    
 		    <!-- Buchungstimer -->
-		    <GridPane fx:id="gridTimer" style="-fx-padding: 15 5 5 0;-fx-min-width: 380px" GridPane.rowIndex="0">
+		    <GridPane fx:id="gridTimer" GridPane.rowIndex="3" style="-fx-padding: 15 5 5 0;-fx-min-width: 380px">
 		    	<Label style="-fx-padding: 0;" styleClass="h2" text="Reservierung läuft ab in " GridPane.columnIndex="0" />
 				<Label fx:id="lbTimer" style="-fx-padding: 0;-fx-min-width: 50px;" styleClass="h2" GridPane.columnIndex="1" />
 				<ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2">
@@ -159,9 +159,9 @@
 		    </GridPane>
 
 			<!-- Tickets -->			
-			<VBox fx:id="gridSumTickets" style="-fx-min-width: 380px;" GridPane.rowIndex="2" />
-			<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-min-width: 400px;" GridPane.rowIndex="3">
-				<VBox fx:id="gridTickets" style="-fx-min-width: 380px;" />
+			<VBox fx:id="gridSumTickets" GridPane.rowIndex="4" />
+			<ScrollPane  GridPane.rowIndex="5" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true">
+				<VBox fx:id="gridTickets"/>
 			</ScrollPane>
 
 	    </GridPane>

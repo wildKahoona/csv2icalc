@@ -4,6 +4,7 @@ package ch.ffhs.kino.service;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 
 import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 import ch.ffhs.kino.model.Vorstellung;
@@ -52,11 +53,8 @@ public class CinemaProgrammServiceMock {
 	private Show show7;
 
 	private List<Vorstellung> vorstellungen = new ArrayList<Vorstellung>();
-	private List<Booking> bookings = new ArrayList<Booking>();
-	//private Booking currentReservation;
 
 	public CinemaProgrammServiceMock() {
-
 		init();
 	}
 
@@ -72,7 +70,6 @@ public class CinemaProgrammServiceMock {
 			if (vorstellung.getShow().getMovie().getTitle().equals(movie.getTitle())) {
 				vListe.add(vorstellung);
 			}
-
 		}
 
 		return vListe;
@@ -82,32 +79,15 @@ public class CinemaProgrammServiceMock {
 		return vorstellungen.get(0);
 	}
 
-	public Booking getBooking() {
-		Booking booking = new Booking();
-		booking.setEvent(getVorstellung());
-		return booking;
-	}
-
-//	public Booking getCurrentReservation() {
-//		return currentReservation;
-//	}
-//
-//	public void setCurrentReservation(Booking currentReservation) {
-//		this.currentReservation = currentReservation;
-//	}
-
-	public List<Booking> getBookings() {
-		return bookings;
-	}
-
-	public void setBookings(List<Booking> bookings) {
-		this.bookings = bookings;
-	}
-
 	public void addBooking(Booking booking) {
-		List<Booking> bookings = getBookings();
-		bookings.add(booking);
-		//setCurrentReservation(null);
+		int eventId = booking.getEvent().getId();
+		Optional<Vorstellung> event = vorstellungen.stream().
+				filter(x -> x.getId() == eventId).findFirst(); 
+		if(event.isPresent()) {
+			List<Booking> bookings = event.get().getBookings();
+			bookings.add(booking);
+			event.get().setBookings(bookings);
+		}
 	}
 
 	private void init() {
@@ -122,6 +102,7 @@ public class CinemaProgrammServiceMock {
 		for (int i = 0; i < 200; i++) {
 
 			Vorstellung event1 = new Vorstellung();
+			event1.setId(i+1);
 
 			// this week
 
@@ -193,9 +174,12 @@ public class CinemaProgrammServiceMock {
 				break;
 			}
 			vorstellungen.add(event1);
+			
+//			if(i == 3 || i == 5 || i == 20) {
+//				addBooking(event1);
+//				System.out.println(event1.getDate() + " " + event1.getShow().getMovie().getTitle());
+//			}
 		}
-
-		initBookings();
 	}
 
 	private int getRandomInt() {
@@ -325,10 +309,9 @@ public class CinemaProgrammServiceMock {
 		hallRex4.configureSeatPlan(10, 15);
 	}
 
-	private void initBookings() {
+	private void addBooking(Vorstellung event){
 		Booking booking = new Booking();
-		Vorstellung vorstellung = getVorstellung();
-		booking.setEvent(vorstellung);
+		booking.setEvent(event);
 
 		// Tickets von dieser Buchung
 		Ticket ticket1 = new Ticket(new Seat(3, 5));
@@ -343,20 +326,12 @@ public class CinemaProgrammServiceMock {
 		tickets.add(ticket2);
 		tickets.add(ticket3);
 
-		booking.setTickets(tickets);
+		List<Booking> bookings = event.getBookings();
 		bookings.add(booking);
-		vorstellung.setBookings(bookings);
+		event.setBookings(bookings);		
 	}
 
 	public Movie getMovie() {
 		return movie3;
 	}
-
-//	public long getSessionRemainTime() {
-//		return sessionRemainTime;
-//	}
-//
-//	public void setSessionRemainTime(long sessionRemainTime) {
-//		this.sessionRemainTime = sessionRemainTime;
-//	}
 }
