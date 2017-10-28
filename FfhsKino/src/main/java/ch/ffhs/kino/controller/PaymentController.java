@@ -5,7 +5,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import org.controlsfx.validation.Severity;
+import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
@@ -27,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -36,6 +40,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+
 
 public class PaymentController {
 
@@ -172,6 +177,33 @@ public class PaymentController {
 		validationSupport.registerValidator(inputKarteninhaber, Validator.createEmptyValidator("Der Name des Karteninhabers ist obligatorisch."));
 		validationSupport.registerValidator(cbMonat, Validator.createEmptyValidator("Der Monat ist obligatorisch"));
 		validationSupport.registerValidator(cbJahr, Validator.createEmptyValidator("Das Jahr ist obligatorisch"));
+  
+        Validator<String> validator = new Validator<String>()
+        {
+			@Override
+			public ValidationResult apply(Control t, String value) {
+				boolean condition =
+			            value != null
+			                ? !value
+			                    .matches("^[A-Za-z0-9+_.-]+@(.+)$" )
+			                : value == null;
+				return ValidationResult.fromMessageIf(inputEmail, "keine gültige Email", Severity.ERROR, condition );
+			}        	
+        };		
+        validationSupport.registerValidator(inputEmail, true, validator );
+		
+		
+		inputCvv.lengthProperty().addListener(new ChangeListener<Number>(){
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				  if (newValue.intValue() > oldValue.intValue()) {
+					  char cvv = inputCvv.getText().charAt(oldValue.intValue());
+					  if (!(cvv >= '0' && cvv <= '9' )) {
+						  inputCvv.setText(inputCvv.getText().substring(0,inputCvv.getText().length()-1)); 
+					  }
+				 }
+			}
+		});
 		
 		BooleanBinding booleanBind = (validationSupport.invalidProperty()).or(Bindings.size(ticketData).isEqualTo(0));
 		btnPay.disableProperty().bind(booleanBind);
@@ -204,7 +236,7 @@ public class PaymentController {
 			}
 		});
 	}
-
+	
 	@FXML
 	protected void creditSelected(ActionEvent event) {
 		payCreditCard = true;
