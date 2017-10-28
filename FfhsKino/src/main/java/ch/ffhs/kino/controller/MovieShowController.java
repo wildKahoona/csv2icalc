@@ -55,9 +55,9 @@ public class MovieShowController {
 	
 	@FXML
 	private GridPane gridTimer;
-	
-	@FXML
-	private GridPane gridMovieShow;
+//	
+//	@FXML
+//	private GridPane gridMovieShow;
 	
 	@FXML
 	private VBox gridTickets;	
@@ -488,14 +488,14 @@ public class MovieShowController {
 		setTitle();
 		
 		ticketHeader.createTicketListener();
-		ticketTable.createTicketListener(seatView);
+		ticketTable.createTicketListener(seatView, false);
 		
 		renderSeatView();
 		renderReservedSeats();
 		renderBookedSeats();
 
 		ticketHeader.createTicketListener();
-		ticketTable.createTicketListener(seatView);
+		ticketTable.createTicketListener(seatView, false);
 		
 		if(reservation.getTickets().size() > 0)
 			timer.startTimeAnimation(reservation.getSessionRemainTime());

@@ -30,7 +30,7 @@ public class TicketTable extends GridPane {
 		this.gridTable = gridTable;
 	}
 
-	public void createTicketListener(SeatView[][] seatView) {
+	public void createTicketListener(SeatView[][] seatView, boolean readOnly) {
 		this.ticketData.addListener((ListChangeListener<Ticket>) change -> {
 			gridTable.getChildren().clear();
 
@@ -50,37 +50,45 @@ public class TicketTable extends GridPane {
 				
 				ticketRow.addSeatInfo();
 				
-				ticketRow.addTicketTypeChoice();
-				// Add Listener for TicketType-Changes
-				ticketRow.getCbTicketType().valueProperty().addListener(new ChangeListener<TicketType>() {
-				    @Override
-				    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
-				        if(newValue != null){
-				        	ticket.setTicketType(newValue);
-				        	ticketData.remove(ticket);
-				        	ticketData.add(ticket);
-				        }
-				    }
-				});							
-				
+				if(!readOnly)
+				{
+					ticketRow.addTicketTypeChoice();
+					// Add Listener for TicketType-Changes
+					ticketRow.getCbTicketType().valueProperty().addListener(new ChangeListener<TicketType>() {
+					    @Override
+					    public void changed(ObservableValue<? extends TicketType> observable, TicketType oldValue, TicketType newValue) {
+					        if(newValue != null){
+					        	ticket.setTicketType(newValue);
+					        	ticketData.remove(ticket);
+					        	ticketData.add(ticket);
+					        }
+					    }
+					});					
+				} else {
+					ticketRow.addTicketTypeLabel();
+				}
+						
 				ticketRow.addPriceInfo();
 				
-				ticketRow.addDeleteButton(imgTrash);				
-				// Add Listener for delete Ticket
-				ticketRow.getBtnDeleteTicket().setOnAction(new EventHandler<ActionEvent>() {
-				    @Override public void handle(ActionEvent e) {
-				    	if(seatView == null) {
-				    		ticketData.remove(ticket);
-				    	} else {
-				    		Seat seat = ticket.getSeat();
-					    	SeatView view = seatView[seat.getSeatRow()][seat.getSeatColumn()];
-					    	if(view != null) {
-					    		view.deselect();
-						    	ticketData.remove(ticket);
+				if(!readOnly)
+				{
+					ticketRow.addDeleteButton(imgTrash);				
+					// Add Listener for delete Ticket
+					ticketRow.getBtnDeleteTicket().setOnAction(new EventHandler<ActionEvent>() {
+					    @Override public void handle(ActionEvent e) {
+					    	if(seatView == null) {
+					    		ticketData.remove(ticket);
+					    	} else {
+					    		Seat seat = ticket.getSeat();
+						    	SeatView view = seatView[seat.getSeatRow()][seat.getSeatColumn()];
+						    	if(view != null) {
+						    		view.deselect();
+							    	ticketData.remove(ticket);
+						    	}
 					    	}
-				    	}
-				    }
-				});					
+					    }
+					});								
+				}
 
 				gridTable.getChildren().add(ticketRow);	
 			}

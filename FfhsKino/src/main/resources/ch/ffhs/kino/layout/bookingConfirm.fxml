@@ -12,6 +12,7 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
 
 
 <GridPane id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.BookingConfirmController">
@@ -50,10 +51,29 @@
 	</GridPane>
 	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER" />
 
-	<Label text="Vielen Dank für Ihre Bestellung." GridPane.rowIndex="3" styleClass="h2" />
-	<Label text="Ihre Tickets wurden Ihnen per E-Mail zugestellt. Bitte drucken Sie diese aus und nehmen Sie diese zu der Vorstellung mit." GridPane.rowIndex="4" styleClass="h2" />
+	<!-- Inhalt -->
+    <GridPane GridPane.rowIndex="3">
+	    <rowConstraints>
+			<RowConstraints minHeight="30.0" prefHeight="40.0"/>
+			<RowConstraints minHeight="30.0" prefHeight="30.0"/>
+			<RowConstraints minHeight="30.0" prefHeight="50.0"/>
+		</rowConstraints>
+		
+		<Label GridPane.rowIndex="0" text="Vielen Dank für Ihre Bestellung." styleClass="payment_hinweis_1" />
+		<Label GridPane.rowIndex="1" text="Ihre Tickets wurden Ihnen per E-Mail zugestellt." styleClass="payment_hinweis_2" />
+		<Label GridPane.rowIndex="2" GridPane.valignment="TOP" text="Bitte drucken Sie diese aus und nehmen Sie diese zu der Vorstellung mit." styleClass="payment_hinweis_2" />
 
-	<!-- TODO: Hie kommt noch das TicketControl mit allen Tickets (ohne Funktionen) -->
+		<!-- Tickets -->
+		<GridPane styleClass="confirm_ticket-table" GridPane.rowIndex="3">
+			<VBox fx:id="gridSumTickets" GridPane.rowIndex="0"/>
+			<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" GridPane.rowIndex="1">
+				<VBox fx:id="gridTickets"/>
+			</ScrollPane>		
+		</GridPane>			
+			    
+	    
+	</GridPane>
+
 	</children>
 </GridPane>
 

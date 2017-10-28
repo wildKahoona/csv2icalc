@@ -101,9 +101,33 @@
 	-fx-padding: 0 0 5 0;
 }
 
-.creditTitle{
+.credit-title{
 	-fx-font: NORMAL 15.0 "Tahoma";
-	 -fx-padding: 0 0 10 0;
+	-fx-padding: 0 0 10 0;
+}
+
+.ticket-header{
+	-fx-padding: 5;
+	-fx-border-style: solid inside;
+	-fx-border-width: 2;
+	-fx-border-insets: -1;
+	-fx-border-color: gray;
+	-fx-background-color:wheat;
+	-fx-min-width: 380px
+}
+
+.ticket-row{
+	-fx-padding: 5;
+	-fx-border-style: solid inside;
+	-fx-border-width: 2;
+	-fx-border-insets: -1;
+	-fx-border-color: gray;
+	-fx-background-color:white;
+	-fx-min-width: 380px
+}
+
+.confirm_ticket-table{
+	-fx-padding: 0 0 0 10;	
 }
 
 #content{

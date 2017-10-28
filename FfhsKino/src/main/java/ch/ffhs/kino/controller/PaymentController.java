@@ -238,12 +238,10 @@ public class PaymentController {
 	}
 
 	private void renderTicketTable() {			
-//		TicketTable table = new TicketTable(ticketData, gridTickets);
-//		table.createTicketListener(null, gridTickets);
 		TicketTableHeader ticketHeader = new TicketTableHeader(ticketData, gridSumTickets);
 		ticketHeader.createTicketListener();
 		TicketTable table = new TicketTable(ticketData, gridTickets);
-		table.createTicketListener(null);
+		table.createTicketListener(null, false);
 	}
 	
 	public Booking getBooking() {

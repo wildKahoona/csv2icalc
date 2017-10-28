@@ -278,7 +278,9 @@ public class CinemaProgrammServiceMock {
 
 	private void initHalls() {
 		// Kinosaal konfigurieren
-		hallRex1.configureSeatPlan(15, 20);
+		
+		// Minisaal
+		hallRex1.configureSeatPlan(10, 10);
 		// Nicht verfügbar
 		hallRex1.setSeatType(5, 0, SeatType.NONE);
 		hallRex1.setSeatType(5, 1, SeatType.NONE);
@@ -295,8 +297,31 @@ public class CinemaProgrammServiceMock {
 		hallRex1.setSeatType(8, 7, SeatType.PREMIUM);
 		hallRex1.setSeatType(8, 8, SeatType.PREMIUM);
 
-		hallRex2.configureSeatPlan(15, 12);
-		hallRex3.configureSeatPlan(12, 15);
+		// Mittelsaal
+		hallRex2.configureSeatPlan(14, 12);
+		// Nicht verfügbar
+		hallRex2.setSeatType(10, 2, SeatType.NONE);
+		hallRex2.setSeatType(10, 3, SeatType.NONE);		
+		hallRex2.setSeatType(10, 4, SeatType.NONE);
+		hallRex2.setSeatType(10, 5, SeatType.NONE);
+		hallRex2.setSeatType(10, 6, SeatType.NONE);
+		hallRex2.setSeatType(10, 7, SeatType.NONE);
+		hallRex2.setSeatType(10, 8, SeatType.NONE);
+		hallRex2.setSeatType(10, 9, SeatType.NONE);
+		// Premium-Sitze		
+		hallRex2.setSeatType(11, 2, SeatType.HANDYCAP);
+		hallRex2.setSeatType(11, 3, SeatType.HANDYCAP);
+		hallRex2.setSeatType(11, 4, SeatType.PREMIUM);
+		hallRex2.setSeatType(11, 5, SeatType.PREMIUM);
+		hallRex2.setSeatType(11, 6, SeatType.PREMIUM);
+		hallRex2.setSeatType(11, 7, SeatType.PREMIUM);
+		hallRex2.setSeatType(11, 8, SeatType.HANDYCAP);
+		hallRex2.setSeatType(11, 9, SeatType.HANDYCAP);
+		
+		// Megasaal
+		hallRex3.configureSeatPlan(15, 15);
+		
+		// Open-Air
 		hallRex4.configureSeatPlan(10, 15);
 	}
 
