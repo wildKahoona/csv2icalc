@@ -21,12 +21,9 @@ import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,6 +31,7 @@ import javafx.geometry.HPos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -41,6 +39,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+/**
+ * Der MovieShowController behandelt die Reservierung von Tickets.
+ * 
+ * Man kann entweder Plätze aus dem Kinosaal direkt auswählen oder
+ * via Funktion hinzufügen (es wird dann jeweils der nächstbeste Sitz automatisch ausgewählt)
+ * 
+ * Tickets können einzeln oder alle aufeinmal gelöscht werden.
+ * Wenn ein Platz deselektiert wird, wird auch das entsprechende Ticket gelöscht.
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class MovieShowController {
 
 	@FXML
@@ -57,9 +66,6 @@ public class MovieShowController {
 	
 	@FXML
 	private GridPane gridTimer;
-//	
-//	@FXML
-//	private GridPane gridMovieShow;
 	
 	@FXML
 	private VBox gridTickets;	
@@ -195,6 +201,8 @@ public class MovieShowController {
             	// to the size of the parent using expression binding          	    	
             	view.fitWidthProperty().bind(size);
 			    view.fitHeightProperty().bind(size);
+			    
+			    Tooltip.install(view, new Tooltip(seat.toString()));
             	
 			    // Wenn der Sitz ausgewählt wird, ein Ticket hinzufügen
             	view.getState().addListener((e, oldValue, newValue) -> {          		
@@ -208,7 +216,7 @@ public class MovieShowController {
 			        	// TODO: funktioniert nicht
 			        	if(ticketData.size() > 10 && newValue == true) {
 		            		System.out.println("Max. Tickets erreicht");
-		            		//view.deselect();
+		            		//view.deselect();		            		
 			        	 }
             		} else {
             			view.setIsSelected(false);
@@ -280,7 +288,7 @@ public class MovieShowController {
 			bestSeat = selectedSeats.get(selectedSeats.size() - 1);
 	
 	    Boolean foundIt = false;
-	    int countSearch = 0;
+	    int countSearch = 0; // TODO: hier müsste man irgendwann abbrechen!!!
 	    while(!foundIt) {	    	   	
 	    	bestSeat = getBestSeat(bestSeat, maxRows, maxCols);
 	    	if(bestSeat.getSeat().getSeatRow() == 13 && bestSeat.getSeat().getSeatColumn() == 13)
@@ -304,9 +312,7 @@ public class MovieShowController {
 //	    	for (Booking booking : bookings)
 //		    	for(Ticket ticket : booking.getTickets())
 //		    		countBookedTickets++;
-	    	
-	    	
-	    	
+	    		    	
 	    	Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Hinweis");
 			alert.setHeaderText("Es wurde kein Platz mehr gefunden.");

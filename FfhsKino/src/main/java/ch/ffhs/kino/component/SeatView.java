@@ -8,6 +8,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+/**
+ * Die Darstellung eines Kinositzes.
+ * Der Kinositz enthält seinen Zustand (selektiert oder nicht)
+ * und zeigt entsprechend seinem Zustand das richtige Bild
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class SeatView extends ImageView {
     
 	static final double scale = 0.95;

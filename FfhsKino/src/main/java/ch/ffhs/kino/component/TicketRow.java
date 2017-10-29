@@ -14,6 +14,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
+/**
+ * Beinhaltet ein ausgewählten Tickets.
+ * Die TicketRow wird in der TicketTable angezeigt
+ * Man kann das Ticket löschen und/oder einen anderen Typ (Erwachsener, Kind, ...) wählen.
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class TicketRow extends HBox {
 
 	private Ticket ticket;

@@ -10,6 +10,13 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.util.Duration;
 
+/**
+ * Die TimerAnimation zählt jede Sekunde von einem Ausgangswert eine Sekunde ab.
+ * Man kann den Stand des Ergebnisses abonnieren (binden), 
+ * sowie den den "Event", wenn die Zeit abgelaufen ist.
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class TimerAnimation {
 
 	private Timeline timeline;

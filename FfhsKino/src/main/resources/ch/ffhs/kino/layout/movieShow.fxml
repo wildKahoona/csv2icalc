@@ -31,19 +31,22 @@
 	    <!-- Breadcrumb -->
 		<HBox styleClass="breadcrumb" GridPane.rowIndex="0" alignment="CENTER_LEFT">
 			<children>
-				<Button id="bc_home" disable="false" onMouseClicked="#breadcrumbAction" mnemonicParsing="false" styleClass="homeButton">
+				<Button id="bc_home" disable="false" onMouseClicked="#breadcrumbAction" mnemonicParsing="false" styleClass="button-home">
 					<graphic>
-				        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+				        <ImageView fx:id="questionMarkImageView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
 				          <image>
 				            <Image url="/ch/ffhs/kino/images/home.png" />
 				          </image>
 				        </ImageView>
 				      </graphic>
+				      <tooltip>
+					       <Tooltip text="Hier gelangen Sie zum Wochenprogramm" />
+					  </tooltip>
 				</Button>				
-				<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
-				<Label id="bc_sitzplatz" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumbAcitve" text="2. Sitzplatz wählen &gt; " />
-				<Label id="bc_bezahlen" disable="true" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
-				<Label disable="true" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
+				<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb-step" text="1. Vorstellung wählen &gt; " />
+				<Label id="bc_sitzplatz" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb-step, breadcrumb-active" text="2. Sitzplatz wählen &gt; " />
+				<Label id="bc_bezahlen" disable="true" styleClass="breadcrumb-step" text="3. Bezahlen &gt; " />
+				<Label disable="true" styleClass="breadcrumb-step" text="4. Bestellbestätigung &gt; " />
 			</children>
 		</HBox>
 		

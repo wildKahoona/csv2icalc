@@ -40,6 +40,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Der PaymentController behandelt die Bezahlung der Ticket-Bestellung.
+ * 
+ * Einzelne Tickets können vom Benutzer vor der Durchführung der Zahlung entfernt werden.
+ * Bevor die Zahlung durchgeführt wird, kann jederzeit wieder auf die Sitzplatz-Wahl gewechselt werden.
+ * 
+ * Die Eingaben vom Benutzer werden minimal validiert (obligatorische Felder,
+ * gültiges E-Mail-Format, cvv ist ein Number-Field)
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class PaymentController {
 
 	@FXML

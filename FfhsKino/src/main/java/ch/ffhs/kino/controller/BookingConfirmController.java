@@ -15,6 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+/**
+ * Der BookingConfirmController behandelt die Bestätigung der Ticket-Bestellung
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class BookingConfirmController {
 	
 	@FXML

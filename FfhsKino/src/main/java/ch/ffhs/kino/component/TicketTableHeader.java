@@ -15,6 +15,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Beinhaltet die Summierung aller ausgewählten Tickets.
+ * Es wird die Summe von jedem Ticket-Typ (Erwachsener, Kind, ...) sowie
+ * die Summe des Preises von allen ausgewählten Tickets angezeigt
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class TicketTableHeader  extends GridPane {
 
 	//private StringProperty sumPrice = new SimpleStringProperty();

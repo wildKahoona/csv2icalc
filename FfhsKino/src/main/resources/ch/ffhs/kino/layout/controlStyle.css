@@ -7,9 +7,19 @@
     
 }
  
-.button  {
+.button {
     -fx-border-radius: 20.0;
     -fx-background-radius: 20.0;
+}
+
+.button-home{
+	-fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color: #919191;
+}
+
+.button-home:focused {
+    -fx-background-insets: 0, 0, 1, 2;
 }
 
 /*Table ohne Überschrift */
@@ -48,19 +58,38 @@
 .solidblackborder{ -fx-border-color: black; -fx-padding: 15.0 ;}
 
 .breadcrumb{
-	/*-fx-cursor:hand;*/
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
 	-fx-spacing:12.0px;
 	-fx-font: 12.0pt "Cambria Bold";
 }
 
-.breadcrumbAcitve{
+.breadcrumb-step{
+	-fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 4 8 4 8;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-border-color: transparent;
+}
+
+.breadcrumb-step:hover{
+	 -fx-border-color: #919191;
+	 -fx-border-radius: 5;
+     -fx-background-radius: 5;
+}
+
+.breadcrumb-active{
 	-fx-background-color: #a0df8d;
+}
+
+.breadcrumb-active:hover{
+	-fx-background-color: #a0df8d;
+	-fx-border-color: #a0df8d;
 }
 
 .borderSolid{
 		-fx-border-style:	solid ;
 }
-
 
 .screen-pane {
   -fx-padding: 2px;

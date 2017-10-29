@@ -18,6 +18,15 @@ import ch.ffhs.kino.model.Ticket.TicketType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+/**
+ * Beinhaltet alle ausgewählten Tickets.
+ * Die TicketTable ist ein Ersatz für die TableView von JavaFX.
+ * Man kann Tickets einzeln aus der TicketTable löschen und/oder 
+ * einen anderen Typ (Erwachsener, Kind, ...) von Ticket wählen ohne editieren zu müssen (ohne doppelklick)
+ * Die Ticket werden stets nach Reihe und Platz des Kinositzes sortiert.
+ * 
+ * @author Birgit Sturzenegger
+ */
 public class TicketTable extends GridPane {
 
 	private VBox gridTable;
