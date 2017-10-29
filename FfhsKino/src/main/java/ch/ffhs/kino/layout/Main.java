@@ -54,8 +54,8 @@ public class Main extends Application {
 		primaryStage.setMinWidth(600);
 		primaryStage.setMinHeight(500);
 
-		primaryStage.setWidth(stageWidth *.1);
-		primaryStage.setHeight(stageHeight * .1);
+		primaryStage.setWidth(stageWidth *.95);
+		primaryStage.setHeight(stageHeight * .95);
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
 		startKinoProgramm();
