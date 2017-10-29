@@ -1,4 +1,4 @@
-package ch.ffhs.kino.layout;
+package ch.ffhs.kino.table;
 
 import java.text.Format;
 

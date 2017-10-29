@@ -174,14 +174,7 @@ public class MovieShowController {
 	    
 
 	    
-//	    gridWidth.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
-//	        System.out.println(newValue);
-//	        int w = 600;
-//	        double w1 = w * newValue.doubleValue();
-//	        double w2 = w - w1;
-//	        image1.setFitWidth(w1);
-//	        image2.setFitWidth(w2);
-//	    });
+	    
 	    
 	    // Bilder der Sitzplätze laden
 	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));

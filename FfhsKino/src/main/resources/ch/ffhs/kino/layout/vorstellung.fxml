@@ -11,7 +11,7 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.ImageView?>
 
-<GridPane id="content" hgap="10.0" vgap="20.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.VorstellungController">
+<GridPane id="content" hgap="10.0" vgap="20.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.VorstellungController">
 	<columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" />
