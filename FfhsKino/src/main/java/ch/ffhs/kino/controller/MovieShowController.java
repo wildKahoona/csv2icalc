@@ -14,9 +14,9 @@ import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Booking;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Seat;
+import ch.ffhs.kino.model.Seat.SeatType;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Vorstellung;
-import ch.ffhs.kino.model.Seat.SeatType;
 import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -29,10 +29,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+<<<<<<< HEAD
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
+=======
+>>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -168,6 +172,12 @@ public class MovieShowController {
 	    		.then(gridWidth.subtract(20).divide(columns).subtract(2))
 	    		.otherwise(gridHeight.subtract(20).divide(rows).subtract(2));
 
+<<<<<<< HEAD
+=======
+	    
+	    
+	    
+>>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 	    // Bilder der Sitzplätze laden
 	    Image selectedSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seatSelected_small.png"));
 	    Image normalSeat = new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/images/seat_small.png"));

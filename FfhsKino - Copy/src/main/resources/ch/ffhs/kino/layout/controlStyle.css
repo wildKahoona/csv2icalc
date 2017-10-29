@@ -1,0 +1,185 @@
+/*controlStyle.css */
+ 
+.scene{
+    -fx-font: 14.0pt "Cambria Bold";
+    -fx-color: #e79423;
+    -fx-background: #67644e;
+    
+}
+ 
+.button {
+    -fx-border-radius: 20.0;
+    -fx-background-radius: 20.0;
+}
+
+.button-home{
+	-fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color: #919191;
+}
+
+.button-home:focused {
+    -fx-background-insets: 0, 0, 1, 2;
+}
+
+/*Table ohne Überschrift */
+.noheader .column-header-background {
+    -fx-max-height: 0.0;
+    -fx-pref-height: 0.0;
+    -fx-min-height: 0.0;
+}
+
+
+.h1{
+	-fx-font: NORMAL 20.0 "Tahoma";
+}
+
+.h2{
+	-fx-font: NORMAL 15.0 "Tahoma";
+	-fx-padding: 15.0 ;
+}
+
+.title-big{
+	-fx-font: NORMAL 20.0 "Tahoma";
+}
+
+.title-small{
+	-fx-font: NORMAL 15.0 "Tahoma";
+}
+
+.text-field {
+    -fx-padding: 5.0px;
+  
+}
+
+.long{-fx-pref-width:180.0px;  -fx-width:180.0px;}
+.medium{-fx-pref-width:120.0px; -fx-width:180.0px; }
+.small{-fx-pref-width:50.0px; -fx-width:180.0px; }
+.solidblackborder{ -fx-border-color: black; -fx-padding: 15.0 ;}
+
+.breadcrumb{
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+	-fx-spacing:12.0px;
+	-fx-font: 12.0pt "Cambria Bold";
+}
+
+.breadcrumb-step{
+	-fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 4 8 4 8;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-border-color: transparent;
+}
+
+.breadcrumb-step:hover{
+	 -fx-border-color: #919191;
+	 -fx-border-radius: 5;
+     -fx-background-radius: 5;
+}
+
+.breadcrumb-active{
+	-fx-background-color: #a0df8d;
+}
+
+.breadcrumb-active:hover{
+	-fx-background-color: #a0df8d;
+	-fx-border-color: #a0df8d;
+}
+
+.borderSolid{
+		-fx-border-style:	solid ;
+}
+
+.screen-pane {
+  -fx-padding: 2px;
+  -fx-background-color:#b7b7b7;
+}
+
+.screen-label {
+  -fx-font-weight: bold;
+}
+
+.legend-label {
+  -fx-pref-height: 20.0px;
+  -fx-padding: 0 0 0 10;
+}
+
+.button-primary {
+  -fx-base: #2C82C9;
+  -fx-text-fill: #fff;
+}
+
+.payment_hinweis_1{
+	-fx-font: NORMAL 15.0 "Tahoma";
+	-fx-padding: 0 0 5 0;
+}
+
+.payment_hinweis_2{
+	-fx-font: NORMAL 13.0 "Tahoma";
+	-fx-padding: 0 0 5 0;
+}
+
+.payment_hinweis_3{
+	-fx-font: NORMAL 13.0 "Tahoma";
+	-fx-padding: 0 0 5 0;
+}
+
+.payment_hinweis_4{
+	-fx-font: NORMAL 11.0 "Tahoma";
+	-fx-padding: 0 0 5 0;
+}
+
+.credit-title{
+	-fx-font: NORMAL 15.0 "Tahoma";
+	-fx-padding: 0 0 10 0;
+}
+
+.ticket-header{
+	-fx-padding: 5;
+	-fx-border-style: solid inside;
+	-fx-border-width: 2;
+	-fx-border-insets: -1;
+	-fx-border-color: gray;
+	-fx-background-color:wheat;
+	-fx-min-width: 380px
+}
+
+.ticket-row{
+	-fx-padding: 5;
+	-fx-border-style: solid inside;
+	-fx-border-width: 2;
+	-fx-border-insets: -1;
+	-fx-border-color: gray;
+	-fx-background-color:white;
+	-fx-min-width: 380px
+}
+
+.confirm_ticket-table{
+	-fx-padding: 0 0 0 10;	
+}
+
+#content{
+	-fx-padding: 15.0 ;   
+} 
+
+#ODD{
+	-fx-background-color: white;
+}
+
+#EVEN{
+	-fx-background-color: #ececec;
+}
+
+.table-row-cell:selected {
+   -fx-background-color: #FFE4e1; 
+}
+
+.table-row-cell:selected .text {
+       -fx-fill: #800000  ;
+}
+
+.homeButton  {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}

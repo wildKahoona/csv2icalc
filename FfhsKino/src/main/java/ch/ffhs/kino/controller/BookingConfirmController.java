@@ -21,14 +21,15 @@ import javafx.scene.layout.VBox;
  * @author Birgit Sturzenegger
  */
 public class BookingConfirmController {
-	
+
 	@FXML
 	public void breadcrumbAction(MouseEvent event) {
 		ControllerUtils.breadcrumbAction(event.getSource());
 	}
-	
+
 	@FXML
 	private Label vorstellungChoice;
+<<<<<<< HEAD
 	
 	@FXML
 	private VBox gridTickets;
@@ -44,24 +45,41 @@ public class BookingConfirmController {
 	private Booking booking;
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
+=======
+
+	private Booking booking;
+
+	@FXML
+	public void initialize() {
+
+	}
+
+>>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 	public void setBooking(Booking booking) {
 		this.booking = booking;
 		setTitle();
-		if(this.booking == null) return;
+		if (this.booking == null)
+			return;
 		List<Ticket> tickets = this.booking.getTickets();
+<<<<<<< HEAD
 		if(tickets == null) return;
 		for(Ticket ticket : tickets){
 			ticketData.add(ticket);
 		}
+=======
+		if (tickets == null || tickets.isEmpty())
+			return;
+>>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 	}
-	
+
 	private void setTitle() {
 		Vorstellung event = booking.getEvent();
 		String movieTitle = event.getShow().getMovie().getTitle();
 		String movieLanguage = event.getShow().getLanguage().getText();
-				
-		SimpleDateFormat fmt = new SimpleDateFormat("E dd MMM yyyy HH:mm");		
-		vorstellungChoice.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(event.getDate()) + ", " + event.getHall().getHallName());
+
+		SimpleDateFormat fmt = new SimpleDateFormat("E dd MMM yyyy HH:mm");
+		vorstellungChoice.setText(movieTitle + " (" + movieLanguage + "), " + fmt.format(event.getDate()) + ", "
+				+ event.getHall().getHallName());
 	}
 	
 	private void renderTicketTable() {			
