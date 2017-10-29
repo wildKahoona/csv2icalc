@@ -17,7 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-<<<<<<< HEAD
 import ch.ffhs.kino.model.Ticket.TicketType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,8 +30,6 @@ import javafx.beans.value.ObservableValue;
  * 
  * @author Birgit Sturzenegger
  */
-=======
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 public class TicketTable extends GridPane {
 
 	private VBox gridTable;

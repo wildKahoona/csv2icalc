@@ -5,11 +5,8 @@ import java.io.IOException;
 import ch.ffhs.kino.layout.Main;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-<<<<<<< HEAD
 import javafx.scene.control.Button;
-=======
 import javafx.scene.control.Label;
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 
 public class ControllerUtils {
 
@@ -22,12 +19,12 @@ public class ControllerUtils {
 					String id = label.getId();
 					if (id.equals("bc_programm")) {
 						Main.startKinoProgramm();
-//					} else if (id.equals("bc_vorstellung")) {
-//						Main.startMovieShow(null);
+						// } else if (id.equals("bc_vorstellung")) {
+						// Main.startMovieShow(null);
 					} else if (id.equals("bc_bezahlen")) {
 						Main.startPayment(null);
-//					} else if (id.equals("bc_sitzplatz")) {
-//						Main.startMovieShow(null);
+						// } else if (id.equals("bc_sitzplatz")) {
+						// Main.startMovieShow(null);
 					}
 				}
 			} else if (source instanceof Button) {
@@ -38,7 +35,7 @@ public class ControllerUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Alert getSessionTimeOverMsg() {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Reservierungszeit abgelaufen");

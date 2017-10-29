@@ -29,7 +29,6 @@ public class BookingConfirmController {
 
 	@FXML
 	private Label vorstellungChoice;
-<<<<<<< HEAD
 	
 	@FXML
 	private VBox gridTickets;
@@ -45,31 +44,16 @@ public class BookingConfirmController {
 	private Booking booking;
 	private ObservableList<Ticket> ticketData = FXCollections.observableArrayList();
 	
-=======
-
-	private Booking booking;
-
-	@FXML
-	public void initialize() {
-
-	}
-
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 	public void setBooking(Booking booking) {
 		this.booking = booking;
 		setTitle();
 		if (this.booking == null)
 			return;
 		List<Ticket> tickets = this.booking.getTickets();
-<<<<<<< HEAD
 		if(tickets == null) return;
 		for(Ticket ticket : tickets){
 			ticketData.add(ticket);
 		}
-=======
-		if (tickets == null || tickets.isEmpty())
-			return;
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 	}
 
 	private void setTitle() {

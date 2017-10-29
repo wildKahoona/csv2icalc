@@ -15,16 +15,12 @@
 <?import javafx.geometry.Insets?>
 
 
-<<<<<<< HEAD
 <GridPane id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.BookingConfirmController">
 	<rowConstraints>
 		<RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
 		<RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="NEVER" />
 		<RowConstraints minHeight="2.0" prefHeight="2.0" vgrow="NEVER" />
 	</rowConstraints>
-=======
-<GridPane id="content" hgap="10.0" vgap="20.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.BookingConfirmController">
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 	<children>
 	
 	<!-- Breadcrumb -->

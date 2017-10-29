@@ -17,7 +17,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<<<<<<< HEAD
 <GridPane id="content" hgap="10.0" minWidth="600.0" vgap="20.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.MovieShowController">
 		<rowConstraints>
 			<RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
@@ -28,46 +27,7 @@
 		<columnConstraints>
 			<ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
 		</columnConstraints>
-=======
-<GridPane fx:id="gridMovieShow" id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.MovieShowController">
-	<columnConstraints>
-		<ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
-	</columnConstraints>
-	
-    <!-- Breadcrumb -->
-	<HBox styleClass="breadcrumb" GridPane.rowIndex="0">
-		<children>
-			<!-- <Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="Programm &gt; " /> -->
-			<Label id="bc_programm" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="1. Vorstellung wählen &gt; " />
-			<Label id="bc_sitzplatz" disable="false" onMouseClicked="#breadcrumbAction" styleClass="breadcrumb" text="2. Sitzplatz wählen &gt; " />
-			<Label id="bc_bezahlen" disable="true" styleClass="breadcrumb" text="3. Bezahlen &gt; " />
-			<Label disable="true" styleClass="breadcrumb" text="4. Bestellbestätigung &gt; " />
-		</children>
-	</HBox>
-	
-	<!-- Title -->
-	<GridPane hgap="30.0" GridPane.rowIndex="1">
-		<children>
-			<Label styleClass="titleBig" text="Vorstellung" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-			<Label fx:id="lbMovieShow" styleClass="titleSmall" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-		</children>
-	</GridPane>
-	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
-	
-	<GridPane GridPane.rowIndex="3">
-	    <columnConstraints>
-	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
-	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
-	    </columnConstraints>
-	    
-	    <!-- Links: Kinosaal -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER">
-			<columnConstraints>
-        		<ColumnConstraints hgrow="SOMETIMES" halignment="CENTER" minWidth="10.0" prefWidth="100.0" />
-    		</columnConstraints>
-    		
-			<Label GridPane.rowIndex="0" alignment="CENTER" text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" styleClass="h2"/>
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
+
 		
 	    <!-- Breadcrumb -->
 		<HBox styleClass="breadcrumb" GridPane.rowIndex="0" alignment="CENTER_LEFT">

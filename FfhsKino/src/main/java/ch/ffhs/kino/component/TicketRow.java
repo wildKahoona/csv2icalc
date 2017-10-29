@@ -30,25 +30,15 @@ public class TicketRow extends HBox {
 
 	public TicketRow() {
 		this.setAlignment(Pos.CENTER_LEFT);
-<<<<<<< HEAD
 		this.getStyleClass().add("ticket-header");
-=======
-		// this.setMaxWidth(350.00);
-		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
-				+ "-fx-border-insets: -1;" + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 380px");
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
+
 	}
 
 	public TicketRow(Ticket ticket) {
 		this.ticket = ticket;
 		this.setAlignment(Pos.CENTER_LEFT);
-<<<<<<< HEAD
 		this.getStyleClass().add("ticket-row");
 
-=======
-		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
-				+ "-fx-border-insets: -1;" + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 		this.setAlignment(Pos.CENTER_LEFT);
 	}
 
@@ -67,11 +57,6 @@ public class TicketRow extends HBox {
 		String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
 		Label labelPrice = new Label();
 		labelPrice.setText(price + " CHF");
-<<<<<<< HEAD
-//		labelPrice.setStyle("-fx-background-color:lightblue");
-=======
-		// labelPrice.setStyle("-fx-background-color:lightblue");
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 		labelPrice.setMinWidth(100);
 		labelPrice.setAlignment(Pos.CENTER);
 		this.getChildren().add(labelPrice);
@@ -94,7 +79,6 @@ public class TicketRow extends HBox {
 		cbTicketType.getSelectionModel().select(ticket.getTicketType());
 		this.getChildren().add(cbTicketType);
 	}
-<<<<<<< HEAD
 	
 	public void addTicketTypeLabel() {
 		Label labelType = new Label();
@@ -102,9 +86,6 @@ public class TicketRow extends HBox {
 		this.getChildren().add(labelType);
 	}
 	
-=======
-
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 	public void addDeleteButton(Image image) {
 		btnDeleteTicket = new Button();
 		btnDeleteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-radius: 100;");

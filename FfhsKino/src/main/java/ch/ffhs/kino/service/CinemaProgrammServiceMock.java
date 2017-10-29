@@ -341,8 +341,4 @@ public class CinemaProgrammServiceMock {
 	public Movie getMovie() {
 		return movie3;
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 }

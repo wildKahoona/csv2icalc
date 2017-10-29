@@ -48,8 +48,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		setPrimaryStage(primaryStage);
-<<<<<<< HEAD
-				
+
 		Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
 		stageWidth = visualBounds.getWidth() - 40;
 		stageHeight = visualBounds.getHeight() - 40;
@@ -57,21 +56,9 @@ public class Main extends Application {
 
 		primaryStage.setMinWidth(600);
 		primaryStage.setMinHeight(500);
-		
+
 		// startMovieDetail(cinemaProgrammService.getMovie());
 		startKinoProgramm();
-=======
-
-		primaryStage.setMaxHeight(stageHeight);
-		primaryStage.setMaxWidth(stageWidth);
-		primaryStage.setHeight(stageHeight * 0.8);
-		primaryStage.setWidth(stageWidth * 0.8);
-		
-		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
-
-		startKinoProgramm();
-		// startMovieDetail(cinemaProgrammService.getMovie());
->>>>>>> d30bcf3fefb4aeca4bd63d21d0e1dffe81ad507b
 		// startMovieShow(cinemaProgrammService.getVorstellung());
 		// startPayment(cinemaProgrammService.getBooking());
 		// startBookingConfirm(cinemaProgrammService.getBooking());
@@ -85,7 +72,7 @@ public class Main extends Application {
 		launch(args);
 
 	}
-	
+
 	public static void startKinoProgramm() throws IOException {
 		primaryStage.setTitle("Kino REX - Programm");
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("/ch/ffhs/kino/layout/programm.fxml"));
