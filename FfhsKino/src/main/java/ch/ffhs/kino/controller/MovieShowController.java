@@ -21,7 +21,9 @@ import ch.ffhs.kino.service.CinemaProgrammServiceMock;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -80,9 +82,6 @@ public class MovieShowController {
 	@FXML
 	private Button btnBuy;	
 	
-//	@FXML
-//	private Button btnHome;
-	
 	@FXML
 	private GridPane gridContent;
 	
@@ -129,12 +128,6 @@ public class MovieShowController {
 			    alert.showAndWait();
 			}
 		});
-		
-//		gridMovieShow.widthProperty().addListener(new ChangeListener<Number>() {
-//		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-//		        //System.out.println("Width: " + newSceneWidth);
-//		    }
-//		});
 	}
 
 	/**
@@ -207,17 +200,17 @@ public class MovieShowController {
             	view.getState().addListener((e, oldValue, newValue) -> {          		
             		if (newValue) {
             			// Ticket für diesen Sitzplatz hinzufügen
-            			System.out.println( view.getIsSelected());
 			        	selectedSeats.add(view);
 			        	ticketData.add(new Ticket(seat));
 			        	if(ticketData.size() == 1)
 			        		  timer.startTimeAnimation(getReservation().getSessionRemainTime());
-			        	 if(ticketData.size() > 10) {
-		            		System.out.println( view.getIsSelected());
+            		
+			        	// TODO: funktioniert nicht
+			        	if(ticketData.size() > 10 && newValue == true) {
+		            		System.out.println("Max. Tickets erreicht");
+		            		//view.deselect();
 			        	 }
-			        	
             		} else {
-            			System.out.println( view.getIsSelected());
             			view.setIsSelected(false);
             			this.selectedSeats.remove(view);
             			if(ticketData.size() == 0)

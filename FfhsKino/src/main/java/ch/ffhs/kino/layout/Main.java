@@ -50,8 +50,8 @@ public class Main extends Application {
 		setPrimaryStage(primaryStage);
 				
 		Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-		stageWidth = visualBounds.getWidth();
-		stageHeight = visualBounds.getHeight();
+		stageWidth = visualBounds.getWidth() - 10;
+		stageHeight = visualBounds.getHeight() - 10;
 //		primaryStage.setMinWidth(480.0);
 //		primaryStage.setMinHeight(600.0);
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));

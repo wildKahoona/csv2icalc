@@ -22,8 +22,7 @@ public class TimerAnimation {
     public final void setTimeElapsed(boolean value){timeElapsed.set(value);}
  
     public BooleanProperty timeElapsedProperty() {return timeElapsed;}
-	
-    
+	 
     private LongProperty remainTime = new SimpleLongProperty();
  
     public final long getRemainTime(){return remainTime.get();}

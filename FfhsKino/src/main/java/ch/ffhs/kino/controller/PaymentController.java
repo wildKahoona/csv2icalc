@@ -40,7 +40,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-
 public class PaymentController {
 
 	@FXML
