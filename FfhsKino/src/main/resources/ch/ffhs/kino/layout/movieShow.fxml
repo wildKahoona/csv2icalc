@@ -158,13 +158,13 @@
 		    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-padding: 0 0 0 15;" >
 			    
 			    <!-- Buchungstimer -->
-			    <GridPane GridPane.rowIndex="0" alignment="CENTER_LEFT" style="-fx-padding: 5 5 10 0;-fx-min-width: 380px">
+			    <GridPane GridPane.rowIndex="0" alignment="CENTER_LEFT" styleClass="timer">
 			    	<GridPane fx:id="gridTimer" alignment="CENTER_LEFT" GridPane.columnIndex="0" style="-fx-padding: 0">
-				    	<Label GridPane.columnIndex="0" text="Reservierung läuft ab in " styleClass="h2" style="-fx-padding: 0;" />
-						<Label fx:id="lbTimer" GridPane.columnIndex="1" styleClass="h2" style="-fx-padding: 0;-fx-min-width: 50px;"/>
+				    	<Label GridPane.columnIndex="0" text="Reservierung läuft ab in " styleClass="timer-text" />
+						<Label fx:id="lbTimer" GridPane.columnIndex="1" styleClass="timer-time"/>
 						<ImageView GridPane.columnIndex="2" fitHeight="20.0" fitWidth="20.0">
 					      <image>
-					      	<Image url="/ch/ffhs/kino/images/timer.png" />
+					      	<Image url="/ch/ffhs/kino/images/timer_red.png" />
 					      </image>
 					 	</ImageView>
 				 	</GridPane>

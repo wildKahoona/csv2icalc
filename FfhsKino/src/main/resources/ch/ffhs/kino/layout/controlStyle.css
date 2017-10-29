@@ -179,7 +179,18 @@
        -fx-fill: #800000  ;
 }
 
-.homeButton  {
-    -fx-border-radius: 0;
-    -fx-background-radius: 0;
+.timer{
+	-fx-padding: 5 5 10 0;
+	-fx-min-width: 380px
+}
+
+.timer-text{
+	-fx-text-fill: #bc0c0c;
+	-fx-font: NORMAL 15.0 "Tahoma";
+}
+
+.timer-time{
+	-fx-text-fill: #bc0c0c;
+	-fx-font: NORMAL 15.0 "Tahoma";
+	-fx-min-width: 50px;
 }

@@ -152,12 +152,12 @@
 				<RowConstraints minHeight="110.0" prefHeight="110.0" vgrow="NEVER" />
 			</rowConstraints>		    
 		    <!-- Buchungstimer -->
-		    <GridPane fx:id="gridTimer" GridPane.rowIndex="3" style="-fx-padding: 15 5 5 0;-fx-min-width: 380px">
-		    	<Label style="-fx-padding: 0;" styleClass="h2" text="Reservierung läuft ab in " GridPane.columnIndex="0" />
-				<Label fx:id="lbTimer" style="-fx-padding: 0;-fx-min-width: 50px;" styleClass="h2" GridPane.columnIndex="1" />
+		    <GridPane fx:id="gridTimer" GridPane.rowIndex="3" styleClass="timer" style="-fx-padding: 15 5 5 0;">
+		    	<Label text="Reservierung läuft ab in " GridPane.columnIndex="0" styleClass="timer-text"/>
+				<Label fx:id="lbTimer" styleClass="timer-time" GridPane.columnIndex="1" />
 				<ImageView fitHeight="20.0" fitWidth="20.0" GridPane.columnIndex="2">
 			      <image>
-			      	<Image url="/ch/ffhs/kino/images/timer.png" />
+			      	<Image url="/ch/ffhs/kino/images/timer_red.png" />
 			      </image>
 			 	</ImageView>		 	
 		    </GridPane>
