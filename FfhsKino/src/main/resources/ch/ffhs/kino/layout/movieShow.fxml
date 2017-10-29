@@ -70,7 +70,7 @@
 			    <!-- Links: Kinosaal -->
 			    <GridPane GridPane.columnIndex="0">
 					<columnConstraints>
-		        		<ColumnConstraints hgrow="SOMETIMES" halignment="CENTER" minWidth="10.0" prefWidth="100.0" />
+		        		<ColumnConstraints hgrow="ALWAYS" halignment="CENTER" minWidth="10.0" prefWidth="100.0" />
 		    		</columnConstraints>
 		    		
 					<Label GridPane.rowIndex="0" alignment="CENTER" text="Bitte wählen Sie Ihre Plätze im Saalplan aus:" styleClass="h2"/>
