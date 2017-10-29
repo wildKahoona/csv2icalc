@@ -26,8 +26,6 @@
 <?import javafx.scene.layout.Pane?>
 
 <GridPane id="content" hgap="10.0" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.ffhs.kino.controller.TicketZahlenController">
-	<!-- <columnConstraints> <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="50.0" /> <ColumnConstraints hgrow="SOMETIMES" 
-		minWidth="10.0" percentWidth="50.0" prefWidth="50.0" /> </columnConstraints> -->
 	<children>
 		<!-- Breadcrumb (Zeile 1) -->
 		<HBox styleClass="breadcrumb" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">

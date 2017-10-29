@@ -49,13 +49,13 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		setPrimaryStage(primaryStage);
 
-		Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-		stageWidth = visualBounds.getWidth() - 40;
-		stageHeight = visualBounds.getHeight() - 40;
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
 		primaryStage.setMinWidth(600);
 		primaryStage.setMinHeight(500);
+
+		primaryStage.setWidth(stageWidth * 0.8);
+		primaryStage.setHeight(stageHeight * 0.8);
 
 		// startMovieDetail(cinemaProgrammService.getMovie());
 		startKinoProgramm();
