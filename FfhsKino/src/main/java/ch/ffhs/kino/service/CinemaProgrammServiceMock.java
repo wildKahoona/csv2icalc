@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ch.ffhs.kino.model.Cinema.CinemaPlaces;
-import ch.ffhs.kino.model.Vorstellung;
 import ch.ffhs.kino.model.Booking;
+import ch.ffhs.kino.model.Cinema.CinemaPlaces;
 import ch.ffhs.kino.model.Hall;
 import ch.ffhs.kino.model.Movie;
 import ch.ffhs.kino.model.Movie.GenreType;
@@ -18,6 +17,7 @@ import ch.ffhs.kino.model.Show;
 import ch.ffhs.kino.model.Show.ShowType;
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
+import ch.ffhs.kino.model.Vorstellung;
 
 /**
  * Stellt einen Mock-Service zur verfügung um die Daten auf den verschiedenen
@@ -245,6 +245,10 @@ public class CinemaProgrammServiceMock {
 				"Die neunköpfige Romafamilie im Garten des Linksintellektuellen Jean-Etienne stellt seine Überzeugungen auf die Probe.");
 		movie1.setImageRessource(String.format(imgPath, "20"));
 		movie1.setAltersfreigabe("12J");
+		String codemov1 = "bw1TdXyXT8Y";
+		String urlmovie1 = "http://www.youtube.com/embed/" + codemov1 + "?rel=0;3&amp;autohide=1&amp;showinfo=0";
+		movie1.setTrailer(urlmovie1);
+
 
 		// Barry Seal - Only in America
 		movie2 = new Movie();
@@ -254,6 +258,9 @@ public class CinemaProgrammServiceMock {
 				"Einige Waisenkinder finden ein Zuhause bei einem Puppenmacher. Schon bald geraten sie ins Visier einer seiner Kreationen.");
 		movie2.setImageRessource(String.format(imgPath, "4"));
 		movie2.setAltersfreigabe("14/12J");
+		String codemov2 = "SiV3XA-sC8k";
+		String urlmovie2 = "http://www.youtube.com/embed/" + codemov2 + "?rel=0;3&amp;autohide=1&amp;showinfo=0";
+		movie2.setTrailer(urlmovie2);
 
 		// Blade Runner 2049
 		movie3 = new Movie();
@@ -327,11 +334,4 @@ public class CinemaProgrammServiceMock {
 		return movie3;
 	}
 
-//	public long getSessionRemainTime() {
-//		return sessionRemainTime;
-//	}
-//
-//	public void setSessionRemainTime(long sessionRemainTime) {
-//		this.sessionRemainTime = sessionRemainTime;
-//	}
 }

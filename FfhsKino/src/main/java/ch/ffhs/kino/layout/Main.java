@@ -51,8 +51,8 @@ public class Main extends Application {
 
 		primaryStage.setMaxHeight(stageHeight);
 		primaryStage.setMaxWidth(stageWidth);
-		primaryStage.setHeight(stageHeight * 0.5);
-		primaryStage.setWidth(stageWidth * 0.5);
+		primaryStage.setHeight(stageHeight * 0.8);
+		primaryStage.setWidth(stageWidth * 0.8);
 		
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 

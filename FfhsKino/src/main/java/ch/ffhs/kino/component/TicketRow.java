@@ -1,6 +1,7 @@
 package ch.ffhs.kino.component;
 
 import java.util.Locale;
+
 import ch.ffhs.kino.model.Ticket;
 import ch.ffhs.kino.model.Ticket.TicketType;
 import javafx.collections.FXCollections;
@@ -19,24 +20,22 @@ public class TicketRow extends HBox {
 	private Ticket ticket;
 	private Button btnDeleteTicket;
 	private ComboBox<TicketType> cbTicketType;
-  
+
 	public TicketRow() {
 		this.setAlignment(Pos.CENTER_LEFT);
-		//this.setMaxWidth(350.00);
-		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-		        + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 380px");
+		// this.setMaxWidth(350.00);
+		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
+				+ "-fx-border-insets: -1;" + "-fx-border-color: gray;-fx-background-color:wheat;-fx-min-width: 380px");
 	}
-	
+
 	public TicketRow(Ticket ticket) {
 		this.ticket = ticket;
 		this.setAlignment(Pos.CENTER_LEFT);
-		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;"
-		        + "-fx-border-width: 2;" + "-fx-border-insets: -1;"
-		        + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
+		this.setStyle("-fx-padding: 5;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
+				+ "-fx-border-insets: -1;" + "-fx-border-color: gray;-fx-background-color:white;-fx-min-width: 350px");
 		this.setAlignment(Pos.CENTER_LEFT);
 	}
-	
+
 	@FXML
 	protected void initialize() {
 	}
@@ -47,38 +46,38 @@ public class TicketRow extends HBox {
 		label.setMinWidth(120);
 		this.getChildren().add(label);
 	}
-	
+
 	public void addPriceInfo() {
 		String price = String.format(Locale.ROOT, "%.2f", ticket.getTicketType().getCost());
 		Label labelPrice = new Label();
 		labelPrice.setText(price + " CHF");
-		labelPrice.setStyle("-fx-background-color:lightblue");
+		// labelPrice.setStyle("-fx-background-color:lightblue");
 		labelPrice.setMinWidth(100);
 		labelPrice.setAlignment(Pos.CENTER);
 		this.getChildren().add(labelPrice);
 	}
-	
+
 	public void addTicketTypeChoice() {
 		cbTicketType = new ComboBox<>();
-		cbTicketType.setItems( FXCollections.observableArrayList( TicketType.values()));
+		cbTicketType.setItems(FXCollections.observableArrayList(TicketType.values()));
 		cbTicketType.setConverter(new StringConverter<TicketType>() {
-		    @Override
-		    public String toString(TicketType object) {
-		        return object.getTitle();
-		    }
+			@Override
+			public String toString(TicketType object) {
+				return object.getTitle();
+			}
 
-		    @Override
-		    public TicketType fromString(String string) {
-		        return null;
-		    }
+			@Override
+			public TicketType fromString(String string) {
+				return null;
+			}
 		});
 		cbTicketType.getSelectionModel().select(ticket.getTicketType());
 		this.getChildren().add(cbTicketType);
 	}
-	
+
 	public void addDeleteButton(Image image) {
 		btnDeleteTicket = new Button();
-		btnDeleteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-radius: 100;");		
+		btnDeleteTicket.setStyle("-fx-padding: 0; -fx-margin:10;-fx-background-radius: 100;");
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
 		imageView.setFitWidth(23);
@@ -86,7 +85,7 @@ public class TicketRow extends HBox {
 		btnDeleteTicket.setGraphic(imageView);
 		this.getChildren().add(btnDeleteTicket);
 	}
-	
+
 	public ComboBox<TicketType> getCbTicketType() {
 		return cbTicketType;
 	}

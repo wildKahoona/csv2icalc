@@ -39,7 +39,6 @@
 	</GridPane>
 	<Separator GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
 	
-	<!-- Inhalt style="-fx-background-color:lightblue"-->
 	<GridPane GridPane.rowIndex="3">
 	    <columnConstraints>
 	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>

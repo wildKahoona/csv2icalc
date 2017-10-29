@@ -5,6 +5,9 @@ import java.util.List;
 import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Seat;
 import ch.ffhs.kino.model.Ticket;
+import ch.ffhs.kino.model.Ticket.TicketType;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -13,10 +16,6 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
-import ch.ffhs.kino.model.Ticket.TicketType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 public class TicketTable extends GridPane {
 

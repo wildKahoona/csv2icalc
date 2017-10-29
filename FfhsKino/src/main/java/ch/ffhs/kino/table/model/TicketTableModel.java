@@ -19,8 +19,6 @@ public class TicketTableModel {
 
 	public TicketTableModel(String sitz, String tickettype, String price) {
 		setSitz(sitz);
-		//setTickettype(tickettype);
-		//setPrice(price);
 	}
 
 	public String getSitz() {

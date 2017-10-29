@@ -148,7 +148,6 @@
 	         </VBox>
 	         
 	      
-		      <!-- Column 1: Tickets (FARBE nur damit ich weiss, wie das Grid ist  style="-fx-background-color:lightblue")-->
 		      <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"> 
 		      		<!-- Buchungstimer -->
 		      		<GridPane prefHeight="94.0" prefWidth="400.0">

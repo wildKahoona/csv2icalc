@@ -95,8 +95,7 @@ public class MovieDetailController {
 	public void startTrailer(MouseEvent event) {
 
 		detailContainer.setVisible(false);
-		String content_Url = "http://www.youtube.com/watch?v=qWxNb17aArw";
-		content_Url = movie.getTrailer();
+		String content_Url = movie.getTrailer();
 		movieTrailerView.getEngine().setUserAgent(CHROME_41_USER_AGENT);
 		movieTrailerView.getEngine().load(content_Url);
 		movieTrailerView.setPrefSize(640, 390);

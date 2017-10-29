@@ -47,14 +47,14 @@
 	</VBox>
     
     <!-- Inhalt -->
-     <GridPane GridPane.rowIndex="4" style="-fx-background-color:lightblue">
+     <GridPane GridPane.rowIndex="4">
 	    <columnConstraints>
 	    	<ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
 	        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="50.0"/>
 	    </columnConstraints>
       
     	<!-- Links: Kreditkarte -->
-	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER" style="-fx-background-color:lightblue">
+	    <GridPane GridPane.rowIndex="0" GridPane.columnIndex="0" alignment="CENTER" >
 		    
 		    <HBox GridPane.rowIndex="0" spacing="10" alignment="TOP_LEFT" >
 				<Label text="E-Mail*:" />

@@ -1,15 +1,12 @@
 package ch.ffhs.kino.controller;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ch.ffhs.kino.layout.Main;
 import ch.ffhs.kino.model.Movie.GenreType;
 import ch.ffhs.kino.model.Movie.MovieLanguage;
 import ch.ffhs.kino.model.Vorstellung;
@@ -17,20 +14,12 @@ import ch.ffhs.kino.table.model.ProgrammTableColumnFactory;
 import ch.ffhs.kino.table.model.ProgrammTableModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 
 /**
  * TODO: Denis: Movies gruppieren TODO: Denis: Richtige Zeiten anzeigen FIXME:
