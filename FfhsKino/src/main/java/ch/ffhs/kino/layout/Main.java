@@ -50,12 +50,13 @@ public class Main extends Application {
 		setPrimaryStage(primaryStage);
 				
 		Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-		stageWidth = visualBounds.getWidth() - 10;
-		stageHeight = visualBounds.getHeight() - 10;
-//		primaryStage.setMinWidth(480.0);
-//		primaryStage.setMinHeight(600.0);
+		stageWidth = visualBounds.getWidth() - 40;
+		stageHeight = visualBounds.getHeight() - 40;
 		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/ch/ffhs/kino/layout/icon/appicon.jpg")));
 
+		primaryStage.setMinWidth(600);
+		primaryStage.setMinHeight(500);
+		
 		// startMovieDetail(cinemaProgrammService.getMovie());
 		startKinoProgramm();
 		// startMovieShow(cinemaProgrammService.getVorstellung());
